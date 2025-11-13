@@ -27,7 +27,7 @@ h5py>=3.10.0
 grpcio>=1.60.0
 
 # IPFS Client
-ipfshttpclient>=0.8.0
+ipfshttpclient==0.8.0a2
 
 # Blockchain interaction
 web3>=6.11.0
