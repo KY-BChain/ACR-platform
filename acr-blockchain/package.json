@@ -1,0 +1,25 @@
+{
+  "name": "@acr/blockchain",
+  "version": "0.8.0",
+  "description": "RSK blockchain smart contracts for ACR Platform",
+  "scripts": {
+    "compile": "hardhat compile",
+    "test": "hardhat test",
+    "deploy": "hardhat run scripts/deploy.js",
+    "deploy:testnet": "hardhat run scripts/deploy.js --network rskTestnet",
+    "deploy:mainnet": "hardhat run scripts/deploy.js --network rskMainnet",
+    "verify": "hardhat verify",
+    "clean": "hardhat clean"
+  },
+  "keywords": ["rsk", "blockchain", "smart-contracts"],
+  "author": "ACR Platform Team",
+  "license": "MIT",
+  "devDependencies": {
+    "@nomicfoundation/hardhat-toolbox": "^3.0.0",
+    "@nomiclabs/hardhat-ethers": "^2.2.3",
+    "@openzeppelin/contracts": "^5.0.0",
+    "hardhat": "^2.19.0",
+    "dotenv": "^16.3.1",
+    "ethers": "^6.9.0"
+  }
+}

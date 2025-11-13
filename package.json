@@ -1,0 +1,73 @@
+{
+  "name": "acr-platform",
+  "version": "0.8.0",
+  "description": "AI-Powered Cervical Cancer Risk Assessment Platform with Federated Learning and Blockchain",
+  "private": true,
+  "workspaces": [
+    "acr-core",
+    "acr-blockchain",
+    "acr-api-gateway",
+    "acr-web-portal"
+  ],
+  "scripts": {
+    "install:all": "npm install && cd acr-agents && pip install -r requirements.txt && cd ../acr-federated-ml && pip install -r requirements.txt && cd ../acr-privacy && pip install -r requirements.txt",
+    "build": "npm run build --workspaces",
+    "test": "npm run test --workspaces",
+    "test:unit": "npm run test:unit --workspaces",
+    "test:integration": "npm run test:integration --workspaces",
+    "test:e2e": "cd tests/e2e && npm test",
+    "lint": "npm run lint --workspaces",
+    "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md}\"",
+    "dev:api": "cd acr-api-gateway && npm run dev",
+    "dev:web": "cd acr-web-portal && npm run dev",
+    "docker:build": "docker-compose build",
+    "docker:up": "docker-compose up -d",
+    "docker:down": "docker-compose down",
+    "k8s:dev": "kubectl apply -f acr-infrastructure/k8s/dev/",
+    "k8s:staging": "kubectl apply -f acr-infrastructure/k8s/staging/",
+    "k8s:prod": "kubectl apply -f acr-infrastructure/k8s/prod/",
+    "deploy:contracts": "cd acr-blockchain && npm run deploy",
+    "clean": "npm run clean --workspaces && rm -rf node_modules"
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^6.0.0",
+    "@typescript-eslint/parser": "^6.0.0",
+    "eslint": "^8.45.0",
+    "eslint-config-prettier": "^9.0.0",
+    "eslint-plugin-import": "^2.28.0",
+    "prettier": "^3.0.0",
+    "typescript": "^5.1.6",
+    "husky": "^8.0.3",
+    "lint-staged": "^13.2.3"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=9.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/KY-BChain/ACR-platform.git"
+  },
+  "keywords": [
+    "cervical-cancer",
+    "federated-learning",
+    "blockchain",
+    "differential-privacy",
+    "ontology",
+    "agents",
+    "monai",
+    "rsk",
+    "privacy-preserving-ml"
+  ],
+  "author": "ACR Platform Team",
+  "license": "MIT",
+  "lint-staged": {
+    "*.{ts,tsx,js,jsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{json,md}": [
+      "prettier --write"
+    ]
+  }
+}
