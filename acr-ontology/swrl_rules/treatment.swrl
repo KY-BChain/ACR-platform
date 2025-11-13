@@ -1,0 +1,43 @@
+// SWRL Rules for Treatment Recommendations
+// ACR Platform - Cervical Cancer Risk Assessment
+// Version: 0.8.0
+
+// Rule 1: Low Risk - Watchful Waiting
+// For low-risk cases, recommend watchful waiting with regular screening
+Case(?c) ^ LowRisk(?c) -> recommendsTreatment(?c, Watchful)
+
+// Rule 2: Moderate Risk - Enhanced Surveillance
+// For moderate risk cases (ASCUS/LSIL), recommend colposcopy
+Case(?c) ^ ModerateRisk(?c) -> recommendsTreatment(?c, Colposcopy)
+
+// Rule 3: High Risk - LEEP Procedure
+// For high-risk cases (HSIL), recommend LEEP
+Case(?c) ^ HighRisk(?c) -> recommendsTreatment(?c, LEEP)
+
+// Rule 4: Very High Risk - Advanced Treatment
+// For very high-risk cases (cancer or HSIL + HPV16/18), recommend hysterectomy consideration
+Case(?c) ^ VeryHighRisk(?c) -> recommendsTreatment(?c, Hysterectomy)
+
+// Rule 5: HSIL with Persistent HPV
+// If HSIL persists with high-risk HPV, recommend immediate LEEP
+Finding(?f) ^ hasGrade(?f, ?g) ^ HSIL(?g) ^ hasFinding(?c, ?f) ^ GenomicFinding(?gf) ^ hasFinding(?c, ?gf) ^ hasHPVStrain(?gf, ?strain) ^ HighRiskHPV(?strain) -> recommendsTreatment(?c, LEEP)
+
+// Rule 6: Cancer Detection - Urgent Referral
+// If cancer is detected, recommend immediate specialist referral
+Finding(?f) ^ hasGrade(?f, ?g) ^ Cancer(?g) ^ hasFinding(?c, ?f) -> UrgentReferralRequired(?c)
+
+// Rule 7: Young Patient with ASCUS
+// For younger patients with ASCUS, prefer watchful waiting over immediate intervention
+Patient(?p) ^ ageGroup(?p, ?age) ^ swrlb:matches(?age, "18-25") ^ hasPatient(?c, ?p) ^ Finding(?f) ^ hasGrade(?f, ?g) ^ ASCUS(?g) ^ hasFinding(?c, ?f) -> recommendsTreatment(?c, Watchful)
+
+// Rule 8: Older Patient with LSIL
+// For older patients with LSIL, recommend colposcopy due to higher cancer risk
+Patient(?p) ^ ageGroup(?p, ?age) ^ swrlb:matches(?age, "56-65|65+") ^ hasPatient(?c, ?p) ^ Finding(?f) ^ hasGrade(?f, ?g) ^ LSIL(?g) ^ hasFinding(?c, ?f) -> recommendsTreatment(?c, Colposcopy)
+
+// Rule 9: Repeat Screening after Watchful
+// After watchful waiting, schedule repeat screening in 6-12 months
+Case(?c) ^ recommendsTreatment(?c, Watchful) -> ScheduleFollowUp(?c, "6-12 months")
+
+// Rule 10: Post-Treatment Monitoring
+// After LEEP, schedule HPV testing at 6 months
+Case(?c) ^ recommendsTreatment(?c, LEEP) -> ScheduleFollowUp(?c, "HPV test at 6 months")

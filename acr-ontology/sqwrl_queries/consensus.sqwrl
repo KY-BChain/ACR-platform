@@ -1,0 +1,48 @@
+// SQWRL Queries for Consensus Mechanism
+// ACR Platform - Cervical Cancer Risk Assessment
+// Version: 0.8.0
+
+// Query 1: Find cases with unanimous agent agreement
+// Returns cases where all agents agree on the same grade
+Case(?c) ^ hasFinding(?c, ?f1) ^ hasFinding(?c, ?f2) ^ hasFinding(?c, ?f3) ^
+RadiologyFinding(?f1) ^ PathologyFinding(?f2) ^ GenomicFinding(?f3) ^
+hasGrade(?f1, ?g) ^ hasGrade(?f2, ?g) ^ hasGrade(?f3, ?g) ->
+sqwrl:select(?c, ?g)
+
+// Query 2: Calculate weighted consensus score
+// Returns cases with weighted confidence scores from all agents
+Case(?c) ^ hasFinding(?c, ?f) ^ analyzedBy(?f, ?agent) ^
+hasGrade(?f, ?grade) ^ confidence(?f, ?conf) ->
+sqwrl:select(?c, ?grade, ?agent, ?conf) ^ sqwrl:groupBy(?c)
+
+// Query 3: Identify high-confidence cases
+// Returns cases where average confidence > 0.85
+Case(?c) ^ hasFinding(?c, ?f) ^ confidence(?f, ?conf) ^
+swrlb:greaterThan(?conf, 0.85) ->
+sqwrl:select(?c, ?conf) ^ sqwrl:avg(?conf) ^ sqwrl:groupBy(?c)
+
+// Query 4: Find cases requiring human review
+// Returns cases with conflicting findings or low confidence
+Case(?c) ^ RequiresHumanReview(?c) -> sqwrl:select(?c)
+
+// Query 5: Count agent votes by grade
+// Returns the distribution of agent votes for each case
+Case(?c) ^ hasFinding(?c, ?f) ^ hasGrade(?f, ?grade) ->
+sqwrl:select(?c, ?grade) ^ sqwrl:count(?grade) ^ sqwrl:groupBy(?c, ?grade)
+
+// Query 6: Identify majority vote
+// Returns the most common grade for each case
+Case(?c) ^ hasFinding(?c, ?f) ^ hasGrade(?f, ?grade) ->
+sqwrl:select(?c, ?grade) ^ sqwrl:count(?grade) ^ sqwrl:orderBy(?grade, "DESC") ^ sqwrl:groupBy(?c)
+
+// Query 7: Find cases with high variance in confidence
+// Returns cases where agents have significantly different confidence levels
+Case(?c) ^ hasFinding(?c, ?f1) ^ hasFinding(?c, ?f2) ^
+confidence(?f1, ?conf1) ^ confidence(?f2, ?conf2) ^
+swrlb:subtract(?diff, ?conf1, ?conf2) ^ swrlb:greaterThan(?diff, 0.3) ->
+sqwrl:select(?c, ?conf1, ?conf2, ?diff)
+
+// Query 8: Get consensus strength
+// Returns the percentage of agents agreeing on the final grade
+Case(?c) ^ hasFinding(?c, ?f) ^ hasGrade(?f, ?finalGrade) ->
+sqwrl:select(?c, ?finalGrade) ^ sqwrl:count(?finalGrade) ^ sqwrl:groupBy(?c)

@@ -1,0 +1,171 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:15-alpine
+    container_name: acr-postgres
+    environment:
+      POSTGRES_USER: acr_user
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-changeme}
+      POSTGRES_DB: acr_platform
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - acr-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U acr_user"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Redis Cache
+  redis:
+    image: redis:7-alpine
+    container_name: acr-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - acr-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+
+  # IPFS Node
+  ipfs:
+    image: ipfs/kubo:latest
+    container_name: acr-ipfs
+    ports:
+      - "4001:4001"
+      - "5001:5001"
+      - "8080:8080"
+    volumes:
+      - ipfs_data:/data/ipfs
+    networks:
+      - acr-network
+    environment:
+      - IPFS_PROFILE=server
+
+  # API Gateway
+  api-gateway:
+    build:
+      context: ./acr-api-gateway
+      dockerfile: Dockerfile
+    container_name: acr-api-gateway
+    ports:
+      - "3000:3000"
+    environment:
+      NODE_ENV: development
+      DATABASE_URL: postgresql://acr_user:${POSTGRES_PASSWORD:-changeme}@postgres:5432/acr_platform
+      REDIS_URL: redis://redis:6379
+      IPFS_URL: http://ipfs:5001
+      RSK_RPC_URL: ${RSK_RPC_URL:-https://public-node.testnet.rsk.co}
+      JWT_SECRET: ${JWT_SECRET:-your-secret-key}
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      ipfs:
+        condition: service_started
+    networks:
+      - acr-network
+    volumes:
+      - ./acr-api-gateway:/app
+      - /app/node_modules
+    command: npm run dev
+
+  # Web Portal
+  web-portal:
+    build:
+      context: ./acr-web-portal
+      dockerfile: Dockerfile
+    container_name: acr-web-portal
+    ports:
+      - "3001:3001"
+    environment:
+      REACT_APP_API_URL: http://localhost:3000
+      REACT_APP_RSK_NETWORK: testnet
+    depends_on:
+      - api-gateway
+    networks:
+      - acr-network
+    volumes:
+      - ./acr-web-portal:/app
+      - /app/node_modules
+    command: npm run dev
+
+  # Agent System
+  agents:
+    build:
+      context: ./acr-agents
+      dockerfile: Dockerfile
+    container_name: acr-agents
+    environment:
+      PYTHONUNBUFFERED: 1
+      ONTOLOGY_PATH: /app/ontology/ACR.owl
+      REDIS_URL: redis://redis:6379
+      API_GATEWAY_URL: http://api-gateway:3000
+    depends_on:
+      - redis
+      - api-gateway
+    networks:
+      - acr-network
+    volumes:
+      - ./acr-agents:/app
+      - ./acr-ontology:/app/ontology
+    command: python src/base_agent.py
+
+  # Federated Learning Aggregator
+  fl-aggregator:
+    build:
+      context: ./acr-federated-ml
+      dockerfile: Dockerfile
+    container_name: acr-fl-aggregator
+    ports:
+      - "8000:8000"
+    environment:
+      PYTHONUNBUFFERED: 1
+      IPFS_URL: http://ipfs:5001
+      REDIS_URL: redis://redis:6379
+      MODEL_REGISTRY_ADDRESS: ${MODEL_REGISTRY_ADDRESS}
+      RSK_RPC_URL: ${RSK_RPC_URL:-https://public-node.testnet.rsk.co}
+    depends_on:
+      - redis
+      - ipfs
+    networks:
+      - acr-network
+    volumes:
+      - ./acr-federated-ml:/app
+      - fl_models:/app/models
+    command: python src/aggregation/secure_aggregator.py
+
+  # RSK Local Node (optional, for development)
+  rsk-node:
+    image: rsksmart/rskj:latest
+    container_name: acr-rsk-node
+    ports:
+      - "4444:4444"
+    volumes:
+      - rsk_data:/var/lib/rsk
+    networks:
+      - acr-network
+    profiles:
+      - local-blockchain
+
+volumes:
+  postgres_data:
+  redis_data:
+  ipfs_data:
+  fl_models:
+  rsk_data:
+
+networks:
+  acr-network:
+    driver: bridge

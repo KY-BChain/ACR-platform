@@ -1,0 +1,259 @@
+<?xml version="1.0"?>
+<rdf:RDF xmlns="http://acr-platform.io/ontology#"
+     xml:base="http://acr-platform.io/ontology"
+     xmlns:owl="http://www.w3.org/2002/07/owl#"
+     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+     xmlns:xml="http://www.w3.org/XML/1998/namespace"
+     xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+     xmlns:swrl="http://www.w3.org/2003/11/swrl#"
+     xmlns:swrlb="http://www.w3.org/2003/11/swrlb#">
+
+    <owl:Ontology rdf:about="http://acr-platform.io/ontology">
+        <owl:versionInfo>0.8.0</owl:versionInfo>
+        <rdfs:comment>ACR Platform Ontology for Cervical Cancer Risk Assessment</rdfs:comment>
+        <rdfs:label>ACR Ontology</rdfs:label>
+    </owl:Ontology>
+
+    <!-- Classes -->
+
+    <owl:Class rdf:about="#Patient">
+        <rdfs:label>Patient</rdfs:label>
+        <rdfs:comment>Represents a patient (anonymized)</rdfs:comment>
+    </owl:Class>
+
+    <owl:Class rdf:about="#Case">
+        <rdfs:label>Case</rdfs:label>
+        <rdfs:comment>Represents a diagnostic case</rdfs:comment>
+    </owl:Class>
+
+    <owl:Class rdf:about="#Finding">
+        <rdfs:label>Finding</rdfs:label>
+        <rdfs:comment>Clinical finding from analysis</rdfs:comment>
+    </owl:Class>
+
+    <owl:Class rdf:about="#RadiologyFinding">
+        <rdfs:subClassOf rdf:resource="#Finding"/>
+        <rdfs:label>Radiology Finding</rdfs:label>
+    </owl:Class>
+
+    <owl:Class rdf:about="#PathologyFinding">
+        <rdfs:subClassOf rdf:resource="#Finding"/>
+        <rdfs:label>Pathology Finding</rdfs:label>
+    </owl:Class>
+
+    <owl:Class rdf:about="#GenomicFinding">
+        <rdfs:subClassOf rdf:resource="#Finding"/>
+        <rdfs:label>Genomic Finding</rdfs:label>
+    </owl:Class>
+
+    <owl:Class rdf:about="#CervicalGrade">
+        <rdfs:label>Cervical Grade</rdfs:label>
+        <rdfs:comment>Cervical lesion grade classification</rdfs:comment>
+    </owl:Class>
+
+    <owl:Class rdf:about="#Normal">
+        <rdfs:subClassOf rdf:resource="#CervicalGrade"/>
+        <rdfs:label>Normal</rdfs:label>
+    </owl:Class>
+
+    <owl:Class rdf:about="#ASCUS">
+        <rdfs:subClassOf rdf:resource="#CervicalGrade"/>
+        <rdfs:label>ASCUS</rdfs:label>
+        <rdfs:comment>Atypical Squamous Cells of Undetermined Significance</rdfs:comment>
+    </owl:Class>
+
+    <owl:Class rdf:about="#LSIL">
+        <rdfs:subClassOf rdf:resource="#CervicalGrade"/>
+        <rdfs:label>LSIL</rdfs:label>
+        <rdfs:comment>Low-grade Squamous Intraepithelial Lesion</rdfs:comment>
+    </owl:Class>
+
+    <owl:Class rdf:about="#HSIL">
+        <rdfs:subClassOf rdf:resource="#CervicalGrade"/>
+        <rdfs:label>HSIL</rdfs:label>
+        <rdfs:comment>High-grade Squamous Intraepithelial Lesion</rdfs:comment>
+    </owl:Class>
+
+    <owl:Class rdf:about="#Cancer">
+        <rdfs:subClassOf rdf:resource="#CervicalGrade"/>
+        <rdfs:label>Cancer</rdfs:label>
+    </owl:Class>
+
+    <owl:Class rdf:about="#HPVStrain">
+        <rdfs:label>HPV Strain</rdfs:label>
+    </owl:Class>
+
+    <owl:Class rdf:about="#HighRiskHPV">
+        <rdfs:subClassOf rdf:resource="#HPVStrain"/>
+        <rdfs:label>High Risk HPV</rdfs:label>
+    </owl:Class>
+
+    <owl:Class rdf:about="#HPV16">
+        <rdfs:subClassOf rdf:resource="#HighRiskHPV"/>
+        <rdfs:label>HPV 16</rdfs:label>
+    </owl:Class>
+
+    <owl:Class rdf:about="#HPV18">
+        <rdfs:subClassOf rdf:resource="#HighRiskHPV"/>
+        <rdfs:label>HPV 18</rdfs:label>
+    </owl:Class>
+
+    <owl:Class rdf:about="#RiskLevel">
+        <rdfs:label>Risk Level</rdfs:label>
+    </owl:Class>
+
+    <owl:Class rdf:about="#LowRisk">
+        <rdfs:subClassOf rdf:resource="#RiskLevel"/>
+        <rdfs:label>Low Risk</rdfs:label>
+    </owl:Class>
+
+    <owl:Class rdf:about="#ModerateRisk">
+        <rdfs:subClassOf rdf:resource="#RiskLevel"/>
+        <rdfs:label>Moderate Risk</rdfs:label>
+    </owl:Class>
+
+    <owl:Class rdf:about="#HighRisk">
+        <rdfs:subClassOf rdf:resource="#RiskLevel"/>
+        <rdfs:label>High Risk</rdfs:label>
+    </owl:Class>
+
+    <owl:Class rdf:about="#VeryHighRisk">
+        <rdfs:subClassOf rdf:resource="#RiskLevel"/>
+        <rdfs:label>Very High Risk</rdfs:label>
+    </owl:Class>
+
+    <owl:Class rdf:about="#Agent">
+        <rdfs:label>Agent</rdfs:label>
+        <rdfs:comment>AI Agent for analysis</rdfs:comment>
+    </owl:Class>
+
+    <owl:Class rdf:about="#RadiologyAgent">
+        <rdfs:subClassOf rdf:resource="#Agent"/>
+        <rdfs:label>Radiology Agent</rdfs:label>
+    </owl:Class>
+
+    <owl:Class rdf:about="#PathologyAgent">
+        <rdfs:subClassOf rdf:resource="#Agent"/>
+        <rdfs:label>Pathology Agent</rdfs:label>
+    </owl:Class>
+
+    <owl:Class rdf:about="#GenomicsAgent">
+        <rdfs:subClassOf rdf:resource="#Agent"/>
+        <rdfs:label>Genomics Agent</rdfs:label>
+    </owl:Class>
+
+    <owl:Class rdf:about="#ConsensusAgent">
+        <rdfs:subClassOf rdf:resource="#Agent"/>
+        <rdfs:label>Consensus Agent</rdfs:label>
+    </owl:Class>
+
+    <owl:Class rdf:about="#Treatment">
+        <rdfs:label>Treatment</rdfs:label>
+    </owl:Class>
+
+    <owl:Class rdf:about="#Watchful">
+        <rdfs:subClassOf rdf:resource="#Treatment"/>
+        <rdfs:label>Watchful Waiting</rdfs:label>
+    </owl:Class>
+
+    <owl:Class rdf:about="#Colposcopy">
+        <rdfs:subClassOf rdf:resource="#Treatment"/>
+        <rdfs:label>Colposcopy</rdfs:label>
+    </owl:Class>
+
+    <owl:Class rdf:about="#LEEP">
+        <rdfs:subClassOf rdf:resource="#Treatment"/>
+        <rdfs:label>LEEP Procedure</rdfs:label>
+        <rdfs:comment>Loop Electrosurgical Excision Procedure</rdfs:comment>
+    </owl:Class>
+
+    <owl:Class rdf:about="#Hysterectomy">
+        <rdfs:subClassOf rdf:resource="#Treatment"/>
+        <rdfs:label>Hysterectomy</rdfs:label>
+    </owl:Class>
+
+    <!-- Object Properties -->
+
+    <owl:ObjectProperty rdf:about="#hasPatient">
+        <rdfs:domain rdf:resource="#Case"/>
+        <rdfs:range rdf:resource="#Patient"/>
+        <rdfs:label>has patient</rdfs:label>
+    </owl:ObjectProperty>
+
+    <owl:ObjectProperty rdf:about="#hasFinding">
+        <rdfs:domain rdf:resource="#Case"/>
+        <rdfs:range rdf:resource="#Finding"/>
+        <rdfs:label>has finding</rdfs:label>
+    </owl:ObjectProperty>
+
+    <owl:ObjectProperty rdf:about="#hasGrade">
+        <rdfs:domain rdf:resource="#Finding"/>
+        <rdfs:range rdf:resource="#CervicalGrade"/>
+        <rdfs:label>has grade</rdfs:label>
+    </owl:ObjectProperty>
+
+    <owl:ObjectProperty rdf:about="#hasHPVStrain">
+        <rdfs:domain rdf:resource="#GenomicFinding"/>
+        <rdfs:range rdf:resource="#HPVStrain"/>
+        <rdfs:label>has HPV strain</rdfs:label>
+    </owl:ObjectProperty>
+
+    <owl:ObjectProperty rdf:about="#hasRiskLevel">
+        <rdfs:domain rdf:resource="#Case"/>
+        <rdfs:range rdf:resource="#RiskLevel"/>
+        <rdfs:label>has risk level</rdfs:label>
+    </owl:ObjectProperty>
+
+    <owl:ObjectProperty rdf:about="#analyzedBy">
+        <rdfs:domain rdf:resource="#Finding"/>
+        <rdfs:range rdf:resource="#Agent"/>
+        <rdfs:label>analyzed by</rdfs:label>
+    </owl:ObjectProperty>
+
+    <owl:ObjectProperty rdf:about="#recommendsTreatment">
+        <rdfs:domain rdf:resource="#Case"/>
+        <rdfs:range rdf:resource="#Treatment"/>
+        <rdfs:label>recommends treatment</rdfs:label>
+    </owl:ObjectProperty>
+
+    <!-- Data Properties -->
+
+    <owl:DatatypeProperty rdf:about="#confidence">
+        <rdfs:domain rdf:resource="#Finding"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#float"/>
+        <rdfs:label>confidence</rdfs:label>
+        <rdfs:comment>Confidence score between 0 and 1</rdfs:comment>
+    </owl:DatatypeProperty>
+
+    <owl:DatatypeProperty rdf:about="#timestamp">
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#dateTime"/>
+        <rdfs:label>timestamp</rdfs:label>
+    </owl:DatatypeProperty>
+
+    <owl:DatatypeProperty rdf:about="#imageHash">
+        <rdfs:domain rdf:resource="#Finding"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+        <rdfs:label>image hash</rdfs:label>
+    </owl:DatatypeProperty>
+
+    <owl:DatatypeProperty rdf:about="#caseId">
+        <rdfs:domain rdf:resource="#Case"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+        <rdfs:label>case ID</rdfs:label>
+    </owl:DatatypeProperty>
+
+    <owl:DatatypeProperty rdf:about="#patientId">
+        <rdfs:domain rdf:resource="#Patient"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+        <rdfs:label>patient ID</rdfs:label>
+        <rdfs:comment>Anonymized patient identifier</rdfs:comment>
+    </owl:DatatypeProperty>
+
+    <owl:DatatypeProperty rdf:about="#ageGroup">
+        <rdfs:domain rdf:resource="#Patient"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+        <rdfs:label>age group</rdfs:label>
+    </owl:DatatypeProperty>
+
+</rdf:RDF>

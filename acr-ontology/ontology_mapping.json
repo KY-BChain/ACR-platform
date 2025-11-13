@@ -1,0 +1,229 @@
+{
+  "version": "0.8.0",
+  "description": "Maps OWL ontology classes to ACR Platform agent types and capabilities",
+  "lastUpdated": "2025-11-12",
+  "mappings": {
+    "agents": {
+      "RadiologyAgent": {
+        "ontologyClass": "RadiologyAgent",
+        "capabilities": [
+          {
+            "id": "colposcopy_analysis",
+            "name": "Colposcopy Image Analysis",
+            "ontologyClass": "RadiologyFinding",
+            "requiredModalities": ["COLPOSCOPY"],
+            "outputTypes": ["CervicalGrade", "RiskLevel"],
+            "skills": ["image_analysis", "lesion_detection", "acetowhite_detection"]
+          },
+          {
+            "id": "region_detection",
+            "name": "Region of Interest Detection",
+            "ontologyClass": "RadiologyFinding",
+            "requiredModalities": ["COLPOSCOPY"],
+            "outputTypes": ["BoundingBox", "SegmentationMask"],
+            "skills": ["region_detection", "saliency_mapping"]
+          }
+        ],
+        "inferenceRules": [
+          "diagnostic.swrl:Rule8",
+          "diagnostic.swrl:Rule9",
+          "diagnostic.swrl:Rule12"
+        ]
+      },
+      "PathologyAgent": {
+        "ontologyClass": "PathologyAgent",
+        "capabilities": [
+          {
+            "id": "cytology_analysis",
+            "name": "Cytology Slide Analysis",
+            "ontologyClass": "PathologyFinding",
+            "requiredModalities": ["CYTOLOGY", "HISTOPATHOLOGY"],
+            "outputTypes": ["CervicalGrade", "RiskLevel"],
+            "skills": ["cell_morphology", "nuclear_analysis", "cytoplasm_analysis"]
+          },
+          {
+            "id": "histopathology_analysis",
+            "name": "Histopathology Analysis",
+            "ontologyClass": "PathologyFinding",
+            "requiredModalities": ["HISTOPATHOLOGY", "IMMUNOHISTOCHEMISTRY"],
+            "outputTypes": ["CervicalGrade", "TissueArchitecture"],
+            "skills": ["tissue_analysis", "grade_classification"]
+          }
+        ],
+        "inferenceRules": [
+          "diagnostic.swrl:Rule5",
+          "diagnostic.swrl:Rule6",
+          "diagnostic.swrl:Rule7",
+          "diagnostic.swrl:Rule9",
+          "diagnostic.swrl:Rule12"
+        ]
+      },
+      "GenomicsAgent": {
+        "ontologyClass": "GenomicsAgent",
+        "capabilities": [
+          {
+            "id": "hpv_detection",
+            "name": "HPV Strain Detection",
+            "ontologyClass": "GenomicFinding",
+            "requiredModalities": ["HPV_TEST"],
+            "outputTypes": ["HPVStrain", "RiskLevel"],
+            "skills": ["hpv_genotyping", "viral_load_estimation"]
+          },
+          {
+            "id": "biomarker_analysis",
+            "name": "Biomarker Analysis",
+            "ontologyClass": "GenomicFinding",
+            "requiredModalities": ["IMMUNOHISTOCHEMISTRY"],
+            "outputTypes": ["BiomarkerStatus"],
+            "skills": ["p16ink4a_detection", "ki67_analysis"]
+          }
+        ],
+        "inferenceRules": [
+          "diagnostic.swrl:Rule1",
+          "diagnostic.swrl:Rule2",
+          "diagnostic.swrl:Rule3",
+          "diagnostic.swrl:Rule4",
+          "diagnostic.swrl:Rule11"
+        ]
+      },
+      "ConsensusAgent": {
+        "ontologyClass": "ConsensusAgent",
+        "capabilities": [
+          {
+            "id": "moa_consensus",
+            "name": "Mixture of Agents Consensus",
+            "ontologyClass": "Case",
+            "requiredModalities": ["ALL"],
+            "outputTypes": ["FinalGrade", "FinalRiskLevel", "ConsensusScore"],
+            "skills": ["weighted_voting", "bayesian_fusion", "confidence_aggregation"]
+          },
+          {
+            "id": "treatment_recommendation",
+            "name": "Treatment Recommendation",
+            "ontologyClass": "Treatment",
+            "requiredModalities": ["ALL"],
+            "outputTypes": ["Treatment"],
+            "skills": ["clinical_guideline_mapping"]
+          }
+        ],
+        "inferenceRules": [
+          "diagnostic.swrl:Rule9",
+          "treatment.swrl:Rule1",
+          "treatment.swrl:Rule2",
+          "treatment.swrl:Rule3",
+          "treatment.swrl:Rule4"
+        ],
+        "sqwrlQueries": [
+          "consensus.sqwrl:Query1",
+          "consensus.sqwrl:Query2",
+          "consensus.sqwrl:Query5",
+          "consensus.sqwrl:Query6"
+        ]
+      }
+    },
+    "grades": {
+      "Normal": {
+        "ontologyClass": "Normal",
+        "riskLevel": "LowRisk",
+        "treatmentDefault": "Watchful",
+        "followUpMonths": 12
+      },
+      "ASCUS": {
+        "ontologyClass": "ASCUS",
+        "riskLevel": "ModerateRisk",
+        "treatmentDefault": "Colposcopy",
+        "followUpMonths": 6
+      },
+      "LSIL": {
+        "ontologyClass": "LSIL",
+        "riskLevel": "ModerateRisk",
+        "treatmentDefault": "Colposcopy",
+        "followUpMonths": 6
+      },
+      "HSIL": {
+        "ontologyClass": "HSIL",
+        "riskLevel": "HighRisk",
+        "treatmentDefault": "LEEP",
+        "followUpMonths": 3
+      },
+      "Cancer": {
+        "ontologyClass": "Cancer",
+        "riskLevel": "VeryHighRisk",
+        "treatmentDefault": "Hysterectomy",
+        "urgentReferral": true
+      }
+    },
+    "hpvStrains": {
+      "HPV16": {
+        "ontologyClass": "HPV16",
+        "category": "HighRiskHPV",
+        "cancerRisk": "VERY_HIGH",
+        "prevalencePercent": 50
+      },
+      "HPV18": {
+        "ontologyClass": "HPV18",
+        "category": "HighRiskHPV",
+        "cancerRisk": "VERY_HIGH",
+        "prevalencePercent": 15
+      },
+      "HPV31": {
+        "ontologyClass": "HighRiskHPV",
+        "category": "HighRiskHPV",
+        "cancerRisk": "HIGH",
+        "prevalencePercent": 5
+      },
+      "HPV33": {
+        "ontologyClass": "HighRiskHPV",
+        "category": "HighRiskHPV",
+        "cancerRisk": "HIGH",
+        "prevalencePercent": 5
+      },
+      "HPV45": {
+        "ontologyClass": "HighRiskHPV",
+        "category": "HighRiskHPV",
+        "cancerRisk": "HIGH",
+        "prevalencePercent": 5
+      }
+    },
+    "riskLevels": {
+      "LowRisk": {
+        "ontologyClass": "LowRisk",
+        "numericScore": 1,
+        "colorCode": "#4CAF50"
+      },
+      "ModerateRisk": {
+        "ontologyClass": "ModerateRisk",
+        "numericScore": 2,
+        "colorCode": "#FFC107"
+      },
+      "HighRisk": {
+        "ontologyClass": "HighRisk",
+        "numericScore": 3,
+        "colorCode": "#FF9800"
+      },
+      "VeryHighRisk": {
+        "ontologyClass": "VeryHighRisk",
+        "numericScore": 4,
+        "colorCode": "#F44336"
+      }
+    },
+    "consensusAlgorithms": {
+      "WEIGHTED_VOTE": {
+        "description": "Weighted voting based on agent confidence",
+        "weights": {
+          "RadiologyAgent": 0.4,
+          "PathologyAgent": 0.4,
+          "GenomicsAgent": 0.2
+        }
+      },
+      "BAYESIAN": {
+        "description": "Bayesian fusion of agent beliefs",
+        "priorDistribution": "uniform"
+      },
+      "DEMPSTER_SHAFER": {
+        "description": "Dempster-Shafer theory for uncertainty handling",
+        "conflictResolution": "normalization"
+      }
+    }
+  }
+}
