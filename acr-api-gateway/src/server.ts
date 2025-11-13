@@ -16,6 +16,9 @@ import casesRoutes from './routes/cases';
 import agentsRoutes from './routes/agents';
 import flRoutes from './routes/fl-submit';
 
+// Import middleware
+import { authMiddleware } from './middleware/auth';
+
 const PORT = parseInt(process.env.PORT || '3000', 10);
 const HOST = process.env.HOST || '0.0.0.0';
 
@@ -50,6 +53,9 @@ async function start() {
     await server.register(jwt, {
       secret: process.env.JWT_SECRET || 'your-secret-key-change-in-production',
     });
+
+    // Register authentication decorator
+    server.decorate('authenticate', authMiddleware);
 
     // Health check
     server.get('/health', async () => {
