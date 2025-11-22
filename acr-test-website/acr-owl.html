@@ -134,6 +134,98 @@
         .alert-critical { background: #e53e3e; color: white; }
         .alert-high { background: #ed8936; color: white; }
         .alert-medium { background: #ecc94b; color: white; }
+
+        /* Enhanced Rules Panel */
+        .rules-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .rules-section {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 15px;
+            max-height: 500px;
+            overflow-y: auto;
+        }
+        
+        .rules-section h3 {
+            margin-bottom: 15px;
+            color: #2d3748;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .rules-section h3 i {
+            color: #667eea;
+        }
+        
+        .rule-item {
+            background: white;
+            border-radius: 6px;
+            padding: 12px;
+            margin-bottom: 10px;
+            border-left: 3px solid #667eea;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .rule-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        
+        .rule-item.active {
+            border-left-color: #48bb78;
+            background: #f0fff4;
+        }
+        
+        .rule-natural {
+            font-size: 13px;
+            color: #4a5568;
+            margin-bottom: 8px;
+        }
+        
+        .rule-technical {
+            font-size: 11px;
+            color: #718096;
+            background: #f7fafc;
+            padding: 8px;
+            border-radius: 4px;
+            display: none;
+            margin-top: 8px;
+            font-family: monospace;
+        }
+        
+        .rule-item.active .rule-technical {
+            display: block;
+        }
+        
+        .rule-meta {
+            display: flex;
+            justify-content: space-between;
+            font-size: 10px;
+            color: #a0aec0;
+            margin-top: 5px;
+        }
+        
+        .rule-category {
+            display: inline-block;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 9px;
+            font-weight: 600;
+            margin-right: 5px;
+        }
+        
+        .category-biomarker { background: #bee3f8; color: #2c5282; }
+        .category-treatment { background: #c6f6d5; color: #22543d; }
+        .category-risk { background: #fed7d7; color: #742a2a; }
+        .category-monitoring { background: #e9d8fd; color: #44337a; }
     </style>
     <script>
         // Redirect if not authenticated
@@ -287,65 +379,47 @@
                     </div>
 
                     <!-- Filter Panel -->
-                    <div class="filter-panel">
-                        <h4 style="margin-bottom: 10px;">Data Filters</h4>
-                        <div class="filter-grid">
-                            <div class="filter-item">
-                                <label style="display: block; margin-bottom: 3px; font-size: 11px; color: #666;">Molecular Subtype</label>
-                                <select id="filterSubtype" onchange="applyFilters()">
-                                    <option value="">All</option>
-                                    <option value="LuminalA">Luminal A</option>
-                                    <option value="LuminalB">Luminal B</option>
-                                    <option value="HER2">HER2+</option>
-                                    <option value="TripleNegative">Triple Negative</option>
-                                </select>
-                            </div>
-                            <div class="filter-item">
-                                <label style="display: block; margin-bottom: 3px; font-size: 11px; color: #666;">Clinical Stage</label>
-                                <select id="filterStage" onchange="applyFilters()">
-                                    <option value="">All</option>
-                                    <option value="I">Stage I</option>
-                                    <option value="II">Stage II</option>
-                                    <option value="III">Stage III</option>
-                                    <option value="IV">Stage IV</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Patient Table -->
-                    <div style="margin-top: 15px;">
-                        <h4 style="margin-bottom: 10px;">Patient List (<span id="patientCount">0</span> patients)</h4>
-                        <div class="patient-table-container">
-                            <table class="patient-table">
-                                <thead>
-                                    <tr>
-                                        <th>MRN</th>
-                                        <th>Name</th>
-                                        <th>Subtype</th>
-                                        <th>Stage</th>
-                                        <th>Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="patientTableBody">
-                                    <tr>
-                                        <td colspan="5" style="text-align: center; color: #999; padding: 20px;">
-                                            Loading patient data...
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-
-                    <div style="margin-top: 15px; text-align: center;">
-                        <button class="btn-refresh" onclick="refreshDashboard()" style="background: #667eea; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer;">
-                            🔄 Refresh Data
-                        </button>
-                    </div>
+<!-- Replace just the Live Rules and Ontology Panel section (lines 381-439) with this: -->
+<!-- Enhanced Live Rules and Ontology Panel -->
+<div class="panel wide-panel">
+    <div>
+        <h2>🧠 Ontolator - SWRL Rules & SQWRL Queries Engine</h2>
+        <p style="color: #666; margin-bottom: 20px;">
+            Interactive display of 22 SWRL clinical rules and 15 SQWRL queries for breast cancer decision support
+        </p>
+        
+        <div class="rules-container">
+            <!-- SWRL Rules Section -->
+            <div class="rules-section">
+                <div class="section-header">
+                    <h3><i class="fas fa-ruler-combined"></i> <span data-translate="swrlRulesTitle">SWRL Rules</span> (22)</h3>
+                </div>
+                <div id="swrlRulesList" class="rules-content">
+                    <!-- SWRL rules will be populated here -->
                 </div>
             </div>
+            
+            <!-- SQWRL Queries Section -->
+            <div class="rules-section">
+                <div class="section-header">
+                    <h3><i class="fas fa-search"></i> <span data-translate="sqwrlQueriesTitle">SQWRL Queries</span> (15)</h3>
+                </div>
+                <div id="sqwrlQueriesList" class="rules-content">
+                    <!-- SQWRL queries will be populated here -->
+                </div>
+            </div>
+        </div>
+    </div>
 
+    <div style="margin-top: 30px;">
+        <h2 data-translate="liveOntologyUpdates">🔄 Live Ontology Updates</h2>
+        <div id="liveOntologyUpdates" style="background: #f8fafc; border-radius: 10px; padding: 15px; height: 400px; overflow-y: auto;">
+            <div style="margin-bottom: 15px; padding: 10px; background: white; border-radius: 8px; border-left: 4px solid #38a169;">
+                <strong>14:32:25</strong> - <span data-translate="updateEngineInit">Ontolator engine initialized with 22 SWRL rules and 15 SQWRL queries</span>
+            </div>
+        </div>
+    </div>
+</div>
             <!-- Agent Communication Log -->
             <div class="panel">
                 <h2 data-translate="agentConversations">💬 Agent Conversations</h2>
@@ -377,62 +451,44 @@
             </div>
         </div>
 
-        <!-- Live Rules and Ontology Panel -->
+        <!-- Enhanced Live Rules and Ontology Panel -->
         <div class="panel wide-panel">
             <div>
-                <h2 data-translate="liveRules">🧠 Live SWRL Rules (Human-Readable)</h2>
+                <h2>🧠 Ontolator - SWRL Rules & SQWRL Queries Engine</h2>
+                <p style="color: #666; margin-bottom: 20px;">
+                    Interactive display of 22 SWRL clinical rules and 15 SQWRL queries for breast cancer decision support
+                </p>
                 
-                <div class="rule-display">
-                    <button class="rule-toggle" onclick="toggleRule(this)" data-translate="btnShowTechnical">Show Technical</button>
-                    <div class="rule-natural">
-                        <strong data-translate="rule1Title">High-Risk Detection Rule:</strong><br>
-                        <span data-translate="rule1Desc">If a patient has imaging studies where both texture analysis shows values above 0.8 AND shape irregularity exceeds 0.75, then automatically classify this case as HIGH RISK and trigger urgent review protocols.</span>
+                <div class="rules-container">
+                    <!-- SWRL Rules Section -->
+                    <div class="rules-section">
+                        <h3><i class="fas fa-ruler-combined"></i> SWRL Rules (22)</h3>
+                        <div id="swrlRulesList">
+                            <!-- SWRL rules will be populated here -->
+                        </div>
                     </div>
-                    <div class="rule-technical">
-                        Patient(?p) ∧ hasImagingStudy(?p, ?study) ∧ hasRadiomicsFeature(?study, ?feature) ∧ hasTextureValue(?feature, ?texture) ∧ hasShapeValue(?feature, ?shape) ∧ swrlb:greaterThan(?texture, 0.8) ∧ swrlb:greaterThan(?shape, 0.75) → hasRiskLevel(?feature, HighRisk)
-                    </div>
-                </div>
-
-                <div class="rule-display">
-                    <button class="rule-toggle" onclick="toggleRule(this)" data-translate="btnShowTechnical">Show Technical</button>
-                    <div class="rule-natural">
-                        <strong data-translate="rule2Title">Age-Based Priority Rule:</strong><br>
-                        <span data-translate="rule2Desc">When a patient over 40 years old receives a HIGH RISK classification from imaging analysis, immediately flag their case for urgent medical review and notify the clinical team within 24 hours.</span>
-                    </div>
-                    <div class="rule-technical">
-                        Patient(?p) ∧ hasAge(?p, ?age) ∧ hasImagingStudy(?p, ?study) ∧ hasRadiomicsFeature(?study, ?feature) ∧ hasRiskLevel(?feature, HighRisk) ∧ swrlb:greaterThan(?age, 40) → requiresUrgentReview(?p, true)
-                    </div>
-                </div>
-
-                <div class="rule-display">
-                    <button class="rule-toggle" onclick="toggleRule(this)" data-translate="btnShowTechnical">Show Technical</button>
-                    <div class="rule-natural">
-                        <strong data-translate="rule3Title">Federated Learning Eligibility:</strong><br>
-                        <span data-translate="rule3Desc">Include patient data in federated learning only if: data quality score exceeds 90%, patient has provided explicit consent for research participation, and the imaging study meets technical quality standards.</span>
-                    </div>
-                    <div class="rule-technical">
-                        Patient(?p) ∧ hasImagingStudy(?p, ?study) ∧ hasDataQuality(?study, ?quality) ∧ hasPrivacyConsent(?p, true) ∧ swrlb:greaterThan(?quality, 0.9) → eligibleForFederatedLearning(?p, true)
+                    
+                    <!-- SQWRL Queries Section -->
+                    <div class="rules-section">
+                        <h3><i class="fas fa-search"></i> SQWRL Queries (15)</h3>
+                        <div id="sqwrlQueriesList">
+                            <!-- SQWRL queries will be populated here -->
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <div>
-                <h2 data-translate="liveOntology">🔄 Live Ontology Updates</h2>
-                <div style="background: #f8fafc; border-radius: 10px; padding: 15px; height: 400px; overflow-y: auto;">
+            <div style="margin-top: 30px;">
+                <h2>🔄 Live Ontology Updates</h2>
+                <div id="liveOntologyUpdates" style="background: #f8fafc; border-radius: 10px; padding: 15px; height: 400px; overflow-y: auto;">
                     <div style="margin-bottom: 15px; padding: 10px; background: white; border-radius: 8px; border-left: 4px solid #38a169;">
-                        <strong>14:32:25</strong> - <span data-translate="update1">New individual created: Patient_ACR_2024_007</span>
+                        <strong>14:32:25</strong> - Ontolator engine initialized with 22 SWRL rules and 15 SQWRL queries
                     </div>
                     <div style="margin-bottom: 15px; padding: 10px; background: white; border-radius: 8px; border-left: 4px solid #3182ce;">
-                        <strong>14:32:26</strong> - <span data-translate="update2">Property assertion: hasRiskLevel(Patient_ACR_2024_007, HighRisk)</span>
+                        <strong>14:32:26</strong> - Molecular subtyping rules activated for patient classification
                     </div>
                     <div style="margin-bottom: 15px; padding: 10px; background: white; border-radius: 8px; border-left: 4px solid #d69e2e;">
-                        <strong>14:32:27</strong> - <span data-translate="update3">Rule fired: HighRiskDetectionRule for Patient_ACR_2024_007</span>
-                    </div>
-                    <div style="margin-bottom: 15px; padding: 10px; background: white; border-radius: 8px; border-left: 4px solid #764ba2;">
-                        <strong>14:32:28</strong> - <span data-translate="update4">Agent notification sent: DiagnosticAgent → ClinicalReviewAgent</span>
-                    </div>
-                    <div style="margin-bottom: 15px; padding: 10px; background: white; border-radius: 8px; border-left: 4px solid #38a169;">
-                        <strong>14:32:30</strong> - <span data-translate="update5">Ontology consistency verified: No conflicts detected</span>
+                        <strong>14:32:27</strong> - Treatment recommendation rules loaded and ready for inference
                     </div>
                 </div>
             </div>
@@ -513,17 +569,342 @@
             diagnostic: { name: 'Diagnostic Agent', status: 'idle' }
         };
 
+        // Comprehensive SWRL Rules and SQWRL Queries
+        const ONTOLATOR_RULES = {
+            swrlRules: [
+                {
+                    id: 1,
+                    natural: "If ER and PR are positive and HER2 is negative and Ki-67 < 20%, classify as Luminal A subtype",
+                    technical: "Patient(?p) ^ hasERStatus(?p, Positive) ^ hasPRStatus(?p, Positive) ^ hasHER2Status(?p, Negative) ^ hasKi67(?p, ?k) ^ swrlb:lessThan(?k, 20) -> hasMolecularSubtype(?p, LuminalA)",
+                    category: "biomarker"
+                },
+                {
+                    id: 2,
+                    natural: "If ER positive and HER2 positive, classify as Luminal B HER2-positive subtype",
+                    technical: "Patient(?p) ^ hasERStatus(?p, Positive) ^ hasHER2Status(?p, Positive) -> hasMolecularSubtype(?p, LuminalB_HER2Positive)",
+                    category: "biomarker"
+                },
+                {
+                    id: 3,
+                    natural: "If ER negative, PR negative, and HER2 positive, classify as HER2-enriched subtype",
+                    technical: "Patient(?p) ^ hasERStatus(?p, Negative) ^ hasPRStatus(?p, Negative) ^ hasHER2Status(?p, Positive) -> hasMolecularSubtype(?p, HER2Enriched)",
+                    category: "biomarker"
+                },
+                {
+                    id: 4,
+                    natural: "If ER negative, PR negative, and HER2 negative, classify as Triple Negative subtype",
+                    technical: "Patient(?p) ^ hasERStatus(?p, Negative) ^ hasPRStatus(?p, Negative) ^ hasHER2Status(?p, Negative) -> hasMolecularSubtype(?p, TripleNegative)",
+                    category: "biomarker"
+                },
+                {
+                    id: 5,
+                    natural: "If tumor size > 5cm or >4 positive lymph nodes, classify as high risk",
+                    technical: "Patient(?p) ^ hasTumorSize(?p, ?size) ^ hasPositiveLymphNodes(?p, ?nodes) ^ (swrlb:greaterThan(?size, 50) v swrlb:greaterThan(?nodes, 4)) -> hasRiskLevel(?p, High)",
+                    category: "risk"
+                },
+                {
+                    id: 6,
+                    natural: "If Luminal A subtype and postmenopausal, recommend endocrine therapy",
+                    technical: "Patient(?p) ^ hasMolecularSubtype(?p, LuminalA) ^ hasMenopausalStatus(?p, Postmenopausal) -> recommendsTherapy(?p, EndocrineTherapy)",
+                    category: "treatment"
+                },
+                {
+                    id: 7,
+                    natural: "If HER2 positive subtype, recommend anti-HER2 targeted therapy",
+                    technical: "Patient(?p) ^ (hasMolecularSubtype(?p, LuminalB_HER2Positive) v hasMolecularSubtype(?p, HER2Enriched)) -> recommendsTherapy(?p, AntiHER2Therapy)",
+                    category: "treatment"
+                },
+                {
+                    id: 8,
+                    natural: "If Triple Negative subtype and tumor > 2cm, recommend chemotherapy",
+                    technical: "Patient(?p) ^ hasMolecularSubtype(?p, TripleNegative) ^ hasTumorSize(?p, ?size) ^ swrlb:greaterThan(?size, 20) -> recommendsTherapy(?p, Chemotherapy)",
+                    category: "treatment"
+                },
+                {
+                    id: 9,
+                    natural: "If high risk and HER2 positive, recommend dual anti-HER2 therapy",
+                    technical: "Patient(?p) ^ hasRiskLevel(?p, High) ^ hasHER2Status(?p, Positive) -> recommendsTherapy(?p, DualAntiHER2Therapy)",
+                    category: "treatment"
+                },
+                {
+                    id: 10,
+                    natural: "If bone metastasis present, recommend bone-targeted therapy",
+                    technical: "Patient(?p) ^ hasMetastasisSite(?p, Bone) -> recommendsTherapy(?p, BoneTargetedTherapy)",
+                    category: "treatment"
+                },
+                {
+                    id: 11,
+                    natural: "If BRCA mutation positive and Triple Negative, recommend PARP inhibitor",
+                    technical: "Patient(?p) ^ hasBRCAMutation(?p, Positive) ^ hasMolecularSubtype(?p, TripleNegative) -> recommendsTherapy(?p, PARPInhibitor)",
+                    category: "treatment"
+                },
+                {
+                    id: 12,
+                    natural: "If age < 40 and high grade tumor, recommend genetic counseling",
+                    technical: "Patient(?p) ^ hasAge(?p, ?age) ^ hasTumorGrade(?p, High) ^ swrlb:lessThan(?age, 40) -> recommendsAction(?p, GeneticCounseling)",
+                    category: "risk"
+                },
+                {
+                    id: 13,
+                    natural: "If prior radiotherapy and new skin changes, monitor for radiation recall",
+                    technical: "Patient(?p) ^ hasPriorTherapy(?p, Radiotherapy) ^ hasSymptom(?p, SkinChanges) -> requiresMonitoring(?p, RadiationRecallMonitoring)",
+                    category: "monitoring"
+                },
+                {
+                    id: 14,
+                    natural: "If left-sided tumor and receiving anti-HER2 therapy, monitor cardiac function",
+                    technical: "Patient(?p) ^ hasTumorLaterality(?p, Left) ^ receivesTherapy(?p, AntiHER2Therapy) -> requiresMonitoring(?p, CardiacFunction)",
+                    category: "monitoring"
+                },
+                {
+                    id: 15,
+                    natural: "If liver metastasis and elevated LFTs, requires dose modification",
+                    technical: "Patient(?p) ^ hasMetastasisSite(?p, Liver) ^ hasLabValue(?p, LFTs, ?value) ^ swrlb:greaterThan(?value, 3) -> requiresAction(?p, DoseModification)",
+                    category: "treatment"
+                },
+                {
+                    id: 16,
+                    natural: "If symptomatic bone metastasis, recommend palliative radiotherapy",
+                    technical: "Patient(?p) ^ hasMetastasisSite(?p, Bone) ^ hasSymptom(?p, Pain) -> recommendsTherapy(?p, PalliativeRadiotherapy)",
+                    category: "treatment"
+                },
+                {
+                    id: 17,
+                    natural: "If brain metastasis and HER2 positive, recommend CNS-penetrating therapy",
+                    technical: "Patient(?p) ^ hasMetastasisSite(?p, Brain) ^ hasHER2Status(?p, Positive) -> recommendsTherapy(?p, CNSPenetratingTherapy)",
+                    category: "treatment"
+                },
+                {
+                    id: 18,
+                    natural: "If PD-L1 positive Triple Negative breast cancer, recommend immunotherapy",
+                    technical: "Patient(?p) ^ hasMolecularSubtype(?p, TripleNegative) ^ hasPDL1Status(?p, Positive) -> recommendsTherapy(?p, Immunotherapy)",
+                    category: "treatment"
+                },
+                {
+                    id: 19,
+                    natural: "If persistent neutropenia during chemotherapy, requires growth factor support",
+                    technical: "Patient(?p) ^ receivesTherapy(?p, Chemotherapy) ^ hasLabValue(?p, Neutrophils, ?value) ^ swrlb:lessThan(?value, 1.0) -> requiresAction(?p, GrowthFactorSupport)",
+                    category: "monitoring"
+                },
+                {
+                    id: 20,
+                    natural: "If premenopausal with hormone receptor positive disease, recommend ovarian suppression",
+                    technical: "Patient(?p) ^ hasMenopausalStatus(?p, Premenopausal) ^ (hasERStatus(?p, Positive) v hasPRStatus(?p, Positive)) -> recommendsTherapy(?p, OvarianSuppression)",
+                    category: "treatment"
+                },
+                {
+                    id: 21,
+                    natural: "If pathological complete response after neoadjuvant therapy, continue adjuvant therapy",
+                    technical: "Patient(?p) ^ receivedTherapy(?p, NeoadjuvantTherapy) ^ hasResponse(?p, PathologicalCompleteResponse) -> recommendsTherapy(?p, AdjuvantTherapy)",
+                    category: "treatment"
+                },
+                {
+                    id: 22,
+                    natural: "If progression on first-line endocrine therapy, recommend second-line options",
+                    technical: "Patient(?p) ^ receivedTherapy(?p, FirstLineEndocrineTherapy) ^ hasDiseaseStatus(?p, ProgressiveDisease) -> recommendsTherapy(?p, SecondLineTherapy)",
+                    category: "treatment"
+                }
+            ],
+            
+            sqwrlQueries: [
+                {
+                    id: 1,
+                    natural: "Select all patients with Luminal A subtype who are candidates for endocrine therapy",
+                    technical: "Patient(?p) ^ hasMolecularSubtype(?p, LuminalA) ^ sqwrl:select(?p)"
+                },
+                {
+                    id: 2,
+                    natural: "Find patients with HER2-positive disease who have not received anti-HER2 therapy",
+                    technical: "Patient(?p) ^ hasHER2Status(?p, Positive) ^ not receivesTherapy(?p, AntiHER2Therapy) ^ sqwrl:select(?p)"
+                },
+                {
+                    id: 3,
+                    natural: "Count patients with Triple Negative subtype and tumor size > 2cm",
+                    technical: "Patient(?p) ^ hasMolecularSubtype(?p, TripleNegative) ^ hasTumorSize(?p, ?size) ^ swrlb:greaterThan(?size, 20) ^ sqwrl:count(?p)"
+                },
+                {
+                    id: 4,
+                    natural: "List patients with high-risk features requiring intensive monitoring",
+                    technical: "Patient(?p) ^ hasRiskLevel(?p, High) ^ sqwrl:select(?p)"
+                },
+                {
+                    id: 5,
+                    natural: "Find premenopausal patients eligible for ovarian suppression therapy",
+                    technical: "Patient(?p) ^ hasMenopausalStatus(?p, Premenopausal) ^ (hasERStatus(?p, Positive) v hasPRStatus(?p, Positive)) ^ sqwrl:select(?p)"
+                },
+                {
+                    id: 6,
+                    natural: "Select patients with bone metastasis who may benefit from bone-targeted agents",
+                    technical: "Patient(?p) ^ hasMetastasisSite(?p, Bone) ^ sqwrl:select(?p)"
+                },
+                {
+                    id: 7,
+                    natural: "Identify patients with BRCA mutations for targeted therapy consideration",
+                    technical: "Patient(?p) ^ hasBRCAMutation(?p, Positive) ^ sqwrl:select(?p)"
+                },
+                {
+                    id: 8,
+                    natural: "Find patients with brain metastasis requiring specialized treatment approaches",
+                    technical: "Patient(?p) ^ hasMetastasisSite(?p, Brain) ^ sqwrl:select(?p)"
+                },
+                {
+                    id: 9,
+                    natural: "List patients with PD-L1 positive Triple Negative breast cancer for immunotherapy",
+                    technical: "Patient(?p) ^ hasMolecularSubtype(?p, TripleNegative) ^ hasPDL1Status(?p, Positive) ^ sqwrl:select(?p)"
+                },
+                {
+                    id: 10,
+                    natural: "Select patients experiencing treatment-related toxicities requiring intervention",
+                    technical: "Patient(?p) ^ hasToxicity(?p, ?tox) ^ swrlb:greaterThan(?tox, 2) ^ sqwrl:select(?p)"
+                },
+                {
+                    id: 11,
+                    natural: "Find patients with pathological complete response after neoadjuvant therapy",
+                    technical: "Patient(?p) ^ receivedTherapy(?p, NeoadjuvantTherapy) ^ hasResponse(?p, PathologicalCompleteResponse) ^ sqwrl:select(?p)"
+                },
+                {
+                    id: 12,
+                    natural: "Identify patients with progressive disease on current therapy line",
+                    technical: "Patient(?p) ^ hasDiseaseStatus(?p, ProgressiveDisease) ^ sqwrl:select(?p)"
+                },
+                {
+                    id: 13,
+                    natural: "List patients requiring dose modifications due to organ dysfunction",
+                    technical: "Patient(?p) ^ requiresAction(?p, DoseModification) ^ sqwrl:select(?p)"
+                },
+                {
+                    id: 14,
+                    natural: "Find patients with cardiac risk factors receiving cardiotoxic therapies",
+                    technical: "Patient(?p) ^ hasCardiacRiskFactor(?p, true) ^ receivesTherapy(?p, ?therapy) ^ hasCardiotoxicityPotential(?therapy, true) ^ sqwrl:select(?p)"
+                },
+                {
+                    id: 15,
+                    natural: "Select patients eligible for clinical trial participation based on molecular profile",
+                    technical: "Patient(?p) ^ hasMolecularSubtype(?p, ?subtype) ^ hasEligibilityCriteria(?p, ClinicalTrial) ^ sqwrl:select(?p)"
+                }
+            ]
+        };
+
         // Initialize the enhanced interface
         document.addEventListener('DOMContentLoaded', function() {
             updateAgentStatuses();
             startAgentCommunication();
             refreshDashboard();
+            initializeOntolator();
             
             // Initialize language switcher
             if (typeof initLanguageSwitcher === 'function') {
                 initLanguageSwitcher(translationKeys);
             }
         });
+
+        // Initialize Ontolator Engine
+        function initializeOntolator() {
+            populateSWRLRules();
+            populateSQWRLQueries();
+            startLiveUpdates();
+        }
+
+        function populateSWRLRules() {
+            const container = document.getElementById('swrlRulesList');
+            container.innerHTML = ONTOLATOR_RULES.swrlRules.map(rule => `
+                <div class="rule-item" onclick="toggleRule(this)">
+                    <div class="rule-natural">
+                        <span class="rule-category category-${rule.category}">${rule.category.toUpperCase()}</span>
+                        ${rule.natural}
+                    </div>
+                    <div class="rule-technical">
+                        ${rule.technical}
+                    </div>
+                    <div class="rule-meta">
+                        <span>SWRL Rule ${rule.id}</span>
+                        <span>Click to view technical</span>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function populateSQWRLQueries() {
+            const container = document.getElementById('sqwrlQueriesList');
+            container.innerHTML = ONTOLATOR_RULES.sqwrlQueries.map(query => `
+                <div class="rule-item" onclick="toggleRule(this)">
+                    <div class="rule-natural">
+                        ${query.natural}
+                    </div>
+                    <div class="rule-technical">
+                        ${query.technical}
+                    </div>
+                    <div class="rule-meta">
+                        <span>SQWRL Query ${query.id}</span>
+                        <span>Click to view technical</span>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function toggleRule(element) {
+            element.classList.toggle('active');
+        }
+
+        function startLiveUpdates() {
+            const updateContainer = document.getElementById('liveOntologyUpdates');
+            
+            // Add initial updates
+            const initialUpdates = [
+                "Ontolator engine loaded 22 SWRL rules for clinical decision support",
+                "15 SQWRL queries initialized for patient cohort analysis",
+                "Molecular subtyping rules activated and ready for inference",
+                "Treatment recommendation engine synchronized with latest guidelines"
+            ];
+            
+            initialUpdates.forEach((update, index) => {
+                setTimeout(() => {
+                    addOntologyUpdate(update);
+                }, index * 2000);
+            });
+            
+            // Continuous updates
+            setInterval(() => {
+                const randomRule = ONTOLATOR_RULES.swrlRules[Math.floor(Math.random() * ONTOLATOR_RULES.swrlRules.length)];
+                const randomQuery = ONTOLATOR_RULES.sqwrlQueries[Math.floor(Math.random() * ONTOLATOR_RULES.sqwrlQueries.length)];
+                
+                const updates = [
+                    `SWRL Rule ${randomRule.id} processed: ${randomRule.natural.substring(0, 60)}...`,
+                    `SQWRL Query ${randomQuery.id} executed: ${randomQuery.natural.substring(0, 60)}...`,
+                    "Patient data analyzed using molecular subtyping rules",
+                    "Treatment recommendations generated based on biomarker profile",
+                    "Risk assessment completed for current patient cohort"
+                ];
+                
+                const randomUpdate = updates[Math.floor(Math.random() * updates.length)];
+                addOntologyUpdate(randomUpdate);
+            }, 8000);
+        }
+
+        function addOntologyUpdate(message) {
+            const container = document.getElementById('liveOntologyUpdates');
+            const now = new Date();
+            const timeString = now.toTimeString().slice(0, 8);
+            
+            const updateDiv = document.createElement('div');
+            updateDiv.style.marginBottom = '15px';
+            updateDiv.style.padding = '10px';
+            updateDiv.style.background = 'white';
+            updateDiv.style.borderRadius = '8px';
+            updateDiv.style.borderLeft = '4px solid #3182ce';
+            
+            updateDiv.innerHTML = `
+                <strong>${timeString}</strong> - ${message}
+            `;
+            
+            container.appendChild(updateDiv);
+            container.scrollTop = container.scrollHeight;
+            
+            // Limit to 10 updates
+            if (container.children.length > 10) {
+                container.removeChild(container.firstChild);
+            }
+        }
 
         // Control Panel Functions
         async function refreshDashboard() {
@@ -594,37 +975,37 @@
         }
 
         function viewPatientDetail(patientId) {
-    if (!patientId) {
-        alert('Invalid patient ID');
-        return;
-    }
-    
-    console.log('🎯 Opening Data Entry for patient:', patientId);
-    
-    // Open test data page with patient ID pre-filled and auto-load
-    const url = `acr_test_data.html?patientId=${encodeURIComponent(patientId)}&autoLoad=true`;
-    const newWindow = window.open(url, '_blank', 'width=1400,height=900,scrollbars=yes,resizable=yes');
-    
-    if (!newWindow) {
-        alert('⚠️ Popup blocked! Please allow popups for this site.\n\n' +
-              'Alternatively, copy this Patient ID and paste in the Data Entry form:\n' + patientId);
-        // Fallback: Copy to clipboard
-        navigator.clipboard.writeText(patientId).then(() => {
-            console.log('Patient ID copied to clipboard:', patientId);
-        });
-    }
-    
-    // Add visual feedback
-    const button = event.target;
-    const originalText = button.innerHTML;
-    button.innerHTML = '⏳ Opening...';
-    button.disabled = true;
-    
-    setTimeout(() => {
-        button.innerHTML = originalText;
-        button.disabled = false;
-    }, 2000);
-}
+            if (!patientId) {
+                alert('Invalid patient ID');
+                return;
+            }
+            
+            console.log('🎯 Opening Data Entry for patient:', patientId);
+            
+            // Open test data page with patient ID pre-filled and auto-load
+            const url = `acr_test_data.html?patientId=${encodeURIComponent(patientId)}&autoLoad=true`;
+            const newWindow = window.open(url, '_blank', 'width=1400,height=900,scrollbars=yes,resizable=yes');
+            
+            if (!newWindow) {
+                alert('⚠️ Popup blocked! Please allow popups for this site.\n\n' +
+                      'Alternatively, copy this Patient ID and paste in the Data Entry form:\n' + patientId);
+                // Fallback: Copy to clipboard
+                navigator.clipboard.writeText(patientId).then(() => {
+                    console.log('Patient ID copied to clipboard:', patientId);
+                });
+            }
+            
+            // Add visual feedback
+            const button = event.target;
+            const originalText = button.innerHTML;
+            button.innerHTML = '⏳ Opening...';
+            button.disabled = true;
+            
+            setTimeout(() => {
+                button.innerHTML = originalText;
+                button.disabled = false;
+            }, 2000);
+        }
 
         function getSubtypeClass(subtype) {
             if (!subtype) return '';
@@ -636,24 +1017,6 @@
         }
 
         // Original OWL Interface Functions
-        function toggleRule(button) {
-            const ruleDisplay = button.parentElement;
-            const technical = ruleDisplay.querySelector('.rule-technical');
-            
-            if (technical.style.display === 'none' || !technical.style.display) {
-                technical.style.display = 'block';
-                button.setAttribute('data-translate', 'btnHideTechnical');
-            } else {
-                technical.style.display = 'none';
-                button.setAttribute('data-translate', 'btnShowTechnical');
-            }
-            
-            // Update button text translation
-            if (typeof translatePage === 'function') {
-                translatePage(currentLanguage);
-            }
-        }
-
         function updateAgentStatuses() {
             // Simulate dynamic agent status updates
             setInterval(() => {

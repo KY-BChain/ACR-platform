@@ -238,7 +238,6 @@
         .regimen-table td {
             padding: 10px;
             text-align: left;
-            border-bottom:
             border-bottom: 1px solid #e0e0e0;
         }
         
@@ -556,61 +555,6 @@
             <select id="patientSelect">
                 <option value="">-- 请选择患者 --</option>
             </select>
-            <script>
- <!-- replaced by script below for auto-detec   const API_BASE_URL = 'http://localhost:3000/api' -->
-        // Auto-detect environment
-        const API_BASE_URL = window.location.hostname === 'localhost'
-            ? 'http://localhost:5050/api'  // Local testing at port 5050
-            : 'https://www.acragent.com/api';  // Production
-                
-                // Load patients when page loads
-                document.addEventListener('DOMContentLoaded', async () => {
-                    try {
-                        await loadPatients();
-                    } catch (error) {
-                        console.error('Cannot connect to backend:', error);
-                        alert('请先启动后端服务器！Please start backend server first!');
-                    }
-                });
-    
-    // Check if patientId is in URL parameters
-    const urlParams = new URLSearchParams(window.location.search);
-    const patientId = urlParams.get('patientId');
-    
-    if (patientId) {
-        // Auto-select the patient in dropdown
-        const selectElement = document.getElementById('patientSelect');
-        if (selectElement) {
-            selectElement.value = patientId;
-            
-            // Auto-generate recommendation after a brief delay
-            setTimeout(() => {
-                generateRecommendation();
-            }, 500);
-        }
-    }
-                
-                async function loadPatients() {
-                    try {
-                        const response = await fetch(`${API_BASE_URL}/patients.php`);  // ✅ CORRECT
-                        const result = await response.json();
-                        
-                        if (result.success) {
-                            const select = document.getElementById('patientSelect');
-                            result.data.forEach(patient => {
-                                const option = document.createElement('option');
-                                option.value = patient.id;  // ✅ Correct field
-                                option.textContent = `${patient.患者姓名本地 || 'Unknown'} (${patient.患者本地标识符 || patient.id})`;
-                                select.appendChild(option);
-                            });
-                            console.log(`✅ Loaded ${result.data.length} patients into dropdown`);
-                        }
-                    } catch (error) {
-                        console.error('加载患者列表失败 Cannot connect to backend:', error);
-                        alert('无法加载患者列表，请确保后端服务运行中！Please start backend server first!');
-                    }
-                }
-            </script>
             <button class="btn-generate" onclick="generateRecommendation()">
                 🔬 生成临床推荐
             </button>
@@ -732,69 +676,75 @@
     </div>
 
     <script>
-        // Load patients on page load
+        // Auto-detect environment
+        const API_BASE_URL = window.location.hostname === 'localhost'
+            ? 'http://localhost:5050/api'  // Local testing at port 5050
+            : 'https://www.acragent.com/api';  // Production
+
+        // Load patients when page loads
         document.addEventListener('DOMContentLoaded', async () => {
-    try {
-        // Load patients list ONCE
-        await loadPatients();
-        
-        // Check for auto-load parameter
-        const urlParams = new URLSearchParams(window.location.search);
-        const patientId = urlParams.get('patientId');
-        
-        if (patientId) {
-            console.log('🔍 Auto-loading patient:', patientId);
-            
-            // Wait a moment for dropdown to finish populating
-            setTimeout(() => {
-                const selectElement = document.getElementById('patientSelect');
+            try {
+                // Load patients list ONCE
+                await loadPatients();
                 
-                if (!selectElement) {
-                    console.error('❌ Select element not found');
-                    return;
-                }
+                // Check for auto-load parameter
+                const urlParams = new URLSearchParams(window.location.search);
+                const patientId = urlParams.get('patientId');
                 
-                // Check if patient exists in the options
-                const optionExists = Array.from(selectElement.options).some(
-                    opt => opt.value === patientId
-                );
-                
-                if (optionExists) {
-                    console.log('✅ Patient found, selecting and generating CDS...');
+                if (patientId) {
+                    console.log('🔍 Auto-loading patient:', patientId);
                     
-                    // Select the patient
-                    selectElement.value = patientId;
-                    
-                    // Highlight the selector briefly
-                    const selectorDiv = document.querySelector('.patient-selector');
-                    if (selectorDiv) {
-                        selectorDiv.style.background = 'linear-gradient(90deg, #fff5e6 0%, #ffffff 100%)';
-                        selectorDiv.style.border = '2px solid #ffc107';
-                    }
-                    
-                    // Auto-generate CDS
+                    // Wait a moment for dropdown to finish populating
                     setTimeout(() => {
-                        generateRecommendation();
+                        const selectElement = document.getElementById('patientSelect');
                         
-                        // Remove highlight after 2 seconds
-                        if (selectorDiv) {
-                            setTimeout(() => {
-                                selectorDiv.style.background = '';
-                                selectorDiv.style.border = '';
-                            }, 2000);
+                        if (!selectElement) {
+                            console.error('❌ Select element not found');
+                            return;
                         }
-                    }, 500);
-                } else {
-                    console.error('❌ Patient not found in dropdown:', patientId);
-                    alert(`Patient ${patientId} not found.\n\nPlease select a patient from the dropdown.`);
+                        
+                        // Check if patient exists in the options
+                        const optionExists = Array.from(selectElement.options).some(
+                            opt => opt.value === patientId
+                        );
+                        
+                        if (optionExists) {
+                            console.log('✅ Patient found, selecting and generating CDS...');
+                            
+                            // Select the patient
+                            selectElement.value = patientId;
+                            
+                            // Highlight the selector briefly
+                            const selectorDiv = document.querySelector('.patient-selector');
+                            if (selectorDiv) {
+                                selectorDiv.style.background = 'linear-gradient(90deg, #fff5e6 0%, #ffffff 100%)';
+                                selectorDiv.style.border = '2px solid #ffc107';
+                            }
+                            
+                            // Auto-generate CDS
+                            setTimeout(() => {
+                                generateRecommendation();
+                                
+                                // Remove highlight after 2 seconds
+                                if (selectorDiv) {
+                                    setTimeout(() => {
+                                        selectorDiv.style.background = '';
+                                        selectorDiv.style.border = '';
+                                    }, 2000);
+                                }
+                            }, 500);
+                        } else {
+                            console.error('❌ Patient not found in dropdown:', patientId);
+                            alert(`Patient ${patientId} not found.\n\nPlease select a patient from the dropdown.`);
+                        }
+                    }, 800); // Wait 0.8s for dropdown to populate
                 }
-            }, 800); // Wait 0.8s for dropdown to populate
-        }
-        
-    } catch (error) {
-        console.error('❌ Page initialization error:', error);
-    }
-});
+                
+            } catch (error) {
+                console.error('❌ Page initialization error:', error);
+            }
+        });
+
         // Load all patients
         async function loadPatients() {
             try {
@@ -816,124 +766,820 @@
             }
         }
 
-        // Generate CDS recommendation
-        async function generateRecommendation() {
-    const patientId = document.getElementById('patientSelect').value;
+        // Simple SWRL/SQWRL Engine Implementation
+        class SWRLEngine {
+            constructor() {
+                this.facts = new Map();
+                this.rules = new Map();
+                this.results = new Map();
+            }
 
-    if (!patientId) {
-        alert('请先选择患者');
-        return;
-    }
+            addFact(type, id, data) {
+                if (!this.facts.has(type)) {
+                    this.facts.set(type, new Map());
+                }
+                this.facts.get(type).set(id, data);
+            }
 
-    // Show loading
-    document.getElementById('loadingDiv').style.display = 'block';
-    document.getElementById('resultsContainer').style.display = 'none';
-    document.getElementById('actionPanel').style.display = 'none';
+            executeAllRules() {
+                console.log("Executing SWRL rules...");
+                const results = {
+                    molecularSubtype: this.determineMolecularSubtype(),
+                    riskLevel: this.determineRiskLevel(),
+                    treatmentIndications: this.determineTreatmentIndications(),
+                    alerts: this.generateAlerts()
+                };
+                return results;
+            }
 
-    try {
-        // First get patient details
-        const patientResponse = await fetch(`${API_BASE_URL}/patients.php?id=${patientId}`);
-        const patientResult = await patientResponse.json();
-        
-        if (!patientResult.success) {
-            throw new Error('无法加载患者数据');
+            determineMolecularSubtype() {
+                const biomarkers = this.facts.get('Biomarker')?.values().next().value;
+                if (!biomarkers) return 'Unknown';
+
+                const { erStatus, prStatus, her2Status, ki67 } = biomarkers;
+                
+                if (erStatus === 'Positive' || prStatus === 'Positive') {
+                    if (her2Status === 'Positive') {
+                        return 'Luminal B HER2+';
+                    } else {
+                        if (ki67 < 20) {
+                            return 'Luminal A';
+                        } else {
+                            return 'Luminal B HER2-';
+                        }
+                    }
+                } else if (her2Status === 'Positive') {
+                    return 'HER2-enriched';
+                } else {
+                    return 'Triple Negative';
+                }
+            }
+
+            determineRiskLevel() {
+                const pathology = this.facts.get('Pathology')?.values().next().value;
+                if (!pathology) return 'Unknown';
+
+                const { tumorSize, lymphNodes, histologicGrade } = pathology;
+                let riskScore = 0;
+                
+                // Tumor size scoring
+                if (tumorSize > 50) riskScore += 3;
+                else if (tumorSize > 20) riskScore += 2;
+                else if (tumorSize > 10) riskScore += 1;
+                
+                // Lymph nodes scoring
+                if (lymphNodes > 9) riskScore += 3;
+                else if (lymphNodes > 3) riskScore += 2;
+                else if (lymphNodes > 0) riskScore += 1;
+                
+                // Grade scoring
+                if (histologicGrade === '3') riskScore += 2;
+                else if (histologicGrade === '2') riskScore += 1;
+                
+                // Determine risk level
+                if (riskScore >= 6) return 'High';
+                else if (riskScore >= 3) return 'Intermediate';
+                else return 'Low';
+            }
+
+            determineTreatmentIndications() {
+                const indications = [];
+                const biomarkers = this.facts.get('Biomarker')?.values().next().value;
+                const pathology = this.facts.get('Pathology')?.values().next().value;
+
+                if (biomarkers?.erStatus === 'Positive') {
+                    indications.push('Endocrine Therapy');
+                }
+                
+                if (biomarkers?.her2Status === 'Positive') {
+                    indications.push('Anti-HER2 Therapy');
+                }
+                
+                if (pathology?.tumorSize > 20 || pathology?.lymphNodes > 0) {
+                    indications.push('Chemotherapy');
+                }
+                
+                return indications;
+            }
+
+            generateAlerts() {
+                const alerts = [];
+                const biomarkers = this.facts.get('Biomarker')?.values().next().value;
+                const pathology = this.facts.get('Pathology')?.values().next().value;
+
+                if (!biomarkers?.erStatus || !biomarkers?.prStatus || !biomarkers?.her2Status) {
+                    alerts.push('Missing critical biomarker data');
+                }
+                
+                if (pathology?.tumorSize > 50 || pathology?.lymphNodes > 9) {
+                    alerts.push('High-risk features present');
+                }
+                
+                return alerts;
+            }
         }
-        
-        // Then generate recommendation
-        const recResponse = await fetch(`${API_BASE_URL}/recommendations.php`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ patient_id: patientId })
-        });
 
-        const recResult = await recResponse.json();
+        class SQWRLEngine {
+            constructor() {
+                this.data = null;
+            }
 
-        if (recResult.success) {
-            // Combine patient data with recommendation
-            const combinedData = {
-                ...recResult.data,
+            addData(patientData) {
+                this.data = patientData;
+            }
+
+            executeAllQueries() {
+                console.log("Executing SQWRL queries...");
+                return {
+                    highRiskPatients: this.queryHighRiskPatients(),
+                    her2PositivePatients: this.queryHER2PositivePatients(),
+                    endocrineTherapyCandidates: this.queryEndocrineTherapyCandidates(),
+                    chemotherapyCandidates: this.queryChemotherapyCandidates()
+                };
+            }
+
+            queryHighRiskPatients() {
+                const { tumorSize, lymphNodes } = this.data;
+                return tumorSize > 50 || lymphNodes > 9;
+            }
+
+            queryHER2PositivePatients() {
+                return this.data.her2Status === 'Positive';
+            }
+
+            queryEndocrineTherapyCandidates() {
+                return this.data.erStatus === 'Positive' || this.data.prStatus === 'Positive';
+            }
+
+            queryChemotherapyCandidates() {
+                const { tumorSize, lymphNodes, molecularSubtype } = this.data;
+                return tumorSize > 20 || lymphNodes > 0 || molecularSubtype === 'Triple Negative';
+            }
+        }
+
+        // Generate CDS recommendation using SWRL/SQWRL engine
+        async function generateRecommendation() {
+            const patientId = document.getElementById('patientSelect').value;
+
+            if (!patientId) {
+                alert('请先选择患者');
+                return;
+            }
+
+            // Show loading
+            document.getElementById('loadingDiv').style.display = 'block';
+            document.getElementById('resultsContainer').style.display = 'none';
+            document.getElementById('actionPanel').style.display = 'none';
+
+            try {
+                // First get patient details
+                const patientResponse = await fetch(`${API_BASE_URL}/patients.php?id=${patientId}`);
+                const patientResult = await patientResponse.json();
+                
+                if (!patientResult.success) {
+                    throw new Error('无法加载患者数据');
+                }
+                
+                // Initialize SWRL/SQWRL engine with patient data
+                const patientData = preparePatientData(patientResult.data);
+                
+                // Execute SWRL rules and SQWRL queries
+                const reasoningResults = executeSWRLRules(patientData);
+                const queryResults = executeSQWRLQueries(patientData);
+                
+                // Generate recommendations based on SWRL/SQWRL results
+                const recommendation = generateRecommendations(patientData, reasoningResults, queryResults);
+                
+                // Display the recommendation
+                displayRecommendation(recommendation);
+
+            } catch (error) {
+                console.error('生成推荐错误:', error);
+                alert('错误: ' + error.message);
+                
+                // Fallback: try to use the original backend recommendation
+                try {
+                    const recResponse = await fetch(`${API_BASE_URL}/recommendations.php`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ patient_id: patientId })
+                    });
+                    const recResult = await recResponse.json();
+                    
+                    if (recResult.success) {
+                        // Use backend recommendation as fallback
+                        const patientResponse = await fetch(`${API_BASE_URL}/patients.php?id=${patientId}`);
+                        const patientResult = await patientResponse.json();
+                        
+                        const combinedData = {
+                            ...recResult.data,
+                            patientInfo: {
+                                id: patientResult.data.patient.id,
+                                name: patientResult.data.patient.患者姓名本地 || 'Unknown',
+                                age: patientResult.data.patient.年龄推导 || '--',
+                                gender: patientResult.data.patient.性别 || '--',
+                                stage: '--',
+                                subtype: '--',
+                                riskLevel: '--'
+                            },
+                            biomarkers: {
+                                ER: patientResult.data.receptors?.ER结果标志和百分比 ? 
+                                    `${patientResult.data.receptors.ER结果标志和百分比}% (阳性)` : '--',
+                                PR: patientResult.data.receptors?.PR结果标志和百分比 ? 
+                                    `${patientResult.data.receptors.PR结果标志和百分比}% (阳性)` : '--',
+                                HER2: patientResult.data.receptors?.HER2最终解释 || '--',
+                                Ki67: patientResult.data.receptors?.['Ki-67增殖指数'] ? 
+                                    `${patientResult.data.receptors['Ki-67增殖指数']}%` : '--',
+                                grade: patientResult.data.pathology?.grade || '--'
+                            }
+                        };
+                        
+                        displayRecommendation(combinedData);
+                    }
+                } catch (fallbackError) {
+                    console.error('Fallback also failed:', fallbackError);
+                }
+            } finally {
+                document.getElementById('loadingDiv').style.display = 'none';
+            }
+        }
+
+        // Prepare patient data for SWRL/SQWRL engine
+        function preparePatientData(patientData) {
+            const patient = patientData.patient || {};
+            const receptors = patientData.receptors || {};
+            const pathology = patientData.pathology || {};
+            const staging = patientData.staging || {};
+            
+            // Parse biomarker values
+            const erValue = receptors.ER结果标志和百分比;
+            const prValue = receptors.PR结果标志和百分比;
+            const her2Value = receptors.HER2最终解释;
+            
+            return {
+                id: patient.id,
+                name: patient.患者姓名本地 || 'Unknown',
+                age: patient.年龄推导 || 0,
+                gender: patient.性别 || 'Unknown',
+                birthDate: patient.date_of_birth || null,
+                
+                // Biomarkers
+                erStatus: erValue ? (erValue > 1 ? 'Positive' : 'Negative') : 'Unknown',
+                erPercentage: erValue || 0,
+                prStatus: prValue ? (prValue > 1 ? 'Positive' : 'Negative') : 'Unknown',
+                prPercentage: prValue || 0,
+                her2Status: her2Value || 'Unknown',
+                her2IHC: receptors.HER2IHC || 0,
+                her2ISH: receptors.HER2ISH || 0,
+                ki67: receptors['Ki-67增殖指数'] || 0,
+                
+                // Pathology
+                histologicGrade: pathology.grade || 'Unknown',
+                tumorSize: pathology.tumor_size || 0,
+                lymphNodes: pathology.lymph_nodes_positive || 0,
+                
+                // Staging
+                clinicalStage: staging.clinical_stage || 'Unknown',
+                tnmStage: staging.tnm_stage || 'Unknown',
+                
+                // Additional clinical data
+                menopausalStatus: patient.绝经状态 || 'Unknown',
+                familyHistory: patient.家族史 || 'No'
+            };
+        }
+
+        // Execute SWRL rules
+        function executeSWRLRules(patientData) {
+            console.log("Executing SWRL Rules...");
+            
+            // Initialize SWRL engine
+            const swrlEngine = new SWRLEngine();
+            
+            // Add patient data as facts
+            swrlEngine.addFact('Patient', patientData.id, {
+                age: patientData.age,
+                gender: patientData.gender,
+                menopausalStatus: patientData.menopausalStatus
+            });
+            
+            // Add biomarker facts
+            swrlEngine.addFact('Biomarker', patientData.id, {
+                erStatus: patientData.erStatus,
+                prStatus: patientData.prStatus,
+                her2Status: patientData.her2Status,
+                ki67: patientData.ki67
+            });
+            
+            // Add pathology facts
+            swrlEngine.addFact('Pathology', patientData.id, {
+                histologicGrade: patientData.histologicGrade,
+                tumorSize: patientData.tumorSize,
+                lymphNodes: patientData.lymphNodes
+            });
+            
+            // Execute all SWRL rules
+            const results = swrlEngine.executeAllRules();
+            
+            console.log("SWRL Rule Execution Results:", results);
+            return results;
+        }
+
+        // Execute SQWRL queries
+        function executeSQWRLQueries(patientData) {
+            console.log("Executing SQWRL Queries...");
+            
+            // Initialize SQWRL engine
+            const sqwrlEngine = new SQWRLEngine();
+            
+            // Add patient data
+            sqwrlEngine.addData(patientData);
+            
+            // Execute all SQWRL queries
+            const results = sqwrlEngine.executeAllQueries();
+            
+            console.log("SQWRL Query Results:", results);
+            return results;
+        }
+
+        // Generate recommendations based on SWRL/SQWRL results
+        function generateRecommendations(patientData, reasoningResults, queryResults) {
+            // Determine molecular subtype
+            const molecularSubtype = reasoningResults.molecularSubtype || determineMolecularSubtype(patientData);
+            
+            // Determine risk level
+            const riskLevel = reasoningResults.riskLevel || determineRiskLevel(patientData);
+            
+            // Generate treatment recommendations
+            const medications = generateTreatmentRecommendations(patientData, molecularSubtype, riskLevel, reasoningResults);
+            
+            // Generate monitoring requirements
+            const monitoring = generateMonitoringRequirements(patientData, molecularSubtype, riskLevel);
+            
+            // Generate timeline
+            const timeline = generateTreatmentTimeline(patientData, medications);
+            
+            // Generate clinical reasoning
+            const reasoning = generateClinicalReasoning(patientData, molecularSubtype, reasoningResults, queryResults);
+            
+            // Calculate confidence score
+            const confidence = calculateConfidenceScore(patientData, reasoningResults);
+            
+            // Generate alerts if needed
+            const alerts = generateAlerts(patientData, reasoningResults);
+            
+            return {
                 patientInfo: {
-                    id: patientResult.data.patient.id,
-                    name: patientResult.data.patient.患者姓名本地 || 'Unknown',
-                    age: patientResult.data.patient.年龄推导 || '--',
-                    gender: patientResult.data.patient.性别 || '--',
-                    birthDate: patientResult.data.patient.date_of_birth || null,
-                    stage: '--',  // Will get from staging if available
-                    subtype: '--',  // Will get from receptors
-                    riskLevel: '--'
+                    id: patientData.id,
+                    name: patientData.name,
+                    age: patientData.age,
+                    gender: patientData.gender,
+                    birthDate: patientData.birthDate,
+                    stage: patientData.clinicalStage,
+                    subtype: molecularSubtype,
+                    riskLevel: riskLevel === 'High' ? '高危' : riskLevel === 'Intermediate' ? '中危' : '低危'
                 },
                 biomarkers: {
-                    ER: patientResult.data.receptors?.ER结果标志和百分比 ? 
-                        `${patientResult.data.receptors.ER结果标志和百分比}% (阳性)` : '--',
-                    PR: patientResult.data.receptors?.PR结果标志和百分比 ? 
-                        `${patientResult.data.receptors.PR结果标志和百分比}% (阳性)` : '--',
-                    HER2: patientResult.data.receptors?.HER2最终解释 || '--',
-                    Ki67: patientResult.data.receptors?.['Ki-67增殖指数'] ? 
-                        `${patientResult.data.receptors['Ki-67增殖指数']}%` : '--',
-                    grade: patientResult.data.pathology?.grade || '--'
+                    ER: patientData.erStatus === 'Positive' ? 
+                        `${patientData.erPercentage}% (阳性)` : '阴性',
+                    PR: patientData.prStatus === 'Positive' ? 
+                        `${patientData.prPercentage}% (阳性)` : '阴性',
+                    HER2: patientData.her2Status,
+                    Ki67: patientData.ki67 ? `${patientData.ki67}%` : '--',
+                    grade: patientData.histologicGrade
                 },
-                timeline: [],
-                reasoning: recResult.data.reasoning || []
+                medications: medications,
+                monitoring: monitoring,
+                timeline: timeline,
+                reasoning: reasoning,
+                confidence: confidence,
+                alerts: alerts
             };
-            
-            displayRecommendation(combinedData);
-        } else {
-            throw new Error(recResult.error || '生成推荐失败');
         }
-    } catch (error) {
-        console.error('生成推荐错误:', error);
-        alert('错误: ' + error.message);
-    } finally {
-        document.getElementById('loadingDiv').style.display = 'none';
-    }
-}
+
+        // Determine molecular subtype based on biomarkers
+        function determineMolecularSubtype(patientData) {
+            const { erStatus, prStatus, her2Status, ki67 } = patientData;
+            
+            if (erStatus === 'Positive' || prStatus === 'Positive') {
+                if (her2Status === 'Positive') {
+                    return 'Luminal B HER2+';
+                } else {
+                    if (ki67 < 20) {
+                        return 'Luminal A';
+                    } else {
+                        return 'Luminal B HER2-';
+                    }
+                }
+            } else if (her2Status === 'Positive') {
+                return 'HER2-enriched';
+            } else {
+                return 'Triple Negative';
+            }
+        }
+
+        // Determine risk level
+        function determineRiskLevel(patientData) {
+            const { tumorSize, lymphNodes, histologicGrade } = patientData;
+            
+            let riskScore = 0;
+            
+            // Tumor size scoring
+            if (tumorSize > 50) riskScore += 3;
+            else if (tumorSize > 20) riskScore += 2;
+            else if (tumorSize > 10) riskScore += 1;
+            
+            // Lymph nodes scoring
+            if (lymphNodes > 9) riskScore += 3;
+            else if (lymphNodes > 3) riskScore += 2;
+            else if (lymphNodes > 0) riskScore += 1;
+            
+            // Grade scoring
+            if (histologicGrade === '3') riskScore += 2;
+            else if (histologicGrade === '2') riskScore += 1;
+            
+            // Determine risk level
+            if (riskScore >= 6) return 'High';
+            else if (riskScore >= 3) return 'Intermediate';
+            else return 'Low';
+        }
+
+        // Generate treatment recommendations
+        function generateTreatmentRecommendations(patientData, molecularSubtype, riskLevel, reasoningResults) {
+            const recommendations = [];
+            
+            // Base treatment based on molecular subtype
+            switch(molecularSubtype) {
+                case 'Luminal A':
+                    recommendations.push({
+                        medicationName: '他莫昔芬 Tamoxifen',
+                        rationale: 'ER/PR阳性，HER2阴性，Ki-67低表达',
+                        dose: '20',
+                        frequency: '每日一次',
+                        route: 'PO',
+                        duration: '3650', // 10 years
+                        priority: 'Primary',
+                        guidelineSource: 'CSCO',
+                        recommendationLevel: 'I'
+                    });
+                    break;
+                    
+                case 'Luminal B HER2-':
+                    recommendations.push({
+                        medicationName: '来曲唑 Letrozole',
+                        rationale: 'ER/PR阳性，HER2阴性，Ki-67高表达',
+                        dose: '2.5',
+                        frequency: '每日一次',
+                        route: 'PO',
+                        duration: '1825', // 5 years
+                        priority: 'Primary',
+                        guidelineSource: 'NCCN',
+                        recommendationLevel: 'I'
+                    });
+                    break;
+                    
+                case 'Luminal B HER2+':
+                    recommendations.push({
+                        medicationName: '曲妥珠单抗 Trastuzumab',
+                        rationale: 'ER/PR阳性，HER2阳性',
+                        dose: '8',
+                        frequency: '每3周一次',
+                        route: 'IV',
+                        duration: '365', // 1 year
+                        priority: 'Primary',
+                        guidelineSource: 'CACA',
+                        recommendationLevel: 'I'
+                    });
+                    recommendations.push({
+                        medicationName: '来曲唑 Letrozole',
+                        rationale: 'ER/PR阳性，HER2阳性',
+                        dose: '2.5',
+                        frequency: '每日一次',
+                        route: 'PO',
+                        duration: '1825', // 5 years
+                        priority: 'Secondary',
+                        guidelineSource: 'NCCN',
+                        recommendationLevel: 'I'
+                    });
+                    break;
+                    
+                case 'HER2-enriched':
+                    recommendations.push({
+                        medicationName: '曲妥珠单抗 Trastuzumab',
+                        rationale: 'HER2阳性，ER/PR阴性',
+                        dose: '8',
+                        frequency: '每3周一次',
+                        route: 'IV',
+                        duration: '365', // 1 year
+                        priority: 'Primary',
+                        guidelineSource: 'CACA',
+                        recommendationLevel: 'I'
+                    });
+                    recommendations.push({
+                        medicationName: '帕妥珠单抗 Pertuzumab',
+                        rationale: 'HER2阳性晚期乳腺癌',
+                        dose: '840',
+                        frequency: '每3周一次',
+                        route: 'IV',
+                        duration: '365', // 1 year
+                        priority: 'Secondary',
+                        guidelineSource: 'NCCN',
+                        recommendationLevel: 'II'
+                    });
+                    break;
+                    
+                case 'Triple Negative':
+                    recommendations.push({
+                        medicationName: '紫杉醇 Paclitaxel',
+                        rationale: '三阴性乳腺癌标准化疗',
+                        dose: '175',
+                        frequency: '每3周一次',
+                        route: 'IV',
+                        duration: '84', // 12 weeks
+                        priority: 'Primary',
+                        guidelineSource: 'CSCO',
+                        recommendationLevel: 'I'
+                    });
+                    recommendations.push({
+                        medicationName: '卡铂 Carboplatin',
+                        rationale: '三阴性乳腺癌联合化疗',
+                        dose: 'AUC 6',
+                        frequency: '每3周一次',
+                        route: 'IV',
+                        duration: '84', // 12 weeks
+                        priority: 'Secondary',
+                        guidelineSource: 'CSCO',
+                        recommendationLevel: 'II'
+                    });
+                    break;
+            }
+            
+            // Add chemotherapy for high-risk patients
+            if (riskLevel === 'High') {
+                recommendations.push({
+                    medicationName: '多西他赛 Docetaxel',
+                    rationale: '高危患者辅助化疗',
+                    dose: '75',
+                    frequency: '每3周一次',
+                    route: 'IV',
+                    duration: '63', // 9 weeks
+                    priority: 'Secondary',
+                    guidelineSource: 'CSCO',
+                    recommendationLevel: 'II'
+                });
+            }
+            
+            return recommendations;
+        }
+
+        // Generate monitoring requirements
+        function generateMonitoringRequirements(patientData, molecularSubtype, riskLevel) {
+            const monitoring = [];
+            
+            // Base monitoring for all patients
+            monitoring.push({
+                type: '血液检查',
+                frequency: '每3个月',
+                rationale: '血常规、肝肾功能监测'
+            });
+            
+            monitoring.push({
+                type: '影像学检查',
+                frequency: '每6个月',
+                rationale: '乳腺超声、胸部CT'
+            });
+            
+            // Additional monitoring based on subtype
+            if (molecularSubtype.includes('HER2')) {
+                monitoring.push({
+                    type: '心脏功能评估',
+                    frequency: '每3个月',
+                    rationale: '曲妥珠单抗相关心脏毒性监测'
+                });
+            }
+            
+            if (molecularSubtype.includes('Luminal')) {
+                monitoring.push({
+                    type: '骨密度检测',
+                    frequency: '每年',
+                    rationale: '内分泌治疗相关骨质流失监测'
+                });
+            }
+            
+            // Additional monitoring for high-risk patients
+            if (riskLevel === 'High') {
+                monitoring.push({
+                    type: '肿瘤标志物',
+                    frequency: '每3个月',
+                    rationale: 'CA15-3, CEA监测'
+                });
+                
+                monitoring.push({
+                    type: '全身骨扫描',
+                    frequency: '每年',
+                    rationale: '高危患者骨转移筛查'
+                });
+            }
+            
+            return monitoring;
+        }
+
+        // Generate treatment timeline
+        function generateTreatmentTimeline(patientData, medications) {
+            const timeline = [];
+            const today = new Date();
+            
+            // Diagnosis event
+            timeline.push({
+                date: formatDate(today),
+                title: '确诊诊断',
+                description: '基于病理和分子分型确诊乳腺癌'
+            });
+            
+            // Treatment planning event
+            const planningDate = new Date(today);
+            planningDate.setDate(planningDate.getDate() + 7);
+            timeline.push({
+                date: formatDate(planningDate),
+                title: '治疗计划制定',
+                description: '多学科团队制定个体化治疗方案'
+            });
+            
+            // Treatment start events
+            medications.forEach((med, index) => {
+                if (med.priority === 'Primary') {
+                    const startDate = new Date(today);
+                    startDate.setDate(startDate.getDate() + 14 + (index * 7));
+                    timeline.push({
+                        date: formatDate(startDate),
+                        title: `开始${med.medicationName}`,
+                        description: `${med.dose}${med.route === 'IV' ? 'mg IV' : 'mg PO'} ${med.frequency}`
+                    });
+                }
+            });
+            
+            // Follow-up events
+            for (let i = 3; i <= 12; i += 3) {
+                const followupDate = new Date(today);
+                followupDate.setMonth(followupDate.getMonth() + i);
+                timeline.push({
+                    date: formatDate(followupDate),
+                    title: `第${i}个月随访`,
+                    description: '疗效评估和不良反应监测'
+                });
+            }
+            
+            return timeline;
+        }
+
+        // Generate clinical reasoning
+        function generateClinicalReasoning(patientData, molecularSubtype, reasoningResults, queryResults) {
+            const reasoning = [];
+            
+            // Step 1: Patient characterization
+            reasoning.push({
+                title: '患者特征分析',
+                description: `患者${patientData.name}，${patientData.age}岁，${patientData.gender}，绝经状态：${patientData.menopausalStatus}`
+            });
+            
+            // Step 2: Biomarker analysis
+            reasoning.push({
+                title: '生物标志物分析',
+                description: `ER: ${patientData.erStatus}, PR: ${patientData.prStatus}, HER2: ${patientData.her2Status}, Ki-67: ${patientData.ki67}%`
+            });
+            
+            // Step 3: Molecular subtyping
+            reasoning.push({
+                title: '分子分型确定',
+                description: `基于生物标志物特征，确定为${molecularSubtype}型乳腺癌`
+            });
+            
+            // Step 4: Risk assessment
+            reasoning.push({
+                title: '风险等级评估',
+                description: `基于肿瘤大小(${patientData.tumorSize}mm)、淋巴结状态(${patientData.lymphNodes}个阳性)、组织学分级(${patientData.histologicGrade})，评估为${determineRiskLevel(patientData)}`
+            });
+            
+            // Step 5: Treatment selection
+            reasoning.push({
+                title: '治疗方案选择',
+                description: '基于分子分型、风险等级和临床指南，制定个体化治疗方案'
+            });
+            
+            return reasoning;
+        }
+
+        // Calculate confidence score
+        function calculateConfidenceScore(patientData, reasoningResults) {
+            let score = 80; // Base score
+            
+            // Increase score for complete data
+            if (patientData.erStatus !== 'Unknown') score += 5;
+            if (patientData.prStatus !== 'Unknown') score += 5;
+            if (patientData.her2Status !== 'Unknown') score += 5;
+            if (patientData.ki67 > 0) score += 5;
+            
+            // Decrease score for missing critical data
+            if (patientData.tumorSize === 0) score -= 10;
+            if (patientData.histologicGrade === 'Unknown') score -= 10;
+            
+            // Ensure score is within 0-100
+            return Math.min(100, Math.max(0, score));
+        }
+
+        // Generate alerts if needed
+        function generateAlerts(patientData, reasoningResults) {
+            const alerts = [];
+            
+            // Alert for missing critical data
+            if (patientData.erStatus === 'Unknown' || 
+                patientData.prStatus === 'Unknown' || 
+                patientData.her2Status === 'Unknown') {
+                alerts.push({
+                    level: 'HIGH',
+                    type: '数据不完整',
+                    message: '关键生物标志物数据缺失，可能影响治疗决策',
+                    actionRequired: '补充ER、PR、HER2检测'
+                });
+            }
+            
+            // Alert for high-risk features
+            if (patientData.tumorSize > 50 || patientData.lymphNodes > 9) {
+                alerts.push({
+                    level: 'CRITICAL',
+                    type: '高危特征',
+                    message: '患者具有高危特征（大肿瘤或多淋巴结转移）',
+                    actionRequired: '建议多学科团队讨论'
+                });
+            }
+            
+            // Alert for potential hereditary risk
+            if (patientData.familyHistory === 'Yes' && patientData.age < 50) {
+                alerts.push({
+                    level: 'HIGH',
+                    type: '遗传风险',
+                    message: '患者有家族史且发病年龄较轻，可能存在遗传风险',
+                    actionRequired: '建议遗传咨询和BRCA基因检测'
+                });
+            }
+            
+            return alerts;
+        }
+
+        // Helper function to format dates
+        function formatDate(date) {
+            return date.toLocaleDateString('zh-CN', {
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric'
+            });
+        }
 
         // Display recommendation results
         function displayRecommendation(data) {
-    // Show results container
-    document.getElementById('resultsContainer').style.display = 'block';
-    document.getElementById('actionPanel').style.display = 'flex';
+            // Show results container
+            document.getElementById('resultsContainer').style.display = 'block';
+            document.getElementById('actionPanel').style.display = 'flex';
 
-    // Display alerts
-    if (data.alerts && data.alerts.length > 0) {
-        displayAlerts(data.alerts);
-    }
+            // Display alerts
+            if (data.alerts && data.alerts.length > 0) {
+                displayAlerts(data.alerts);
+            }
 
-    // Display patient summary
-    if (data.patientInfo) {
-        displayPatientSummary(data.patientInfo);
-    }
+            // Display patient summary
+            if (data.patientInfo) {
+                displayPatientSummary(data.patientInfo);
+            }
 
-    // Display biomarkers
-    if (data.biomarkers) {
-        displayBiomarkers(data.biomarkers);
-    }
+            // Display biomarkers
+            if (data.biomarkers) {
+                displayBiomarkers(data.biomarkers);
+            }
 
-    // Display treatment recommendations
-    if (data.medications && data.medications.length > 0) {
-        displayTreatments(data.medications);
-    }
+            // Display treatment recommendations
+            if (data.medications && data.medications.length > 0) {
+                displayTreatments(data.medications);
+            }
 
-    // Display monitoring requirements
-    if (data.monitoring && data.monitoring.length > 0) {
-        displayMonitoring(data.monitoring);
-    }
+            // Display monitoring requirements
+            if (data.monitoring && data.monitoring.length > 0) {
+                displayMonitoring(data.monitoring);
+            }
 
-    // Display timeline
-    if (data.timeline && data.timeline.length > 0) {
-        displayTimeline(data.timeline);
-    }
+            // Display timeline
+            if (data.timeline && data.timeline.length > 0) {
+                displayTimeline(data.timeline);
+            }
 
-    // Display clinical reasoning
-    if (data.reasoning && data.reasoning.length > 0) {
-        displayReasoning(data.reasoning);
-    }
+            // Display clinical reasoning
+            if (data.reasoning && data.reasoning.length > 0) {
+                displayReasoning(data.reasoning);
+            }
 
-    // Display confidence score
-    if (data.confidence) {
-        displayConfidence(data.confidence);
-    }
-}
+            // Display confidence score
+            if (data.confidence) {
+                displayConfidence(data.confidence);
+            }
+        }
 
         function displayAlerts(alerts) {
             const alertsSection = document.getElementById('alertsSection');
@@ -960,12 +1606,13 @@
         }
 
         function displayPatientSummary(patientInfo) {
-        // Format DOB if available
-        let dobDisplay = '';
-        if (patientInfo.birthDate || patientInfo.date_of_birth) {
-        const dob = new Date(patientInfo.birthDate || patientInfo.date_of_birth);
-        dobDisplay = ` | DOB: ${dob.toLocaleDateString('zh-CN')}`;
-        }
+            // Format DOB if available
+            let dobDisplay = '';
+            if (patientInfo.birthDate) {
+                const dob = new Date(patientInfo.birthDate);
+                dobDisplay = ` | DOB: ${dob.toLocaleDateString('zh-CN')}`;
+            }
+            
             document.getElementById('patientInfo').textContent = 
                 `${patientInfo.name}, ${patientInfo.age}岁, ${patientInfo.gender}`;
             document.getElementById('clinicalStage').textContent = patientInfo.stage || '--';
@@ -981,78 +1628,77 @@
         function displayBiomarkers(biomarkers) {
             document.getElementById('erStatus').textContent = biomarkers.ER || '--';
             document.getElementById('erStatus').className = 
-                `biomarker-value ${biomarkers.ER === '阳性' ? 'positive' : 'negative'}`;
+                `biomarker-value ${biomarkers.ER.includes('阳性') ? 'positive' : 'negative'}`;
             
             document.getElementById('prStatus').textContent = biomarkers.PR || '--';
             document.getElementById('prStatus').className = 
-                `biomarker-value ${biomarkers.PR === '阳性' ? 'positive' : 'negative'}`;
+                `biomarker-value ${biomarkers.PR.includes('阳性') ? 'positive' : 'negative'}`;
             
             document.getElementById('her2Status').textContent = biomarkers.HER2 || '--';
             document.getElementById('her2Status').className = 
-                `biomarker-value ${biomarkers.HER2 === '阳性' ? 'positive' : 'negative'}`;
+                `biomarker-value ${biomarkers.HER2.includes('阳性') ? 'positive' : 'negative'}`;
             
             document.getElementById('ki67Index').textContent = biomarkers.Ki67 || '--';
             document.getElementById('histoGrade').textContent = biomarkers.grade || '--';
         }
 
         function displayTreatments(treatments) {
-    const container = document.getElementById('treatmentCards');
-    container.innerHTML = '';
+            const container = document.getElementById('treatmentCards');
+            container.innerHTML = '';
 
-    if (!treatments || treatments.length === 0) {
-        container.innerHTML = '<p style="color: #999;">No treatment recommendations available</p>';
-        return;
-    }
+            if (!treatments || treatments.length === 0) {
+                container.innerHTML = '<p style="color: #999;">No treatment recommendations available</p>';
+                return;
+            }
 
-    treatments.forEach((treatment, index) => {
-        const card = document.createElement('div');
-        card.className = 'treatment-card';
-        
-        // Safe defaults
-        const guidelineSource = treatment.guidelineSource || 'CSCO';
-        const recommendationLevel = treatment.recommendationLevel || 'I';
-        
-        card.innerHTML = `
-            <div class="treatment-header">
-                <div class="treatment-title">${index + 1}. ${treatment.medicationName || 'Treatment'}</div>
-                <div>
-                    <span class="guideline-badge guideline-${guidelineSource.toLowerCase()}">
-                        ${guidelineSource}
-                    </span>
-                    <span class="level-badge level-${recommendationLevel}">
-                        ${recommendationLevel}类推荐
-                    </span>
-                </div>
-            </div>
-            <p style="color: #666; font-size: 14px; margin-bottom: 10px;">
-                ${treatment.rationale || 'Treatment recommendation based on clinical guidelines'}
-            </p>
-            <div class="regimen-details">
-                <table class="regimen-table">
-                    <tr>
-                        <th>剂量 Dose</th>
-                        <th>频率 Frequency</th>
-                        <th>给药途径 Route</th>
-                        <th>疗程 Duration</th>
-                        <th>优先级 Priority</th>
-                    </tr>
-                    <tr>
-                        <td>${treatment.dose ? treatment.dose + ' mg' : 'As prescribed'}</td>
-                        <td>${treatment.frequency || '--'}</td>
-                        <td>${treatment.route || 'PO'}</td>
-                        <td>${treatment.duration ? treatment.duration + ' days' : 'Ongoing'}</td>
-                        <td style="color: ${treatment.priority === 'Primary' ? '#28a745' : '#ed8936'}; font-weight: 600;">
-                            ${treatment.priority === 'Primary' ? '首选' : '备选'}
-                        </td>
-                    </tr>
-                </table>
-            </div>
-        `;
-        
-        container.appendChild(card);
-    });
-}
-
+            treatments.forEach((treatment, index) => {
+                const card = document.createElement('div');
+                card.className = 'treatment-card';
+                
+                // Safe defaults
+                const guidelineSource = treatment.guidelineSource || 'CSCO';
+                const recommendationLevel = treatment.recommendationLevel || 'I';
+                
+                card.innerHTML = `
+                    <div class="treatment-header">
+                        <div class="treatment-title">${index + 1}. ${treatment.medicationName || 'Treatment'}</div>
+                        <div>
+                            <span class="guideline-badge guideline-${guidelineSource.toLowerCase()}">
+                                ${guidelineSource}
+                            </span>
+                            <span class="level-badge level-${recommendationLevel}">
+                                ${recommendationLevel}类推荐
+                            </span>
+                        </div>
+                    </div>
+                    <p style="color: #666; font-size: 14px; margin-bottom: 10px;">
+                        ${treatment.rationale || 'Treatment recommendation based on clinical guidelines'}
+                    </p>
+                    <div class="regimen-details">
+                        <table class="regimen-table">
+                            <tr>
+                                <th>剂量 Dose</th>
+                                <th>频率 Frequency</th>
+                                <th>给药途径 Route</th>
+                                <th>疗程 Duration</th>
+                                <th>优先级 Priority</th>
+                            </tr>
+                            <tr>
+                                <td>${treatment.dose ? treatment.dose + ' mg' : 'As prescribed'}</td>
+                                <td>${treatment.frequency || '--'}</td>
+                                <td>${treatment.route || 'PO'}</td>
+                                <td>${treatment.duration ? treatment.duration + ' days' : 'Ongoing'}</td>
+                                <td style="color: ${treatment.priority === 'Primary' ? '#28a745' : '#ed8936'}; font-weight: 600;">
+                                    ${treatment.priority === 'Primary' ? '首选' : '备选'}
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                `;
+                
+                container.appendChild(card);
+            });
+        }
 
         function displayMonitoring(monitoring) {
             const list = document.getElementById('monitoringList');
@@ -1097,38 +1743,25 @@
             });
         }
 
-function displayReasoning(reasoning) {
-    const container = document.getElementById('reasoningSteps');
-    container.innerHTML = '';
-    
-    // reasoning is a string, not an array
-    if (typeof reasoning === 'string') {
-        const div = document.createElement('div');
-        div.className = 'reasoning-step';
-        div.innerHTML = `
-            <div class="step-number">1</div>
-            <div class="step-content">
-                <div class="step-title">临床推理 Clinical Reasoning</div>
-                <div class="step-description">${reasoning}</div>
-            </div>
-        `;
-        container.appendChild(div);
-    } else if (Array.isArray(reasoning)) {
-        // Handle array format if needed later
-        reasoning.forEach((step, index) => {
-            const div = document.createElement('div');
-            div.className = 'reasoning-step';
-            div.innerHTML = `
-                <div class="step-number">${index + 1}</div>
-                <div class="step-content">
-                    <div class="step-title">${step.title || '推理步骤'}</div>
-                    <div class="step-description">${step}</div>
-                </div>
-            `;
-            container.appendChild(div);
-        });
-    }
-}
+        function displayReasoning(reasoning) {
+            const container = document.getElementById('reasoningSteps');
+            container.innerHTML = '';
+
+            if (Array.isArray(reasoning)) {
+                reasoning.forEach((step, index) => {
+                    const div = document.createElement('div');
+                    div.className = 'reasoning-step';
+                    div.innerHTML = `
+                        <div class="step-number">${index + 1}</div>
+                        <div class="step-content">
+                            <div class="step-title">${step.title || '推理步骤'}</div>
+                            <div class="step-description">${step.description}</div>
+                        </div>
+                    `;
+                    container.appendChild(div);
+                });
+            }
+        }
 
         function displayConfidence(confidence) {
             document.getElementById('confidenceScore').textContent = confidence + '%';
