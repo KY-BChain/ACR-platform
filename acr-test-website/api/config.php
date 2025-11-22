@@ -1,4 +1,15 @@
 <?php
+// CORS headers
+header('Access-Control-Allow-Origin: *');
+header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS');
+header('Access-Control-Allow-Headers: Content-Type, Authorization');
+header('Content-Type: application/json');
+
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+    http_response_code(200);
+    exit();
+}
+
 /**
  * ACR Platform - SQLite Database Configuration
  * 
@@ -18,7 +29,7 @@ define('DB_PATH', __DIR__ . '/../data/acr_clinical_trail.db');
 // ============================================
 
 define('API_BASE_URL', '/acr/api');
-define('DEBUG_MODE', true);  // Set to true for development, false for production
+define('DEBUG_MODE', false);  // Set to true for development, false for production
 define('CORS_ENABLED', true);
 define('ALLOWED_ORIGINS', '*');
 
