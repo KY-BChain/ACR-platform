@@ -1,0 +1,77 @@
+[
+  {
+    "id": 1,
+    "technical": "Patient(?p) ^ hasMolecularSubtype(?p, LuminalA) -> sqwrl:select(?p)",
+    "natural": "اختر المرضى بنوع Luminal A"
+  },
+  {
+    "id": 2,
+    "technical": "Patient(?p) ^ hasMolecularSubtype(?p, LuminalB) -> sqwrl:select(?p)",
+    "natural": "اختر المرضى بنوع Luminal B"
+  },
+  {
+    "id": 3,
+    "technical": "Patient(?p) ^ hasMolecularSubtype(?p, HER2Positive) -> sqwrl:select(?p)",
+    "natural": "اختر المرضى بنوع HER2 إيجابي"
+  },
+  {
+    "id": 4,
+    "technical": "Patient(?p) ^ hasMolecularSubtype(?p, TripleNegative) -> sqwrl:select(?p)",
+    "natural": "اختر المرضى بنوع ثلاثي السلبي"
+  },
+  {
+    "id": 5,
+    "technical": "Patient(?p) ^ hasRiskLevel(?p, High) -> sqwrl:select(?p)",
+    "natural": "اختر المرضى ذوي الخطورة العالية"
+  },
+  {
+    "id": 6,
+    "technical": "Patient(?p) ^ recommendTreatment(?p, Chemotherapy) -> sqwrl:select(?p)",
+    "natural": "اختر المرضى الموصى لهم بالعلاج الكيميائي"
+  },
+  {
+    "id": 7,
+    "technical": "Patient(?p) ^ recommendTreatment(?p, EndocrineTherapy) -> sqwrl:select(?p)",
+    "natural": "اختر المرضى الموصى لهم بالعلاج الهرموني"
+  },
+  {
+    "id": 8,
+    "technical": "Patient(?p) ^ hasAge(?p, ?age) ^ swrlb:lessThan(?age, 50) -> sqwrl:select(?p)",
+    "natural": "اختر المرضى تحت 50 سنة"
+  },
+  {
+    "id": 9,
+    "technical": "Patient(?p) ^ hasTumorSize(?p, ?size) ^ swrlb:greaterThan(?size, 20) -> sqwrl:select(?p)",
+    "natural": "اختر المرضى بحجم ورم > 2 سم"
+  },
+  {
+    "id": 10,
+    "technical": "Patient(?p) ^ hasLymphNodeStatus(?p, Positive) -> sqwrl:select(?p)",
+    "natural": "اختر المرضى بعقد ليمفاوية إيجابية"
+  },
+  {
+    "id": 11,
+    "technical": "Patient(?p) ^ hasBRCAStatus(?p, Positive) -> sqwrl:select(?p)",
+    "natural": "اختر المرضى بحالة BRCA إيجابية"
+  },
+  {
+    "id": 12,
+    "technical": "Patient(?p) ^ requiresGeneticCounseling(?p, true) -> sqwrl:select(?p)",
+    "natural": "اختر المرضى الذين يحتاجون استشارة وراثية"
+  },
+  {
+    "id": 13,
+    "technical": "Patient(?p) ^ hasTreatmentResponse(?p, ?resp) ^ swrlb:lessThan(?resp, 0.5) -> sqwrl:select(?p)",
+    "natural": "اختر المرضى باستجابة علاج < 50%"
+  },
+  {
+    "id": 14,
+    "technical": "Patient(?p) ^ hasPathologicalResponse(?p, Complete) -> sqwrl:select(?p)",
+    "natural": "اختر المرضى باستجابة مرضية كاملة"
+  },
+  {
+    "id": 15,
+    "technical": "Patient(?p) ^ includeInFederatedLearning(?p, true) -> sqwrl:select(?p)",
+    "natural": "اختر المرضى المؤهلين للتعلم الموحد"
+  }
+]

@@ -1,0 +1,77 @@
+[
+  {
+    "id": 1,
+    "technical": "Patient(?p) ^ hasMolecularSubtype(?p, LuminalA) -> sqwrl:select(?p)",
+    "natural": "Patienten mit Luminal-A-Subtyp auswählen"
+  },
+  {
+    "id": 2,
+    "technical": "Patient(?p) ^ hasMolecularSubtype(?p, LuminalB) -> sqwrl:select(?p)",
+    "natural": "Patienten mit Luminal-B-Subtyp auswählen"
+  },
+  {
+    "id": 3,
+    "technical": "Patient(?p) ^ hasMolecularSubtype(?p, HER2Positive) -> sqwrl:select(?p)",
+    "natural": "Patienten mit HER2-positivem Subtyp auswählen"
+  },
+  {
+    "id": 4,
+    "technical": "Patient(?p) ^ hasMolecularSubtype(?p, TripleNegative) -> sqwrl:select(?p)",
+    "natural": "Patienten mit Triple-Negativen-Subtyp auswählen"
+  },
+  {
+    "id": 5,
+    "technical": "Patient(?p) ^ hasRiskLevel(?p, High) -> sqwrl:select(?p)",
+    "natural": "Hochrisikopatienten auswählen"
+  },
+  {
+    "id": 6,
+    "technical": "Patient(?p) ^ recommendTreatment(?p, Chemotherapy) -> sqwrl:select(?p)",
+    "natural": "Patienten auswählen, für die Chemotherapie empfohlen wird"
+  },
+  {
+    "id": 7,
+    "technical": "Patient(?p) ^ recommendTreatment(?p, EndocrineTherapy) -> sqwrl:select(?p)",
+    "natural": "Patienten auswählen, für die endokrine Therapie empfohlen wird"
+  },
+  {
+    "id": 8,
+    "technical": "Patient(?p) ^ hasAge(?p, ?age) ^ swrlb:lessThan(?age, 50) -> sqwrl:select(?p)",
+    "natural": "Patienten unter 50 Jahren auswählen"
+  },
+  {
+    "id": 9,
+    "technical": "Patient(?p) ^ hasTumorSize(?p, ?size) ^ swrlb:greaterThan(?size, 20) -> sqwrl:select(?p)",
+    "natural": "Patienten mit Tumorgröße > 2cm auswählen"
+  },
+  {
+    "id": 10,
+    "technical": "Patient(?p) ^ hasLymphNodeStatus(?p, Positive) -> sqwrl:select(?p)",
+    "natural": "Patienten mit positiven Lymphknoten auswählen"
+  },
+  {
+    "id": 11,
+    "technical": "Patient(?p) ^ hasBRCAStatus(?p, Positive) -> sqwrl:select(?p)",
+    "natural": "Patienten mit BRCA-positivem Status auswählen"
+  },
+  {
+    "id": 12,
+    "technical": "Patient(?p) ^ requiresGeneticCounseling(?p, true) -> sqwrl:select(?p)",
+    "natural": "Patienten auswählen, die genetische Beratung benötigen"
+  },
+  {
+    "id": 13,
+    "technical": "Patient(?p) ^ hasTreatmentResponse(?p, ?resp) ^ swrlb:lessThan(?resp, 0.5) -> sqwrl:select(?p)",
+    "natural": "Patienten mit Therapieansprechen < 50% auswählen"
+  },
+  {
+    "id": 14,
+    "technical": "Patient(?p) ^ hasPathologicalResponse(?p, Complete) -> sqwrl:select(?p)",
+    "natural": "Patienten mit pathologischer Komplettremission auswählen"
+  },
+  {
+    "id": 15,
+    "technical": "Patient(?p) ^ includeInFederatedLearning(?p, true) -> sqwrl:select(?p)",
+    "natural": "Patienten auswählen, die für Federated Learning geeignet sind"
+  }
+]
