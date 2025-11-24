@@ -281,7 +281,35 @@
 .wide-panel .filter-grid {
     grid-template-columns: repeat(4, 1fr);
 }
+.ontolator-header {
+    margin-bottom: 15px;
+}
 
+.ontolator-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+}
+
+.toggle-btn {
+    background: #667eea;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: normal;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.toggle-btn:hover {
+    background: #5a6fd8;
+    transform: translateY(-1px);
+    transition: all 0.2s ease;
+}
     </style>
     <script>
         // Redirect if not authenticated
@@ -364,16 +392,24 @@
     <div class="left-column">
         <!-- SWRL Rules and SQWRL Queries Panel -->
         <div class="panel">
-            <h2>🧠 Ontolator - SWRL Rules & SQWRL Queries</h2>
-            <p style="color: #666; margin-bottom: 15px; font-size: 12px;">
-                Interactive clinical rules and queries for breast cancer decision support
-            </p>
+            <!-- Replace the current Ontolator subtitle section with this -->
+            <div class="ontolator-header">
+                <h2 data-translate="ontolatorTitle">🧠 Ontolator - SWRL Rules & SQWRL Queries</h2>
+                <div class="ontolator-controls">
+                    <p style="color: #666; margin: 0; font-size: 12px;" data-translate="ontolatorSubtitle">
+                        Interactive clinical rules and queries for breast cancer decision support
+                    </p>
+                    <button id="rulesToggleBtn" onclick="toggleRulesView()" class="toggle-btn" data-translate="switchToSQWRL">
+                        🔀 Switch to SQWRL Queries
+                    </button>
+                </div>
+            </div>
             
             <div class="rules-container">
                 <!-- SWRL Rules Section -->
                 <div class="rules-section">
                     <div class="section-header">
-                        <h3 style="margin: 0; font-size: 14px;"><i class="fas fa-ruler-combined"></i> SWRL Rules (<span id="swrlRuleCount">0</span>)</h3>
+                        <h3 style="margin: 0; font-size: 14px;"><i class="fas fa-ruler-combined"></i> <span data-translate="swrlRulesTitle">SWRL Rules</span> (<span id="swrlRuleCount">0</span>)</h3>
                     </div>
                     <div id="swrlRulesList" class="rules-content">
                         <div class="rule-item">
@@ -387,7 +423,7 @@
                 <!-- SQWRL Queries Section -->
                 <div class="rules-section">
                     <div class="section-header">
-                        <h3 style="margin: 0; font-size: 14px;"><i class="fas fa-search"></i> SQWRL Queries (<span id="sqwrlQueryCount">0</span>)</h3>
+                        <h3 style="margin: 0; font-size: 14px;"><i class="fas fa-search"></i> <span data-translate="sqwrlQueriesTitle">SQWRL Queries</span> (<span id="sqwrlQueryCount">0</span>)</h3>
                     </div>
                     <div id="sqwrlQueriesList" class="rules-content">
                         <div class="rule-item">
@@ -480,9 +516,9 @@
 <div class="panel wide-panel" style="margin-top: 20px; width: 100%;">
     <div style="padding: 25px; width: 100%; box-sizing: border-box;">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; width: 100%;">
-            <h2 style="margin: 0; font-size: 24px;">📊 Patients Summary</h2>
-            <button class="btn-view" onclick="openFullDashboard()" style="background: #667eea; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-size: 14px; font-weight: 500;">
-                🚀 Full Dashboard
+            <h2 style="margin: 0; font-size: 24px;" data-translate="patientsSummaryTitle">📊 Patients Summary 患者摘要</h2>
+            <button class="btn-view" onclick="openFullDashboard()" style="background: #667eea; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-size: 14px; font-weight: 500;" data-translate="fullDashboardButton">
+                🚀 Full Dashboard 完整细节盘
             </button>
         </div>
         
@@ -494,22 +530,22 @@
                 <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; width: 100%;">
                     <div style="background: #f8f9fa; padding: 25px; border-radius: 12px; border-left: 6px solid #667eea; text-align: center;">
                         <span style="font-size: 32px; font-weight: bold; color: #333; display: block;" id="totalPatients">0</span>
-                        <span style="font-size: 14px; color: #666; display: block; margin-top: 8px;">Total Patients</span>
+                        <span style="font-size: 14px; color: #666; display: block; margin-top: 8px;" data-translate="totalPatientsLabel">Total Patients</span>
                     </div>
                     
                     <div style="background: #f8f9fa; padding: 25px; border-radius: 12px; border-left: 6px solid #48bb78; text-align: center;">
                         <span style="font-size: 32px; font-weight: bold; color: #333; display: block;" id="adherenceRate">0%</span>
-                        <span style="font-size: 14px; color: #666; display: block; margin-top: 8px;">Adherence Rate</span>
+                        <span style="font-size: 14px; color: #666; display: block; margin-top: 8px;" data-translate="totalPatientsLabel">Adherence Rate</span>
                     </div>
                     
                     <div style="background: #f8f9fa; padding: 25px; border-radius: 12px; border-left: 6px solid #ed8936; text-align: center;">
                         <span style="font-size: 32px; font-weight: bold; color: #333; display: block;" id="pendingMDT">0</span>
-                        <span style="font-size: 14px; color: #666; display: block; margin-top: 8px;">Pending MDT</span>
+                        <span style="font-size: 14px; color: #666; display: block; margin-top: 8px;" data-translate="totalPatientsLabel">Pending MDT</span>
                     </div>
                     
                     <div style="background: #f8f9fa; padding: 25px; border-radius: 12px; border-left: 6px solid #e53e3e; text-align: center;">
                         <span style="font-size: 32px; font-weight: bold; color: #333; display: block;" id="criticalAlerts">0</span>
-                        <span style="font-size: 14px; color: #666; display: block; margin-top: 8px;">Critical Alerts</span>
+                        <span style="font-size: 14px; color: #666; display: block; margin-top: 8px;" data-translate="totalPatientsLabel">CRitical Alerts</span>
                     </div>
                 </div>
             </div>
@@ -520,9 +556,9 @@
                 <div style="background: #f8f9fa; padding: 25px; border-radius: 12px; height: 100%; width: 100%;">
                     <div style="display: flex; flex-direction: column; gap: 20px; width: 100%;">
                         <div>
-                            <label style="display: block; margin-bottom: 10px; font-size: 14px; color: #666; font-weight: 500;">Subtype</label>
+                            <label style="display: block; margin-bottom: 10px; font-size: 14px; color: #666; font-weight: 500;" data-translate="subtypeFilterLabel">Subtype</label>
                             <select id="filterSubtype" onchange="applyFilters()" style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px; background: white;">
-                                <option value="">All Subtypes</option>
+                                <option value="" data-translate="allSubtypesOption">All Subtypes</option>
                                 <option value="Luminal A">Luminal A</option>
                                 <option value="Luminal B">Luminal B</option>
                                 <option value="HER2+">HER2+</option>
@@ -530,9 +566,9 @@
                             </select>
                         </div>
                         <div>
-                            <label style="display: block; margin-bottom: 10px; font-size: 14px; color: #666; font-weight: 500;">Stage</label>
+                            <label style="display: block; margin-bottom: 10px; font-size: 14px; color: #666; font-weight: 500;" data-translate="subtypeFilterLabel">Stage</label>
                             <select id="filterStage" onchange="applyFilters()" style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px; background: white;">
-                                <option value="">All Stages</option>
+                                <option value="" data-translate="allStagesOption">All Stages</option>
                                 <option value="I">Stage I</option>
                                 <option value="II">Stage II</option>
                                 <option value="III">Stage III</option>
@@ -540,9 +576,9 @@
                             </select>
                         </div>
                         <div>
-                            <label style="display: block; margin-bottom: 10px; font-size: 14px; color: #666; font-weight: 500;">Status</label>
+                            <label style="display: block; margin-bottom: 10px; font-size: 14px; color: #666; font-weight: 500;" data-translate="subtypeFilterLabel">Status</label>
                             <select style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px; background: white;">
-                                <option value="">All Status</option>
+                                <option value="" data-translate="allStatusOption">All Status</option>
                                 <option value="Active">Active</option>
                                 <option value="Completed">Completed</option>
                                 <option value="Pending">Pending</option>
@@ -556,12 +592,12 @@
         <!-- Patient Table - Full Width Below -->
         <div style="width: 100%;">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; width: 100%;">
-                <h3 style="margin: 0; font-size: 20px; color: #333; font-weight: 600;">Patient Records (<span id="patientCount">0</span>)</h3>
+                <h3 style="margin: 0; font-size: 20px; color: #333; font-weight: 600;" data-translate="patientRecordsTitle">Patient Records</h3> (<span id="patientCount">0</span>)
                 <div>
-                    <button class="btn-view" style="background: #48bb78; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-size: 14px; font-weight: 500; margin-right: 10px;">
+                    <button class="btn-view" style="background: #48bb78; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-size: 14px; font-weight: 500; margin-right: 10px;" data-translate="exportDataButton">
                         📥 Export Data
                     </button>
-                    <button class="btn-view" style="background: #ed8936; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-size: 14px; font-weight: 500;">
+                    <button class="btn-view" style="background: #ed8936; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-size: 14px; font-weight: 500;" data-translate="refreshButton">
                         🔄 Refresh
                     </button>
                 </div>
@@ -570,14 +606,14 @@
                 <table style="width: 100%; font-size: 14px; border-collapse: collapse; min-width: 100%;">
                     <thead>
                         <tr style="background: #f8f9fa; position: sticky; top: 0;">
-                            <th style="padding: 16px; font-weight: 600; border-bottom: 2px solid #e0e0e0; text-align: left; min-width: 120px;">MRN</th>
-                            <th style="padding: 16px; font-weight: 600; border-bottom: 2px solid #e0e0e0; text-align: left; min-width: 150px;">Name</th>
-                            <th style="padding: 16px; font-weight: 600; border-bottom: 2px solid #e0e0e0; text-align: left; min-width: 80px;">Age</th>
-                            <th style="padding: 16px; font-weight: 600; border-bottom: 2px solid #e0e0e0; text-align: left; min-width: 140px;">Subtype</th>
-                            <th style="padding: 16px; font-weight: 600; border-bottom: 2px solid #e0e0e0; text-align: left; min-width: 100px;">Stage</th>
-                            <th style="padding: 16px; font-weight: 600; border-bottom: 2px solid #e0e0e0; text-align: left; min-width: 120px;">Last Visit</th>
-                            <th style="padding: 16px; font-weight: 600; border-bottom: 2px solid #e0e0e0; text-align: left; min-width: 120px;">Status</th>
-                            <th style="padding: 16px; font-weight: 600; border-bottom: 2px solid #e0e0e0; text-align: center; min-width: 120px;">Actions</th>
+                            <th style="padding: 16px; font-weight: 600; border-bottom: 2px solid #e0e0e0; text-align: left; min-width: 120px;" data-translate="mrnHeader">MRN</th>
+                            <th style="padding: 16px; font-weight: 600; border-bottom: 2px solid #e0e0e0; text-align: left; min-width: 150px;" data-translate="nameHeader">Name</th>
+                            <th style="padding: 16px; font-weight: 600; border-bottom: 2px solid #e0e0e0; text-align: left; min-width: 80px;" data-translate="ageHeader">Age</th>
+                            <th style="padding: 16px; font-weight: 600; border-bottom: 2px solid #e0e0e0; text-align: left; min-width: 140px;" data-translate="subtypeHeader">Subtype</th>
+                            <th style="padding: 16px; font-weight: 600; border-bottom: 2px solid #e0e0e0; text-align: left; min-width: 100px;" data-translate="stageHeader">Stage</th>
+                            <th style="padding: 16px; font-weight: 600; border-bottom: 2px solid #e0e0e0; text-align: left; min-width: 120px;" data-translate="lastVisitHeader">Last Visit</th>
+                            <th style="padding: 16px; font-weight: 600; border-bottom: 2px solid #e0e0e0; text-align: left; min-width: 120px;" data-translate="statusHeader">Status</th>
+                            <th style="padding: 16px; font-weight: 600; border-bottom: 2px solid #e0e0e0; text-align: center; min-width: 120px;" data-translate="actionsHeader">Actions</th>
                         </tr>
                     </thead>
                     <tbody id="patientTableBody">
@@ -595,7 +631,7 @@
 
 <!-- Live Ontology Updates - Full Width -->
 <div class="panel wide-panel" style="margin-top: 20px;">
-    <h2 data-translate="liveOntology">🔄 Live Ontology Updates</h2>
+    <h2 data-translate="liveOntologyUpdatesTitle">🔄 Live Ontology Updates 实时本体更新</h2>
     <div id="liveOntologyUpdates" style="background: #f8fafc; border-radius: 10px; padding: 15px; height: 200px; overflow-y: auto; font-size: 13px;">
         <div style="margin-bottom: 12px; padding: 10px; background: white; border-radius: 8px; border-left: 4px solid #38a169;">
             <strong>14:32:25</strong> - Ontolator engine initializing...
@@ -664,6 +700,9 @@
                 if (translations[key]) {
                     el.textContent = translations[key];
                 }
+                
+            // Update toggle button text
+                updateToggleButtonText();
             });
             
             // Update ontology engine language
@@ -1070,11 +1109,12 @@ function loadFallbackRules() {
         function updatePatientTable() {
             const tbody = document.getElementById('patientTableBody');
             document.getElementById('patientCount').textContent = filteredPatients.length;
+            const viewButtonText = document.querySelector('[data-translate="viewButton"]')?.textContent || 'View';
             
             if (filteredPatients.length === 0) {
                 tbody.innerHTML = `
                     <tr>
-                        <td colspan="5" style="text-align: center; color: #999; padding: 20px;">
+                        <td colspan="8" style="text-align: center; color: #999; padding: 20px;">
                             No patients match the current filters
                         </td>
                     </tr>
@@ -1086,11 +1126,14 @@ function loadFallbackRules() {
                 <tr onclick="viewPatientDetail('${patient.id}')">
                     <td>${patient.mrn || patient.id}</td>
                     <td>${patient.name || 'Unknown'}</td>
+                    <td>${patient.age || '--'}</td>
                     <td><span class="badge badge-${getSubtypeClass(patient.subtype)}">${patient.subtype || '--'}</span></td>
                     <td>${patient.stage || '--'}</td>
-                    <td>
+                    <td>${patient.lastVisit || '--'}</td>
+                    <td>${patient.status || '--'}</td>
+                    <td style="text-align: center;">
                         <button class="btn-view" onclick="viewPatientDetail('${patient.id}'); event.stopPropagation();">
-                            View
+                            ${viewButtonText}
                         </button>
                     </td>
                 </tr>
@@ -1250,6 +1293,54 @@ function loadFallbackRules() {
                 console.error('Failed to load SQWRL queries for language:', lang, error);
             }
         }
+
+        // SWRL/SQWRL Toggle Functionality
+        function toggleRulesView() {
+            const swrlSection = document.querySelector('.rules-section:first-child');
+            const sqwrlSection = document.querySelector('.rules-section:last-child');
+            const toggleBtn = document.getElementById('rulesToggleBtn');
+            
+            if (!swrlSection || !sqwrlSection || !toggleBtn) return;
+            
+            const isSWRLVisible = swrlSection.style.display !== 'none';
+            
+            if (isSWRLVisible) {
+                // Show SQWRL, hide SWRL
+                swrlSection.style.display = 'none';
+                sqwrlSection.style.display = 'block';
+                toggleBtn.setAttribute('data-translate', 'switchToSWRL');
+                updateToggleButtonText();
+            } else {
+                // Show SWRL, hide SQWRL  
+                swrlSection.style.display = 'block';
+                sqwrlSection.style.display = 'none';
+                toggleBtn.setAttribute('data-translate', 'switchToSQWRL');
+                updateToggleButtonText();
+            }
+        }
+
+        // Helper function to update toggle button text based on current language
+        function updateToggleButtonText() {
+            const toggleBtn = document.getElementById('rulesToggleBtn');
+            if (!toggleBtn) return;
+            
+            const currentKey = toggleBtn.getAttribute('data-translate');
+            const translatedElement = document.querySelector(`[data-translate="${currentKey}"]`);
+            
+            if (translatedElement && translatedElement !== toggleBtn) {
+                toggleBtn.textContent = translatedElement.textContent;
+            }
+        }
+
+        // Initialize toggle button text on language switch
+        function initToggleButton() {
+            updateToggleButtonText();
+        }
+
+        // Call this after language switch
+        document.addEventListener('DOMContentLoaded', function() {
+            initToggleButton();
+        });
     </script>
 </body>
 </html>
