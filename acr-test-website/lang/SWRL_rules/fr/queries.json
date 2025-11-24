@@ -1,0 +1,77 @@
+[
+  {
+    "id": 1,
+    "technical": "Patient(?p) ^ hasMolecularSubtype(?p, LuminalA) -> sqwrl:select(?p)",
+    "natural": "Sélectionner les patients avec sous-type Luminal A"
+  },
+  {
+    "id": 2,
+    "technical": "Patient(?p) ^ hasMolecularSubtype(?p, LuminalB) -> sqwrl:select(?p)",
+    "natural": "Sélectionner les patients avec sous-type Luminal B"
+  },
+  {
+    "id": 3,
+    "technical": "Patient(?p) ^ hasMolecularSubtype(?p, HER2Positive) -> sqwrl:select(?p)",
+    "natural": "Sélectionner les patients avec sous-type HER2-positif"
+  },
+  {
+    "id": 4,
+    "technical": "Patient(?p) ^ hasMolecularSubtype(?p, TripleNegative) -> sqwrl:select(?p)",
+    "natural": "Sélectionner les patients avec sous-type Triple Négatif"
+  },
+  {
+    "id": 5,
+    "technical": "Patient(?p) ^ hasRiskLevel(?p, High) -> sqwrl:select(?p)",
+    "natural": "Sélectionner les patients à haut risque"
+  },
+  {
+    "id": 6,
+    "technical": "Patient(?p) ^ recommendTreatment(?p, Chemotherapy) -> sqwrl:select(?p)",
+    "natural": "Sélectionner les patients recommandés pour la chimiothérapie"
+  },
+  {
+    "id": 7,
+    "technical": "Patient(?p) ^ recommendTreatment(?p, EndocrineTherapy) -> sqwrl:select(?p)",
+    "natural": "Sélectionner les patients recommandés pour la thérapie endocrinienne"
+  },
+  {
+    "id": 8,
+    "technical": "Patient(?p) ^ hasAge(?p, ?age) ^ swrlb:lessThan(?age, 50) -> sqwrl:select(?p)",
+    "natural": "Sélectionner les patients de moins de 50 ans"
+  },
+  {
+    "id": 9,
+    "technical": "Patient(?p) ^ hasTumorSize(?p, ?size) ^ swrlb:greaterThan(?size, 20) -> sqwrl:select(?p)",
+    "natural": "Sélectionner les patients avec taille de tumeur > 2cm"
+  },
+  {
+    "id": 10,
+    "technical": "Patient(?p) ^ hasLymphNodeStatus(?p, Positive) -> sqwrl:select(?p)",
+    "natural": "Sélectionner les patients avec ganglions lymphatiques positifs"
+  },
+  {
+    "id": 11,
+    "technical": "Patient(?p) ^ hasBRCAStatus(?p, Positive) -> sqwrl:select(?p)",
+    "natural": "Sélectionner les patients avec statut BRCA positif"
+  },
+  {
+    "id": 12,
+    "technical": "Patient(?p) ^ requiresGeneticCounseling(?p, true) -> sqwrl:select(?p)",
+    "natural": "Sélectionner les patients nécessitant un conseil génétique"
+  },
+  {
+    "id": 13,
+    "technical": "Patient(?p) ^ hasTreatmentResponse(?p, ?resp) ^ swrlb:lessThan(?resp, 0.5) -> sqwrl:select(?p)",
+    "natural": "Sélectionner les patients avec réponse au traitement < 50%"
+  },
+  {
+    "id": 14,
+    "technical": "Patient(?p) ^ hasPathologicalResponse(?p, Complete) -> sqwrl:select(?p)",
+    "natural": "Sélectionner les patients avec réponse pathologique complète"
+  },
+  {
+    "id": 15,
+    "technical": "Patient(?p) ^ includeInFederatedLearning(?p, true) -> sqwrl:select(?p)",
+    "natural": "Sélectionner les patients éligibles pour l'apprentissage fédéré"
+  }
+]

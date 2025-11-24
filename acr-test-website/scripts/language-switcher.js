@@ -76,4 +76,15 @@ document.addEventListener('DOMContentLoaded', () => {
             loadLanguage(lang);
         });
     }
-});
+    });
+    // Ontology engine language switching
+    const languageSelect = document.getElementById('languageSelect');
+    if (languageSelect) {
+        languageSelect.addEventListener('change', function() {
+            // Trigger language change event for ontology engine
+            const event = new CustomEvent('languageChanged', {
+                detail: { language: this.value }
+            });
+            document.dispatchEvent(event);
+        });
+    };

@@ -1,0 +1,77 @@
+[
+  {
+    "id": 1,
+    "technical": "Patient(?p) ^ hasMolecularSubtype(?p, LuminalA) -> sqwrl:select(?p)",
+    "natural": "Luminal A 아형 환자 선택"
+  },
+  {
+    "id": 2,
+    "technical": "Patient(?p) ^ hasMolecularSubtype(?p, LuminalB) -> sqwrl:select(?p)",
+    "natural": "Luminal B 아형 환자 선택"
+  },
+  {
+    "id": 3,
+    "technical": "Patient(?p) ^ hasMolecularSubtype(?p, HER2Positive) -> sqwrl:select(?p)",
+    "natural": "HER2 양성 아형 환자 선택"
+  },
+  {
+    "id": 4,
+    "technical": "Patient(?p) ^ hasMolecularSubtype(?p, TripleNegative) -> sqwrl:select(?p)",
+    "natural": "삼중 음성 아형 환자 선택"
+  },
+  {
+    "id": 5,
+    "technical": "Patient(?p) ^ hasRiskLevel(?p, High) -> sqwrl:select(?p)",
+    "natural": "고위험 환자 선택"
+  },
+  {
+    "id": 6,
+    "technical": "Patient(?p) ^ recommendTreatment(?p, Chemotherapy) -> sqwrl:select(?p)",
+    "natural": "화학요법이 권장되는 환자 선택"
+  },
+  {
+    "id": 7,
+    "technical": "Patient(?p) ^ recommendTreatment(?p, EndocrineTherapy) -> sqwrl:select(?p)",
+    "natural": "내분비 치료가 권장되는 환자 선택"
+  },
+  {
+    "id": 8,
+    "technical": "Patient(?p) ^ hasAge(?p, ?age) ^ swrlb:lessThan(?age, 50) -> sqwrl:select(?p)",
+    "natural": "50세 미만 환자 선택"
+  },
+  {
+    "id": 9,
+    "technical": "Patient(?p) ^ hasTumorSize(?p, ?size) ^ swrlb:greaterThan(?size, 20) -> sqwrl:select(?p)",
+    "natural": "종양 크기 > 2cm인 환자 선택"
+  },
+  {
+    "id": 10,
+    "technical": "Patient(?p) ^ hasLymphNodeStatus(?p, Positive) -> sqwrl:select(?p)",
+    "natural": "양성 림프절 환자 선택"
+  },
+  {
+    "id": 11,
+    "technical": "Patient(?p) ^ hasBRCAStatus(?p, Positive) -> sqwrl:select(?p)",
+    "natural": "BRCA 양성 상태 환자 선택"
+  },
+  {
+    "id": 12,
+    "technical": "Patient(?p) ^ requiresGeneticCounseling(?p, true) -> sqwrl:select(?p)",
+    "natural": "유전 상담이 필요한 환자 선택"
+  },
+  {
+    "id": 13,
+    "technical": "Patient(?p) ^ hasTreatmentResponse(?p, ?resp) ^ swrlb:lessThan(?resp, 0.5) -> sqwrl:select(?p)",
+    "natural": "치료 반응 < 50%인 환자 선택"
+  },
+  {
+    "id": 14,
+    "technical": "Patient(?p) ^ hasPathologicalResponse(?p, Complete) -> sqwrl:select(?p)",
+    "natural": "병리학적 완전 반응 환자 선택"
+  },
+  {
+    "id": 15,
+    "technical": "Patient(?p) ^ includeInFederatedLearning(?p, true) -> sqwrl:select(?p)",
+    "natural": "연합 학습 적격 환자 선택"
+  }
+]

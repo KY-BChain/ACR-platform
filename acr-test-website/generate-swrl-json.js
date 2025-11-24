@@ -1,92 +1,9 @@
-// acr_ontology_rules.js - Dynamic SWRL/SQWRL Rules Engine
-// Interface to ACR OWL Ontology for clinical decision support
+const fs = require('fs');
 
-class ACROntologyEngine {
-    constructor() {
-        this.rules = {};
-        this.queries = {};
-        this.currentLanguage = 'en';
-        this.initialized = false;
-        this.languageChangeCallbacks = [];
-    }
-
-    async initialize() {
-        try {
-            // Try to load from ACR OWL Ontology API first
-            await this.loadFromOntologyAPI();
-        } catch (error) {
-            console.warn('Failed to load from ontology API, using static rules:', error);
-            // Fallback to static rules
-            this.loadStaticRules();
-        }
-        this.initialized = true;
-        
-        // Initialize with current language from sessionStorage or default to English
-        const savedLanguage = sessionStorage.getItem('selectedLanguage') || 'en';
-        this.setLanguage(savedLanguage);
-        
-        // Listen for language changes
-        this.setupLanguageListener();
-    }
-
-    setupLanguageListener() {
-        // Listen for language change events from the main page
-        document.addEventListener('languageChanged', (event) => {
-            if (event.detail && event.detail.language) {
-                this.setLanguage(event.detail.language);
-                this.notifyLanguageChange();
-            }
-        });
-
-        // Also watch for changes to the language select dropdown
-        const languageSelect = document.getElementById('languageSelect');
-        if (languageSelect) {
-            languageSelect.addEventListener('change', (event) => {
-                this.setLanguage(event.target.value);
-                this.notifyLanguageChange();
-            });
-        }
-    }
-
-    onLanguageChange(callback) {
-        this.languageChangeCallbacks.push(callback);
-    }
-
-    notifyLanguageChange() {
-        this.languageChangeCallbacks.forEach(callback => {
-            callback(this.currentLanguage);
-        });
-    }
-
-    async loadFromOntologyAPI() {
-        // This would interface with your ACR OWL Ontology backend
-        const API_BASE_URL = window.location.hostname === 'localhost' 
-            ? 'http://localhost:5050/api' 
-            : 'https://www.acragent.com/api';
-
-        try {
-            // Example API endpoints - adjust based on your actual ontology API
-            const [rulesResponse, queriesResponse] = await Promise.all([
-                fetch(`${API_BASE_URL}/ontology/swrl-rules`),
-                fetch(`${API_BASE_URL}/ontology/sqwrl-queries`)
-            ]);
-
-            if (rulesResponse.ok && queriesResponse.ok) {
-                this.rules = await rulesResponse.json();
-                this.queries = await queriesResponse.json();
-            } else {
-                throw new Error('Ontology API not available');
-            }
-        } catch (error) {
-            throw new Error(`Ontology API error: ${error.message}`);
-        }
-    }
-
-    loadStaticRules() {
-    // Comprehensive SWRL Rules (22) - English
-    this.rules = {
-        en: [
-            {
+// Extract from your acr_ontology_rules.js - English and Chinese
+const rulesData = {
+    en: [
+        {
                 id: 1,
                 natural: "If ER and PR are positive and HER2 is negative and Ki-67 < 20%, classify as Luminal A subtype",
                 technical: "Patient(?p) ^ hasERStatus(?p, Positive) ^ hasPRStatus(?p, Positive) ^ hasHER2Status(?p, Negative) ^ hasKi67(?p, ?k) ^ swrlb:lessThan(?k, 20) -> hasMolecularSubtype(?p, LuminalA)",
@@ -218,11 +135,9 @@ class ACROntologyEngine {
                 technical: "Patient(?p) ^ receivedTherapy(?p, FirstLineEndocrineTherapy) ^ hasDiseaseStatus(?p, ProgressiveDisease) -> recommendsTherapy(?p, SecondLineTherapy)",
                 category: "treatment"
             }
-        ],
-
-        // Chinese Version - 中文版本
-        zh: [
-            {
+    ],
+    zh: [
+        {
                 id: 1,
                 natural: "如果ER和PR阳性，HER2阴性，且Ki-67 < 20%，分类为Luminal A亚型",
                 technical: "Patient(?p) ^ hasERStatus(?p, Positive) ^ hasPRStatus(?p, Positive) ^ hasHER2Status(?p, Negative) ^ hasKi67(?p, ?k) ^ swrlb:lessThan(?k, 20) -> hasMolecularSubtype(?p, LuminalA)",
@@ -354,13 +269,18 @@ class ACROntologyEngine {
                 technical: "Patient(?p) ^ receivedTherapy(?p, FirstLineEndocrineTherapy) ^ hasDiseaseStatus(?p, ProgressiveDisease) -> recommendsTherapy(?p, SecondLineTherapy)",
                 category: "treatment"
             }
-        ]
-    };
+    ],
+    fr: [], // Will be filled later
+    de: [], // Will be filled later  
+    ja: [], // Will be filled later
+    ko: [], // Will be filled later
+    ru: [], // Will be filled later
+    ar: []  // Will be filled later
+};
 
-    // Comprehensive SQWRL Queries (15) - English
-    this.queries = {
-        en: [
-            {
+const queriesData = {
+    en: [
+       {
                 id: 1,
                 natural: "Select all patients with Luminal A subtype who are candidates for endocrine therapy",
                 technical: "Patient(?p) ^ hasMolecularSubtype(?p, LuminalA) ^ sqwrl:select(?p)"
@@ -435,11 +355,9 @@ class ACROntologyEngine {
                 natural: "Select patients eligible for clinical trial participation based on molecular profile",
                 technical: "Patient(?p) ^ hasMolecularSubtype(?p, ?subtype) ^ hasEligibilityCriteria(?p, ClinicalTrial) ^ sqwrl:select(?p)"
             }
-        ],
-
-        // Chinese Version - 中文版本
-        zh: [
-            {
+    ],
+    zh: [
+        {
                 id: 1,
                 natural: "选择所有Luminal A亚型且适合内分泌治疗的患者",
                 technical: "Patient(?p) ^ hasMolecularSubtype(?p, LuminalA) ^ sqwrl:select(?p)"
@@ -514,79 +432,25 @@ class ACROntologyEngine {
                 natural: "选择基于分子特征符合临床试验参与资格的患者",
                 technical: "Patient(?p) ^ hasMolecularSubtype(?p, ?subtype) ^ hasEligibilityCriteria(?p, ClinicalTrial) ^ sqwrl:select(?p)"
             }
-        ]
-    };
-}
-
-    setLanguage(lang) {
-        if (this.rules[lang] && this.queries[lang]) {
-            this.currentLanguage = lang;
-            // Save to sessionStorage
-            sessionStorage.setItem('selectedLanguage', lang);
-            console.log(`✅ Ontology engine language changed to: ${lang}`);
-            return true;
-        }
-        console.warn(`Language ${lang} not available, falling back to English`);
-        this.currentLanguage = 'en';
-        sessionStorage.setItem('selectedLanguage', 'en');
-        return false;
-    }
-
-    getSWRLRules() {
-        return this.rules[this.currentLanguage] || this.rules['en'];
-    }
-
-    getSQWRLQueries() {
-        return this.queries[this.currentLanguage] || this.queries['en'];
-    }
-
-    getRuleCount() {
-        const rules = this.getSWRLRules();
-        return rules ? rules.length : 0;
-    }
-
-    getQueryCount() {
-        const queries = this.getSQWRLQueries();
-        return queries ? queries.length : 0;
-    }
-}
-
-// Create global instance
-window.ACROntologyEngine = new ACROntologyEngine();
-
-// Legacy global variable for backward compatibility
-window.ONTOLATOR_RULES = {
-    swrlRules: [],
-    sqwrlQueries: []
+    ],
+    fr: [], de: [], ja: [], ko: [], ru: [], ar: []
 };
 
-// Function to refresh the rules display when language changes
-function refreshOntologyDisplay() {
-    if (window.ONTOLATOR_RULES && window.populateSWRLRules && window.populateSQWRLQueries) {
-        window.ONTOLATOR_RULES.swrlRules = window.ACROntologyEngine.getSWRLRules();
-        window.ONTOLATOR_RULES.sqwrlQueries = window.ACROntologyEngine.getSQWRLQueries();
-        
-        window.populateSWRLRules();
-        window.populateSQWRLQueries();
-        
-        console.log('🔄 Ontology display refreshed for language:', window.ACROntologyEngine.currentLanguage);
+// Create directory structure and generate files
+Object.keys(rulesData).forEach(lang => {
+    const rulesDir = `./lang/SWRL_rules/${lang}`;
+    if (!fs.existsSync(rulesDir)) {
+        fs.mkdirSync(rulesDir, { recursive: true });
     }
-}
-
-// Initialize and populate legacy variable  
-window.ACROntologyEngine.initialize().then(() => {
-    window.ONTOLATOR_RULES.swrlRules = ACROntologyEngine.getSWRLRules();
-    window.ONTOLATOR_RULES.sqwrlQueries = ACROntologyEngine.getSQWRLQueries();
     
-    // Listen for language changes
-    ACROntologyEngine.onLanguageChange(() => {
-        refreshOntologyDisplay();
-    });
-    
-    console.log('✅ ACR Ontology Engine initialized with', 
-        window.ONTOLATOR_RULES.swrlRules.length, 'SWRL rules and',
-        window.ONTOLATOR_RULES.sqwrlQueries.length, 'SQWRL queries in', 
-        ACROntologyEngine.currentLanguage);
-}).catch(error => {
-    console.error('❌ Failed to initialize ACR Ontology Engine:', error);
+    // Only generate files if we have data for that language
+    if (rulesData[lang].length > 0) {
+        fs.writeFileSync(`${rulesDir}/rules.json`, JSON.stringify(rulesData[lang], null, 2));
+    }
+    if (queriesData[lang].length > 0) {
+        fs.writeFileSync(`${rulesDir}/queries.json`, JSON.stringify(queriesData[lang], null, 2));
+    }
 });
+
+console.log('✅ Generated SWRL rules structure for 8 languages');
+console.log('⚠️  Note: French, German, Japanese, Korean, Russian, Arabic need translations');
