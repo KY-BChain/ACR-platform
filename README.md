@@ -1,216 +1,302 @@
-# ACR Platform v0.8
+# ACR Platform v1.0
 
-**AI-Powered Cervical Cancer Risk Assessment Platform**
+**AI-Powered Breast Cancer Clinical Decision Support Platform**
 
-A comprehensive, privacy-preserving federated learning platform for cervical cancer diagnosis combining ontology-based reasoning, agentic AI, blockchain identity management, and differential privacy.
+A comprehensive, ontology-driven clinical decision support system for breast cancer diagnosis and treatment, combining semantic reasoning, agentic AI, blockchain security, and federated learning.
 
 ## Overview
 
 The ACR Platform integrates:
-- **Ontology-Based Reasoning**: OWL ontology with SWRL rules for clinical decision support
-- **Agentic AI**: Fetch.ai-based intelligent agents for radiology, pathology, and genomics
-- **Federated Learning**: MONAI-based vision transformers with differential privacy (ε=0.7, δ=10^-6)
-- **Blockchain Identity**: RSK-based ERC-3643 identity management and model registry
-- **Zero-Knowledge Proofs**: Privacy-preserving consent and data verification
-- **Tokenomics**: $ACR_RWA and $ACR_GOV tokens for incentivizing data contribution
+- **Ontology-Based Reasoning**: ACR OWL ontology with SWRL/SQWRL rules and HermiT 1.4.3.456 reasoner
+- **Clinical Decision Support**: Real-time treatment recommendations based on CACA/CSCO/NCCN guidelines
+- **DICOM Integration**: Medical imaging support with advanced radiomics
+- **Agentic AI**: Intelligent agents for continuous ontology refinement and learning
+- **Blockchain Security**: RSK-based MCP server with Bitcoin blockchain anchoring
+- **Federated Learning**: Privacy-preserving model training across institutions
+
+## Live Platform
+
+🌐 **Production Website**: [www.acragent.com](https://www.acragent.com)
 
 ## Architecture
 
+```mermaid
+graph TB
+    A[Patient Data] --> B[DICOM Images]
+    A --> C[Clinical Records]
+    A --> D[Biomarker Data]
+    
+    B --> E[Radiomics Feature Extraction]
+    C --> F[Ontology Mapping]
+    D --> F
+    
+    E --> G[ACR OWL Ontology]
+    F --> G
+    
+    G --> H[HermiT Reasoner]
+    H --> I[SWRL Rule Execution]
+    I --> J[Clinical Decision Support]
+    
+    J --> K[Treatment Recommendations]
+    J --> L[Monitoring Schedule]
+    J --> M[Risk Assessment]
+    
+    G --> N[Federated Learning]
+    N --> O[Global Model Updates]
+    
+    H --> P[Blockchain Anchoring]
+    P --> Q[Bitcoin Blockchain]
+    
+    classDef clinical fill:#e1f5fe
+    classDef technical fill:#f3e5f5
+    classDef output fill:#e8f5e8
+    
+    class A,B,C,D clinical
+    class E,F,G,H,I,N,P technical
+    class J,K,L,M,O,Q output
 ```
-acr-platform/
-├── acr-core/              # Shared types, constants, utilities
-├── acr-ontology/          # OWL ontology, SWRL/SQWRL rules
-├── acr-agents/            # Fetch.ai intelligent agents
-├── acr-federated-ml/      # Federated learning with MONAI
-├── acr-blockchain/        # RSK smart contracts
-├── acr-privacy/           # ZKP, differential privacy
-├── acr-api-gateway/       # Fastify backend API
-├── acr-web-portal/        # React frontend
-└── acr-infrastructure/    # Kubernetes, Docker, IaC
+
+## Core Features
+
+### Clinical Decision Support
+- **Real-time SWRL Rule Execution**: 32 clinical rules for treatment recommendations
+- **Molecular Subtyping**: Luminal A/B, HER2-enriched, Triple Negative classification
+- **Risk Stratification**: Low/Intermediate/High risk assessment
+- **Guideline Integration**: CACA, CSCO, NCCN, and international standards
+- **Treatment Timeline**: Visual treatment pathway with monitoring schedule
+
+### DICOM & Medical Imaging
+- **DICOM Standard Support**: Full compliance with medical imaging standards
+- **Radiomics Feature Extraction**: Texture, shape, and intensity analysis
+- **Multi-modal Imaging**: MRI, CT, PET, and ultrasound integration
+- **Automated Segmentation**: AI-powered tumor region identification
+- **Quantitative Analysis**: Hundreds of radiomic features extraction
+
+### Ontology-Driven Reasoning
+- **ACR OWL Ontology**: Comprehensive breast cancer knowledge base
+- **HermiT Reasoner**: Logical inference and consistency checking
+- **SWRL Rules**: Clinical decision logic automation
+- **SQWRL Queries**: Data retrieval and analysis
+- **Entity Mapping**: Patient data to ontology classes
+
+### Privacy & Security
+- **Blockchain Anchoring**: Bitcoin blockchain for data integrity
+- **RSK MCP Server**: Secure smart contract execution
+- **Federated Learning**: Local model training, global knowledge sharing
+- **Data Protection**: No raw patient data leaves hospital premises
+
+## Clinical Workflow
+
+```mermaid
+sequenceDiagram
+    participant C as Clinician
+    participant P as Patient Portal
+    participant O as ACR Ontology
+    participant R as HermiT Reasoner
+    participant B as Blockchain
+    participant FL as Federated Learning
+    
+    C->>P: Select Patient
+    P->>O: Load Patient Data
+    O->>R: Execute SWRL Rules
+    
+    Note over R: 32 Clinical Rules Applied
+    
+    R->>O: Molecular Subtyping
+    R->>O: Risk Assessment
+    R->>O: Treatment Indications
+    
+    O->>P: Generate Recommendations
+    P->>C: Display CDS Results
+    
+    C->>P: Approve/Modify Treatment
+    P->>B: Record Decision on Blockchain
+    
+    par Federated Learning
+        FL->>O: Aggregate Anonymous Insights
+        O->>FL: Update Global Knowledge
+    end
+    
+    FL->>B: Anchor Model Updates
 ```
-
-## Key Features
-
-### Privacy-Preserving AI
-- Local model training with differential privacy guarantees
-- Zero-knowledge proofs for consent verification
-- Homomorphic encryption for secure gradient aggregation
-- No raw patient data leaves hospital premises
-
-### Ontology-Driven Decision Making
-- Comprehensive OWL ontology for cervical cancer domain
-- SWRL rules for automated reasoning and inference
-- SQWRL queries for consensus mechanisms
-- HermiT reasoner integration
-
-### Agentic System
-- Specialized agents for radiology, pathology, genomics
-- Mixture of Agents (MoA) consensus
-- Fetch.ai protocol-based communication
-- Reusable skills and protocols
-
-### Blockchain Integration
-- ERC-3643 compliant identity management
-- Immutable model registry on RSK
-- DAO for SWRL rule governance
-- Gasless transactions via ERC-4337
 
 ## Quick Start
 
-### Prerequisites
-- Node.js 18+
-- Python 3.10+
-- Docker & Docker Compose
-- Kubernetes (for production)
-- RSK node or testnet access
+### Access Production System
+1. Visit [www.acragent.com](https://www.acragent.com)
+2. Select patient from dropdown or use direct patient links
+3. Generate clinical recommendations in real-time
+4. Review treatment pathways with confidence scoring
 
-### Installation
-
+### Local Development
 ```bash
-# Clone the repository
+# Clone repository
 git clone https://github.com/KY-BChain/ACR-platform.git
 cd ACR-platform
 
-# Install dependencies for all modules
-npm install
-cd acr-agents && pip install -r requirements.txt
-cd ../acr-federated-ml && pip install -r requirements.txt
-cd ../acr-blockchain && npm install
-cd ../acr-api-gateway && npm install
-cd ../acr-web-portal && npm install
-```
-
-### Running Locally
-
-```bash
-# Start the API gateway
-cd acr-api-gateway
-npm run dev
-
-# Start the web portal
-cd acr-web-portal
-npm run dev
-
-# Start the agent system
-cd acr-agents
-python src/base_agent.py
-
-# Start federated learning aggregator
-cd acr-federated-ml
-python src/aggregation/secure_aggregator.py
-```
-
-### Running with Docker
-
-```bash
-# Build and start all services
+# Start local services
 docker-compose up -d
 
-# View logs
-docker-compose logs -f
+# Access CDS interface
+open http://localhost:8080/acr-pathway.html
 ```
 
-## Workflow
+## DICOM Integration
 
-### Single Diagnostic Run
-1. Clinician logs in with ERC-3643 wallet (gasless via ERC-4337)
-2. Selects patient case from dashboard (anonymized metadata only)
-3. Local agents activate and process DICOM/EHR data locally
-4. Agents run inference, apply SWRL rules, generate findings
-5. Consensus agent performs MoA voting
-6. Results displayed with confidence scores and rule explanations
-7. Decision logged to blockchain immutably
+### Supported Modalities
+```mermaid
+graph LR
+    A[MRI] --> D[DICOM Standard]
+    B[CT] --> D
+    C[PET] --> D
+    E[Ultrasound] --> D
+    D --> F[Radiomics Pipeline]
+    F --> G[Feature Extraction]
+    G --> H[Ontology Mapping]
+    
+    classDef imaging fill:#fff3e0
+    classDef processing fill:#e8f5e8
+    
+    class A,B,C,E imaging
+    class D,F,G,H processing
+```
 
-### Federated Learning Cycle
-1. Global aggregator publishes model CID to blockchain
-2. Hospitals pull model and train locally for one epoch
-3. Local updates encrypted and noise added (DP with ε=0.7)
-4. ZKP proof generated for privacy verification
-5. Secure aggregation performed at central server
-6. New global model validated and published to IPFS
-7. Model CID recorded on blockchain
+### Radiomics Features
+- **First-Order Statistics**: Intensity-based features
+- **Shape-based**: 3D tumor morphology
+- **Texture Features**: GLCM, GLRLM, GLSZM
+- **Wavelet Features**: Multi-scale analysis
+- **Deep Learning**: CNN-based feature extraction
 
-## Tokenomics
+## Federated Learning Cycle
 
-- **$ACR_RWA**: Non-transferable ERC-3643 token representing hospital identity and data quota
-- **$ACR_GOV**: Transferable ERC-20 governance token for voting and staking
-
-Hospitals earn $ACR_GOV for:
-- Contributing verified model updates
-- Participating in consensus mechanisms
-- Submitting high-quality SWRL rules
+```mermaid
+flowchart TD
+    A[Global Model Publisher] --> B[Model CID on Blockchain]
+    B --> C[Hospital 1 Local Training]
+    B --> D[Hospital 2 Local Training]
+    B --> E[Hospital N Local Training]
+    
+    C --> F[Differential Privacy ε=0.7]
+    D --> F
+    E --> F
+    
+    F --> G[Secure Aggregation]
+    G --> H[Zero-Knowledge Proof Verification]
+    H --> I[New Global Model]
+    I --> J[IPFS Storage]
+    J --> K[Blockchain Registry]
+    K --> A
+    
+    classDef hospital fill:#e1f5fe
+    classDef privacy fill:#fce4ec
+    classDef blockchain fill:#e8f5e8
+    
+    class C,D,E hospital
+    class F,H privacy
+    class B,K,J blockchain
+```
 
 ## Technology Stack
 
-- **ML/AI**: MONAI, PyTorch, Vision Transformers
-- **Agents**: Fetch.ai, Python
-- **Ontology**: OWL, SWRL, HermiT Reasoner, Protégé
-- **Backend**: Node.js, Fastify, TypeScript
-- **Frontend**: React, TypeScript, Web3.js
-- **Blockchain**: RSK, Solidity, Hardhat, ERC-3643, ERC-4337
-- **Privacy**: Circom (ZKP), Differential Privacy, Paillier/CKKS
-- **Infrastructure**: Kubernetes, Docker, Terraform, Ansible
-- **Storage**: IPFS, PostgreSQL, Redis
+### Core Technologies
+- **Ontology**: OWL 2, SWRL, SQWRL, HermiT 1.4.3.456
+- **Frontend**: HTML5, CSS3, JavaScript (ES6+)
+- **Backend**: PHP, Node.js, REST APIs
+- **Database**: MySQL/PostgreSQL with ontology mapping
+
+### Medical Imaging
+- **DICOM**: Full standard compliance
+- **Radiomics**: PyRadiomics, MONAI
+- **Visualization**: Cornerstone.js, OHIF Viewer
+- **Processing**: ITK, SimpleITK, NumPy
+
+### AI & Machine Learning
+- **Reasoning**: HermiT reasoner, SWRL rule engine
+- **Agents**: Agentive AI for ontology refinement
+- **Federated Learning**: MONAI, PyTorch, Differential Privacy
+- **Computer Vision**: CNN, Vision Transformers
+
+### Blockchain & Security
+- **Blockchain**: Bitcoin (via RSK), MCP Server
+- **Identity**: ERC-3643 compliant management
+- **Privacy**: Zero-knowledge proofs, homomorphic encryption
+
+## Clinical Integration
+
+### Supported Guidelines
+- **CACA**: Chinese Anti-cancer Association Breast Cancer Guidelines
+- **CSCO**: Chinese Society of Clinical Oncology
+- **NCCN**: National Comprehensive Cancer Network
+- **International Standards**: EU and USA best practices
+
+### Biomarker Support
+- ER/PR status and percentage
+- HER2 IHC and ISH results
+- Ki-67 proliferation index
+- Histologic grade and tumor characteristics
+- DICOM-based radiomic features
+
+## API Endpoints
+
+```javascript
+// Patient Data
+GET /api/patients.php              # List all patients
+GET /api/patients.php?id={id}      # Get specific patient
+
+// Clinical Recommendations
+POST /api/recommendations.php      # Generate CDS recommendations
+
+// DICOM Services
+POST /api/dicom/upload            # Upload DICOM images
+GET /api/dicom/features/{id}      # Extract radiomic features
+POST /api/dicom/analyze           # AI-based image analysis
+```
+
+## Development Status
+
+### ✅ Production Ready
+- Clinical Decision Support System
+- Ontology-driven reasoning
+- Real-time treatment recommendations
+- Multi-guideline compliance
+- Blockchain security layer
+- DICOM image support
+
+### 🔄 Active Development
+- Advanced radiomics integration
+- Federated learning deployment
+- Agentic AI refinement
+- Expanded cancer types
+- Enhanced visualization
+
+## Compliance & Standards
+
+- **Medical Standards**: CACA, CSCO, NCCN compliant
+- **Imaging Standards**: DICOM, HL7, FHIR
+- **Data Privacy**: GDPR, PIPL, HIPAA ready
+- **Security**: Blockchain-anchored audit trail
+- **Clinical Validation**: Continuous guideline updates
 
 ## Documentation
 
-- [Architecture Overview](docs/architecture.md)
+- [Clinical Workflow](docs/clinical-workflow.md)
+- [Ontology Guide](docs/ontology-guide.md)
+- [DICOM Integration](docs/dicom-integration.md)
 - [API Documentation](docs/api/)
-- [Ontology Guide](docs/ontology/)
 - [Deployment Guide](docs/deployment/)
-- [Compliance Documentation](docs/compliance/)
-
-## Testing
-
-```bash
-# Run unit tests
-npm run test:unit
-
-# Run integration tests
-npm run test:integration
-
-# Run end-to-end tests
-npm run test:e2e
-
-# Run all tests
-npm test
-```
-
-## Deployment
-
-### Development
-```bash
-kubectl apply -f acr-infrastructure/k8s/dev/
-```
-
-### Staging
-```bash
-kubectl apply -f acr-infrastructure/k8s/staging/
-```
-
-### Production
-```bash
-kubectl apply -f acr-infrastructure/k8s/prod/
-```
-
-## Security
-
-- All patient data processed locally at hospitals
-- Differential privacy guarantees (ε=0.7, δ=10^-6)
-- Zero-knowledge proofs for consent verification
-- End-to-end encryption for all communications
-- Regular security audits and penetration testing
-
-## Compliance
-
-- GDPR compliant
-- PIPL (China) compliant
-- HIPAA ready
-- Full audit trail on blockchain
 
 ## Contributing
 
-Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on our code of conduct and the process for submitting pull requests.
+We welcome contributions from clinicians, researchers, and developers. Please see [CONTRIBUTING.md](CONTRIBUTING.md) for details.
+
+## Citation
+
+If you use ACR Platform in your research, please cite:
+```
+ACR Platform: AI-Powered Breast Cancer Clinical Decision Support System
+Version 1.0, 2024 - www.acragent.com
+```
 
 ## License
 
@@ -218,19 +304,27 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## Contact
 
-- Website: https://acr-platform.io
-- Email: contact@acr-platform.io
-- Discord: https://discord.gg/acr-platform
+- **Production Site**: [www.acragent.com](https://www.acragent.com)
+- **Clinical Support**: clinical@acragent.com
+- **Technical Support**: tech@acragent.com
+- **Research Collaboration**: research@acragent.com
 
 ## Acknowledgments
 
-- MONAI for medical imaging framework
-- Fetch.ai for agent framework
-- RSK for blockchain infrastructure
-- OpenMined for federated learning inspiration
+- **CACA**: Chinese Anti-cancer Association for clinical guidelines
+- **CSCO**: Chinese Society of Clinical Oncology for treatment standards
+- **NCCN**: National Comprehensive Cancer Network for international protocols
+- **RSK**: Blockchain infrastructure and MCP server
+- **HermiT**: Ontology reasoner development team
+- **DICOM Standards Committee**: Medical imaging standards
 
 ---
 
-**Version**: 0.8
-**Last Updated**: November 12, 2025
-**Status**: Development
+**Version**: 1.0  
+**Last Updated**: 25-November 2024  
+**Status**: Production  
+**Clinical Focus**: Breast Cancer Diagnostics & Treatment  
+**Live Platform**: [www.acragent.com](https://www.acragent.com)  
+**DICOM Support**: Full compliance with medical imaging standards
+
+
