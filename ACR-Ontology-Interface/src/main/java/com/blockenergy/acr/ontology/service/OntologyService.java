@@ -9,12 +9,9 @@ import org.semanticweb.owlapi.reasoner.OWLReasoner;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
-import org.swrlapi.factory.SWRLAPIFactory;
-import org.swrlapi.sqwrl.SQWRLQueryEngine;
 
 import jakarta.annotation.PostConstruct;
 import java.io.File;
-import java.io.InputStream;
 
 /**
  * Ontology Service
@@ -43,7 +40,6 @@ public class OntologyService {
     private OWLOntologyManager manager;
     private OWLOntology ontology;
     private OWLReasoner reasoner;
-    private SQWRLQueryEngine queryEngine;
     private OWLDataFactory dataFactory;
 
     private int swrlRulesCount = 0;
@@ -71,9 +67,6 @@ public class OntologyService {
 
             // Step 2: Initialize Pellet reasoner
             initializeReasoner();
-
-            // Step 3: Create SQWRL query engine
-            initializeQueryEngine();
 
             log.info("✅ Ontology initialized successfully");
             log.info("📊 Classes: {}", ontology.getClassesInSignature().size());
@@ -151,17 +144,6 @@ public class OntologyService {
     }
 
     /**
-     * Initialize SQWRL query engine
-     */
-    private void initializeQueryEngine() {
-        log.info("🔍 Initializing SQWRL query engine...");
-
-        queryEngine = SWRLAPIFactory.createSQWRLQueryEngine(ontology);
-
-        log.info("✅ SQWRL query engine initialized");
-    }
-
-    /**
      * Get resource path from classpath or filesystem
      */
     private String getResourcePath(String resourcePath) throws Exception {
@@ -219,10 +201,6 @@ public class OntologyService {
 
     public OWLReasoner getReasoner() {
         return reasoner;
-    }
-
-    public SQWRLQueryEngine getQueryEngine() {
-        return queryEngine;
     }
 
     public OWLDataFactory getDataFactory() {

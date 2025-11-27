@@ -27,7 +27,6 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <owlapi.version>5.5.0</owlapi.version>
         <pellet.version>2.6.5</pellet.version>
-        <swrlapi.version>2.1.1</swrlapi.version>
     </properties>
 
     <dependencies>
@@ -49,20 +48,6 @@
             <groupId>com.github.galigator.openllet</groupId>
             <artifactId>openllet-owlapi</artifactId>
             <version>${pellet.version}</version>
-        </dependency>
-
-        <!-- SWRL API -->
-        <dependency>
-            <groupId>edu.stanford.swrl</groupId>
-            <artifactId>swrlapi</artifactId>
-            <version>${swrlapi.version}</version>
-        </dependency>
-
-        <!-- SWRL API Drools Engine -->
-        <dependency>
-            <groupId>edu.stanford.swrl</groupId>
-            <artifactId>swrlapi-drools-engine</artifactId>
-            <version>${swrlapi.version}</version>
         </dependency>
 
         <!-- SQLite JDBC -->
@@ -112,19 +97,6 @@
         </dependency>
     </dependencies>
 
-    <repositories>
-        <!-- Stanford SWRL Repository -->
-        <repository>
-            <id>swrlapi-repo</id>
-            <url>https://raw.githubusercontent.com/protegeproject/swrlapi/maven-repository/</url>
-        </repository>
-
-        <!-- Maven Central -->
-        <repository>
-            <id>central</id>
-            <url>https://repo.maven.apache.org/maven2</url>
-        </repository>
-    </repositories>
 
     <build>
         <plugins>

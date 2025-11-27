@@ -2,9 +2,6 @@ package com.blockenergy.acr.ontology.util;
 
 import org.semanticweb.owlapi.apibinding.OWLManager;
 import org.semanticweb.owlapi.model.*;
-import org.swrlapi.factory.SWRLAPIFactory;
-import org.swrlapi.parser.SWRLParseException;
-import org.swrlapi.sqwrl.SQWRLQueryEngine;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -13,13 +10,20 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * SWRL/SQWRL Integration Utility
  *
- * Integrates 22 SWRL rules and 15 SQWRL queries into ACR_Ontology_full.owl
+ * Integrates SWRL rules and SQWRL queries into ACR_Ontology_full.owl
  * Creates ACR_Ontology_Integrated.owl with all rules embedded
+ *
+ * Uses OWL API's built-in SWRL support (no external SWRL API dependency)
+ *
+ * Note: The actual classification logic is implemented in ReasoningEngine.java
+ * which uses hardcoded rules for molecular subtype classification.
  */
 public class SWRLIntegrator {
 
@@ -27,23 +31,26 @@ public class SWRLIntegrator {
 
     private OWLOntologyManager manager;
     private OWLOntology ontology;
+    private OWLDataFactory dataFactory;
 
     public SWRLIntegrator(OWLOntologyManager manager, OWLOntology ontology) {
         this.manager = manager;
         this.ontology = ontology;
+        this.dataFactory = manager.getOWLDataFactory();
     }
 
     /**
      * Load and integrate SWRL rules from file
      * Expected: 22 rules in acr_swrl_rules.swrl
+     *
+     * Reads rules from file and stores them as annotations in the ontology.
+     * The actual reasoning logic is implemented in ReasoningEngine.java
      */
-    public int integrateRules(String swrlFilePath) throws IOException, SWRLParseException {
+    public int integrateRules(String swrlFilePath) throws IOException {
         log.info("📜 Loading SWRL rules from: {}", swrlFilePath);
 
         List<String> rules = readRulesFromFile(swrlFilePath);
         log.info("📊 Found {} SWRL rules to integrate", rules.size());
-
-        SQWRLQueryEngine queryEngine = SWRLAPIFactory.createSQWRLQueryEngine(ontology);
 
         int successCount = 0;
         for (int i = 0; i < rules.size(); i++) {
@@ -54,31 +61,35 @@ public class SWRLIntegrator {
             }
 
             try {
-                queryEngine.createSWRLRule("swrl_rule_" + (i + 1), rule);
-                log.debug("✅ Integrated SWRL rule {}: {}", (i + 1),
+                // Store SWRL rules as ontology annotations for documentation
+                addSWRLRuleAnnotation("swrl_rule_" + (i + 1), rule);
+
+                log.debug("✅ Documented SWRL rule {}: {}", (i + 1),
                     rule.substring(0, Math.min(80, rule.length())) + "...");
                 successCount++;
-            } catch (SWRLParseException e) {
-                log.error("❌ Failed to parse SWRL rule {}: {}", (i + 1), rule);
-                throw e;
+            } catch (Exception e) {
+                log.warn("⚠️  Skipped SWRL rule {}: {}", (i + 1), e.getMessage());
+                // Continue processing other rules
             }
         }
 
-        log.info("✅ Successfully integrated {}/{} SWRL rules", successCount, rules.size());
+        log.info("✅ Successfully documented {}/{} SWRL rules", successCount, rules.size());
+        log.info("ℹ️  Classification logic is implemented in ReasoningEngine.java");
         return successCount;
     }
 
     /**
      * Load and integrate SQWRL queries from file
      * Expected: 15 queries in acr_sqwrl_queries.sqwrl
+     *
+     * Stores queries as annotations for documentation purposes.
+     * The actual pathway logic is implemented in PathwayService.java
      */
-    public int integrateQueries(String sqwrlFilePath) throws IOException, SWRLParseException {
+    public int integrateQueries(String sqwrlFilePath) throws IOException {
         log.info("📜 Loading SQWRL queries from: {}", sqwrlFilePath);
 
         List<String> queries = readRulesFromFile(sqwrlFilePath);
         log.info("📊 Found {} SQWRL queries to integrate", queries.size());
-
-        SQWRLQueryEngine queryEngine = SWRLAPIFactory.createSQWRLQueryEngine(ontology);
 
         int successCount = 0;
         for (int i = 0; i < queries.size(); i++) {
@@ -89,18 +100,70 @@ public class SWRLIntegrator {
             }
 
             try {
-                queryEngine.createSQWRLQuery("sqwrl_query_" + (i + 1), query);
-                log.debug("✅ Integrated SQWRL query {}: {}", (i + 1),
+                // Store SQWRL queries as ontology annotations
+                addSQWRLQueryAnnotation("sqwrl_query_" + (i + 1), query);
+
+                log.debug("✅ Documented SQWRL query {}: {}", (i + 1),
                     query.substring(0, Math.min(80, query.length())) + "...");
                 successCount++;
-            } catch (SWRLParseException e) {
-                log.error("❌ Failed to parse SQWRL query {}: {}", (i + 1), query);
-                throw e;
+            } catch (Exception e) {
+                log.warn("⚠️  Skipped SQWRL query {}: {}", (i + 1), e.getMessage());
+                // Continue processing other queries
             }
         }
 
-        log.info("✅ Successfully integrated {}/{} SQWRL queries", successCount, queries.size());
+        log.info("✅ Successfully documented {}/{} SQWRL queries", successCount, queries.size());
+        log.info("ℹ️  Pathway logic is implemented in PathwayService.java");
         return successCount;
+    }
+
+    /**
+     * Add SWRL rule as ontology annotation
+     */
+    private void addSWRLRuleAnnotation(String ruleName, String ruleText) {
+        IRI annotationProperty = IRI.create(getOntologyBaseIRI() + "swrl_rule");
+
+        OWLAnnotationProperty prop = dataFactory.getOWLAnnotationProperty(annotationProperty);
+        OWLAnnotation annotation = dataFactory.getOWLAnnotation(prop,
+            dataFactory.getOWLLiteral(ruleName + ": " + ruleText));
+
+        OWLAxiom axiom = dataFactory.getOWLAnnotationAssertionAxiom(
+            getOntologyIRI(), annotation);
+
+        manager.addAxiom(ontology, axiom);
+    }
+
+    /**
+     * Add SQWRL query as ontology annotation
+     */
+    private void addSQWRLQueryAnnotation(String queryName, String queryText) {
+        IRI annotationProperty = IRI.create(getOntologyBaseIRI() + "sqwrl_query");
+
+        OWLAnnotationProperty prop = dataFactory.getOWLAnnotationProperty(annotationProperty);
+        OWLAnnotation annotation = dataFactory.getOWLAnnotation(prop,
+            dataFactory.getOWLLiteral(queryName + ": " + queryText));
+
+        OWLAxiom axiom = dataFactory.getOWLAnnotationAssertionAxiom(
+            getOntologyIRI(), annotation);
+
+        manager.addAxiom(ontology, axiom);
+    }
+
+    /**
+     * Get ontology base IRI
+     */
+    private String getOntologyBaseIRI() {
+        return ontology.getOntologyID().getOntologyIRI()
+            .map(IRI::toString)
+            .orElse("http://acr.blockenergy.com/ontology") + "#";
+    }
+
+    /**
+     * Get ontology IRI
+     */
+    private IRI getOntologyIRI() {
+        return ontology.getOntologyID().getOntologyIRI()
+            .orElse(IRI.create("http://acr.blockenergy.com/ontology"));
     }
 
     /**
@@ -191,7 +254,9 @@ public class SWRLIntegrator {
         integrator.saveOntology(outputPath);
 
         log.info("🎉 Integration complete!");
-        log.info("📊 Integrated: {} SWRL rules, {} SQWRL queries", swrlCount, sqwrlCount);
+        log.info("📊 Documented: {} SWRL rules, {} SQWRL queries", swrlCount, sqwrlCount);
         log.info("💾 Output: {}", outputPath);
+        log.info("ℹ️  Classification logic is implemented in ReasoningEngine.java");
+        log.info("ℹ️  Pathway logic is implemented in PathwayService.java");
     }
 }
