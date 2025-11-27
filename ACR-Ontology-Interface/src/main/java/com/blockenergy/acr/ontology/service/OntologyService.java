@@ -1,7 +1,7 @@
 package com.blockenergy.acr.ontology.service;
 
 import com.blockenergy.acr.ontology.util.SWRLIntegrator;
-import com.clarkparsia.pellet.owlapiv3.PelletReasonerFactory;
+import openllet.owlapi.OpenlletReasonerFactory;
 import lombok.extern.slf4j.Slf4j;
 import org.semanticweb.owlapi.apibinding.OWLManager;
 import org.semanticweb.owlapi.model.*;
@@ -134,12 +134,12 @@ public class OntologyService {
      * Initialize Pellet reasoner
      */
     private void initializeReasoner() {
-        log.info("🧠 Initializing Pellet reasoner...");
+        log.info("🧠 Initializing Openllet reasoner...");
 
-        reasoner = PelletReasonerFactory.getInstance().createReasoner(ontology);
+        reasoner = OpenlletReasonerFactory.getInstance().createReasoner(ontology);
         reasoner.precomputeInferences();
 
-        log.info("✅ Pellet reasoner initialized");
+        log.info("✅ Openllet reasoner initialized");
         log.info("📊 Ontology is consistent: {}", reasoner.isConsistent());
     }
 
