@@ -1,0 +1,59 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /
+
+spring:
+  application:
+    name: acr-ontology-interface
+  
+  # CORS Configuration for Demo Website
+  web:
+    cors:
+      allowed-origins:
+        - "http://www.acragent.com"
+        - "https://www.acragent.com"
+        - "http://localhost:*"
+      allowed-methods:
+        - GET
+        - POST
+        - OPTIONS
+      allowed-headers: "*"
+      allow-credentials: true
+      max-age: 3600
+
+# ACR Platform Configuration
+acr:
+  ontology:
+    # Path to ontology files (relative to project root)
+    base-path: ../ACR-Ontology-Staging
+    ontology-file: acr-cancer-ontology.owl
+    swrl-file: acr-swrl-rules.swrl
+    sqwrl-file: acr-sqwrl-queries.sqwrl
+    base-iri: http://acr-platform.org/cancer-ontology#
+  
+  reasoning:
+    reasoner-type: openllet
+    enable-swrl: true
+    enable-sqwrl: true
+    enable-incremental: true
+    enable-caching: true
+    timeout-seconds: 30
+  
+  tracing:
+    enabled: true
+    output-directory: ./traces
+    max-trace-files: 100
+
+# Logging Configuration
+logging:
+  level:
+    root: INFO
+    org.acr.platform: DEBUG
+    openllet: INFO
+    org.semanticweb.owlapi: INFO
+    org.apache.jena: WARN
+  pattern:
+    console: "%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"
+  file:
+    name: logs/acr-engine.log
