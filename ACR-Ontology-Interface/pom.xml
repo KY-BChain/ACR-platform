@@ -38,31 +38,38 @@
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
         
+        <!-- Javax Annotations for legacy @PostConstruct -->
+        <dependency>
+            <groupId>javax.annotation</groupId>
+            <artifactId>javax.annotation-api</artifactId>
+            <version>1.3.2</version>
+        </dependency>
+        
         <!-- OWL API - Core Ontology Manipulation -->
         <dependency>
             <groupId>net.sourceforge.owlapi</groupId>
             <artifactId>owlapi-distribution</artifactId>
-            <version>\${owlapi.version}</version>
+            <version>${owlapi.version}</version>
         </dependency>
         
         <!-- Openllet Reasoner - SWRL Support -->
         <dependency>
             <groupId>com.github.galigator.openllet</groupId>
             <artifactId>openllet-owlapi</artifactId>
-            <version>\${openllet.version}</version>
+            <version>${openllet.version}</version>
         </dependency>
         
         <dependency>
             <groupId>com.github.galigator.openllet</groupId>
             <artifactId>openllet-jena</artifactId>
-            <version>\${openllet.version}</version>
+            <version>${openllet.version}</version>
         </dependency>
         
         <!-- Apache Jena - SPARQL Query Support -->
         <dependency>
             <groupId>org.apache.jena</groupId>
             <artifactId>apache-jena-libs</artifactId>
-            <version>\${jena.version}</version>
+            <version>${jena.version}</version>
             <type>pom</type>
         </dependency>
         
@@ -109,13 +116,6 @@
                 <configuration>
                     <source>17</source>
                     <target>17</target>
-                    <annotationProcessorPaths>
-                        <path>
-                            <groupId>org.projectlombok</groupId>
-                            <artifactId>lombok</artifactId>
-                            <version>${lombok.version}</version>
-                        </path>
-                    </annotationProcessorPaths>
                 </configuration>
             </plugin>
 
