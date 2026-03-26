@@ -78,6 +78,7 @@ data/
 *.db
 *.sqlite
 *.sqlite3
+*.zip
 
 # Docker
 .dockerignore
@@ -109,3 +110,7 @@ temp/
 Thumbs.db
 .Spotlight-V100
 .Trashes
+
+# OS / macOS
+.DS_Store
+**/.DS_Store
