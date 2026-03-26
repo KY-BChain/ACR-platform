@@ -1,0 +1,633 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://acragent.com/schemas/cds-result.schema.json",
+  "title": "ACRAgent CDS Result",
+  "description": "Structured clinician-facing Clinical Decision Support output for ACRAgent, derived from ontology reasoning, SWRL inference, and SQWRL retrieval.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "cds_result_id",
+    "generated_at",
+    "platform",
+    "case_context",
+    "clinical_summary",
+    "classification",
+    "risk_assessment",
+    "recommendations",
+    "alerts",
+    "explanation",
+    "rule_trace",
+    "query_trace",
+    "audit"
+  ],
+  "properties": {
+    "cds_result_id": {
+      "type": "string",
+      "description": "Unique CDS result identifier."
+    },
+    "generated_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Timestamp when the CDS result was generated."
+    },
+    "platform": {
+      "$ref": "#/$defs/platform"
+    },
+    "case_context": {
+      "$ref": "#/$defs/case_context"
+    },
+    "clinical_summary": {
+      "$ref": "#/$defs/clinical_summary"
+    },
+    "classification": {
+      "$ref": "#/$defs/classification"
+    },
+    "risk_assessment": {
+      "$ref": "#/$defs/risk_assessment"
+    },
+    "recommendations": {
+      "$ref": "#/$defs/recommendations"
+    },
+    "alerts": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/alert"
+      }
+    },
+    "explanation": {
+      "$ref": "#/$defs/explanation"
+    },
+    "rule_trace": {
+      "$ref": "#/$defs/rule_trace"
+    },
+    "query_trace": {
+      "$ref": "#/$defs/query_trace"
+    },
+    "audit": {
+      "$ref": "#/$defs/audit"
+    }
+  },
+  "$defs": {
+    "platform": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "product_name",
+        "ontology_version",
+        "swrl_package_version",
+        "sqwrl_package_version",
+        "reasoner_runtime_version"
+      ],
+      "properties": {
+        "product_name": {
+          "type": "string"
+        },
+        "ontology_version": {
+          "type": "string"
+        },
+        "swrl_package_version": {
+          "type": "string"
+        },
+        "sqwrl_package_version": {
+          "type": "string"
+        },
+        "bayesian_module_version": {
+          "type": ["string", "null"]
+        },
+        "reasoner_runtime_version": {
+          "type": "string"
+        }
+      }
+    },
+    "case_context": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "site_id",
+        "patient_local_id",
+        "case_id",
+        "jurisdiction",
+        "disease_area",
+        "data_completeness",
+        "input_facts_used"
+      ],
+      "properties": {
+        "site_id": {
+          "type": "string"
+        },
+        "site_name": {
+          "type": "string"
+        },
+        "patient_local_id": {
+          "type": "string"
+        },
+        "case_id": {
+          "type": "string"
+        },
+        "jurisdiction": {
+          "type": "string",
+          "enum": ["EU", "EEA", "UK", "HKSAR", "China", "Other"]
+        },
+        "disease_area": {
+          "type": "string"
+        },
+        "data_completeness": {
+          "$ref": "#/$defs/data_completeness"
+        },
+        "input_facts_used": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "data_completeness": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "biomarkers_complete",
+        "pathology_complete",
+        "staging_complete",
+        "imaging_available"
+      ],
+      "properties": {
+        "biomarkers_complete": {
+          "type": "boolean"
+        },
+        "pathology_complete": {
+          "type": "boolean"
+        },
+        "staging_complete": {
+          "type": "boolean"
+        },
+        "imaging_available": {
+          "type": "boolean"
+        }
+      }
+    },
+    "clinical_summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "headline",
+        "one_line_recommendation",
+        "urgency",
+        "confidence_band"
+      ],
+      "properties": {
+        "headline": {
+          "type": "string"
+        },
+        "one_line_recommendation": {
+          "type": "string"
+        },
+        "urgency": {
+          "type": "string",
+          "enum": ["routine", "priority", "urgent"]
+        },
+        "confidence_band": {
+          "type": "string",
+          "enum": ["high", "moderate", "low"]
+        }
+      }
+    },
+    "classification": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "molecular_subtype",
+        "disease_state",
+        "hormone_receptor_status",
+        "her2_classification"
+      ],
+      "properties": {
+        "molecular_subtype": {
+          "$ref": "#/$defs/inferred_value"
+        },
+        "disease_state": {
+          "$ref": "#/$defs/inferred_value"
+        },
+        "hormone_receptor_status": {
+          "$ref": "#/$defs/inferred_value"
+        },
+        "her2_classification": {
+          "$ref": "#/$defs/inferred_value"
+        }
+      }
+    },
+    "inferred_value": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["value", "source"],
+      "properties": {
+        "value": {
+          "type": "string"
+        },
+        "source": {
+          "type": "string",
+          "description": "Origin of the value, e.g. SWRL, Derived, Manual, Bayesian."
+        },
+        "supporting_rules": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "risk_assessment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "overall_risk_level",
+        "risk_factors",
+        "recurrence_risk_note"
+      ],
+      "properties": {
+        "overall_risk_level": {
+          "$ref": "#/$defs/inferred_value"
+        },
+        "risk_factors": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/risk_factor"
+          }
+        },
+        "recurrence_risk_note": {
+          "type": "string"
+        }
+      }
+    },
+    "risk_factor": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["factor"],
+      "properties": {
+        "factor": {
+          "type": "string"
+        },
+        "source_fact": {
+          "type": "string"
+        }
+      }
+    },
+    "recommendations": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "treatment_pathway",
+        "medications",
+        "monitoring",
+        "timeline"
+      ],
+      "properties": {
+        "treatment_pathway": {
+          "$ref": "#/$defs/treatment_pathway"
+        },
+        "medications": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/medication"
+          }
+        },
+        "monitoring": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "timeline": {
+          "$ref": "#/$defs/timeline"
+        }
+      }
+    },
+    "treatment_pathway": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "primary_recommendation",
+        "secondary_considerations",
+        "contraindications",
+        "recommended_next_steps"
+      ],
+      "properties": {
+        "primary_recommendation": {
+          "type": "string"
+        },
+        "secondary_considerations": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "contraindications": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "recommended_next_steps": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "medication": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["class", "indicated", "reason"],
+      "properties": {
+        "class": {
+          "type": "string"
+        },
+        "indicated": {
+          "type": "boolean"
+        },
+        "reason": {
+          "type": "string"
+        }
+      }
+    },
+    "timeline": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "initial_action_window",
+        "therapy_start_target",
+        "first_review_target"
+      ],
+      "properties": {
+        "initial_action_window": {
+          "type": "string"
+        },
+        "therapy_start_target": {
+          "type": "string"
+        },
+        "first_review_target": {
+          "type": "string"
+        }
+      }
+    },
+    "alert": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["severity", "code", "message", "source"],
+      "properties": {
+        "severity": {
+          "type": "string",
+          "enum": ["low", "medium", "high", "critical"]
+        },
+        "code": {
+          "type": "string"
+        },
+        "message": {
+          "type": "string"
+        },
+        "source": {
+          "type": "string"
+        }
+      }
+    },
+    "explanation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "narrative_summary",
+        "key_supporting_facts",
+        "uncertainties",
+        "missing_data_impact"
+      ],
+      "properties": {
+        "narrative_summary": {
+          "type": "string"
+        },
+        "key_supporting_facts": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "uncertainties": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "missing_data_impact": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "rule_trace": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "executed_rules_total",
+        "triggered_rules",
+        "not_triggered_rules"
+      ],
+      "properties": {
+        "executed_rules_total": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "triggered_rules": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/rule_trace_item"
+          }
+        },
+        "not_triggered_rules": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/rule_trace_item_not_triggered"
+          }
+        }
+      }
+    },
+    "rule_trace_item": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "rule_id",
+        "rule_name",
+        "status",
+        "input_facts",
+        "inferred_facts",
+        "contributes_to"
+      ],
+      "properties": {
+        "rule_id": {
+          "type": "string"
+        },
+        "rule_name": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string",
+          "const": "triggered"
+        },
+        "input_facts": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "inferred_facts": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "contributes_to": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "clinical_summary",
+              "classification",
+              "risk_assessment",
+              "recommendations",
+              "alerts",
+              "explanation",
+              "audit"
+            ]
+          }
+        }
+      }
+    },
+    "rule_trace_item_not_triggered": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "rule_id",
+        "rule_name",
+        "status",
+        "failed_conditions"
+      ],
+      "properties": {
+        "rule_id": {
+          "type": "string"
+        },
+        "rule_name": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string",
+          "const": "not_triggered"
+        },
+        "failed_conditions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "query_trace": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["executed_queries_total", "queries"],
+      "properties": {
+        "executed_queries_total": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "queries": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/query_trace_item"
+          }
+        }
+      }
+    },
+    "query_trace_item": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "query_id",
+        "query_name",
+        "result_type",
+        "feeds"
+      ],
+      "properties": {
+        "query_id": {
+          "type": "string"
+        },
+        "query_name": {
+          "type": "string"
+        },
+        "result_type": {
+          "type": "string",
+          "enum": ["single_value", "list", "count", "object", "boolean", "none"]
+        },
+        "result": {},
+        "feeds": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "clinical_summary",
+              "classification",
+              "risk_assessment",
+              "recommendations",
+              "alerts",
+              "explanation",
+              "audit"
+            ]
+          }
+        }
+      }
+    },
+    "audit": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "generated_by",
+        "site_id",
+        "generated_timestamp",
+        "ontology_version",
+        "rule_package_version",
+        "review_status",
+        "explainability_mode_available"
+      ],
+      "properties": {
+        "generated_by": {
+          "type": "string"
+        },
+        "site_id": {
+          "type": "string"
+        },
+        "generated_timestamp": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "ontology_version": {
+          "type": "string"
+        },
+        "rule_package_version": {
+          "type": "string"
+        },
+        "review_status": {
+          "type": "string",
+          "enum": [
+            "pending_clinician_review",
+            "reviewed",
+            "accepted",
+            "modified",
+            "rejected"
+          ]
+        },
+        "explainability_mode_available": {
+          "type": "boolean"
+        }
+      }
+    }
+  }
+}
