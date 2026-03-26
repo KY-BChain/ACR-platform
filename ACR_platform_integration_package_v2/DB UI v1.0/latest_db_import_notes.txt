@@ -1,0 +1,19 @@
+{
+  "imported_patients_into_canonical_patient": 200,
+  "imported_pathology_into_canonical_pathology_report": 200,
+  "imported_receptors_into_canonical_receptor_assay": 200,
+  "imported_labs_into_canonical_laboratory_test": 0,
+  "summary_counts": {
+    "patients": 200,
+    "patient": 202,
+    "pathology_reports": 200,
+    "pathology_report": 200,
+    "receptor_assays": 200,
+    "receptor_assay": 200,
+    "lab_results": 1000,
+    "laboratory_test": 0,
+    "imaging_study": 2,
+    "imaging_image_instance": 8,
+    "mammography_acquisition": 4
+  }
+}
