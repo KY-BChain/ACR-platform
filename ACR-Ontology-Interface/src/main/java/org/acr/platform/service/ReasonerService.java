@@ -2,7 +2,6 @@ package org.acr.platform.service;
 
 import org.acr.platform.ontology.OntologyLoader;
 import org.semanticweb.owlapi.model.*;
-import org.semanticweb.owlapi.reasoner.OWLReasoner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +35,7 @@ public class ReasonerService {
 
     private static final Logger logger = LoggerFactory.getLogger(ReasonerService.class);
 
+    @SuppressWarnings("unused")
     private final OntologyLoader ontologyLoader;
     private final TraceService traceService;
 
@@ -75,6 +75,7 @@ public class ReasonerService {
         
         // Patient info
         Map<String, Object> patientInfo = new HashMap<>();
+        @SuppressWarnings("unchecked")
         Map<String, Object> patient = (Map<String, Object>) patientData.get("patient");
         patientInfo.put("id", patient != null ? patient.get("id") : "unknown");
         patientInfo.put("molecularSubtype", "TODO: Infer from ontology");
@@ -126,6 +127,7 @@ public class ReasonerService {
     /**
      * TODO: Convert patient JSON to OWL individual
      */
+    @SuppressWarnings("unused")
     private OWLNamedIndividual createPatientFromJson(Map<String, Object> patientData) {
         // TODO: Implement
         return null;
@@ -134,6 +136,7 @@ public class ReasonerService {
     /**
      * TODO: Assert biomarker data properties
      */
+    @SuppressWarnings("unused")
     private void assertBiomarkers(OWLNamedIndividual patient, Map<String, Object> biomarkers) {
         // TODO: Implement
         // Example: Assert ER=85, PR=70, HER2=Negative, Ki67=10
@@ -142,6 +145,7 @@ public class ReasonerService {
     /**
      * TODO: Assert pathology data
      */
+    @SuppressWarnings("unused")
     private void assertPathology(OWLNamedIndividual patient, Map<String, Object> pathology) {
         // TODO: Implement
         // Example: tumorSize=18mm, grade=2, lymphNodesPositive=0
@@ -150,6 +154,7 @@ public class ReasonerService {
     /**
      * TODO: Execute reasoner and get inferred types
      */
+    @SuppressWarnings("unused")
     private Set<OWLClass> getInferredTypes(OWLNamedIndividual patient) {
         // TODO: Implement
         // Use ontologyLoader.getReasoner().getTypes(patient, false)
@@ -159,6 +164,7 @@ public class ReasonerService {
     /**
      * TODO: Determine molecular subtype from inferred classes
      */
+    @SuppressWarnings("unused")
     private String determineMolecularSubtype(Set<OWLClass> inferredTypes) {
         // TODO: Implement
         // Map OWL classes to: LuminalA, LuminalB, HER2Enriched, TripleNegative
@@ -168,6 +174,7 @@ public class ReasonerService {
     /**
      * TODO: Calculate risk level from biomarker values
      */
+    @SuppressWarnings("unused")
     private String calculateRiskLevel(Map<String, Object> biomarkers, Map<String, Object> pathology) {
         // TODO: Implement
         // Use Ki67, tumor size, grade, lymph node status
@@ -177,6 +184,7 @@ public class ReasonerService {
     /**
      * TODO: Extract treatment recommendations from ontology
      */
+    @SuppressWarnings("unused")
     private List<Map<String, Object>> queryTreatments(String molecularSubtype) {
         // TODO: Implement
         // SQWRL-style query: Get medications for subtype

@@ -78,6 +78,7 @@ public class OntologyLoader {
     /**
      * Load OWL ontology from file
      */
+    @SuppressWarnings("null")
     private void loadOntology() throws OWLOntologyCreationException {
         manager = OWLManager.createOWLOntologyManager();
         dataFactory = manager.getOWLDataFactory();
@@ -167,6 +168,7 @@ public class OntologyLoader {
     /**
      * Create a fresh patient individual for reasoning
      */
+    @SuppressWarnings("null")
     public OWLNamedIndividual createPatientIndividual(String patientId) {
         IRI patientIRI = IRI.create(baseIRI + patientId);
         OWLNamedIndividual patient = dataFactory.getOWLNamedIndividual(patientIRI);
