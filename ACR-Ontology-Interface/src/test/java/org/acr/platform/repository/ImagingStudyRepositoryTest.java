@@ -47,7 +47,7 @@ public class ImagingStudyRepositoryTest {
             .map(p -> p.getPatientLocalId())
             .toList();
         
-        assertTrue(!patientIds.isEmpty(), "Should have at least one patient");
+        assertFalse(patientIds.isEmpty(), "Should have at least one patient");
         String patientId = patientIds.get(0);
         
         // When: Finding imaging studies for this patient
