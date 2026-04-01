@@ -5,9 +5,6 @@ package org.acr.platform;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.Bean;
-import org.springframework.web.servlet.config.annotation.CorsRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 /**
  * ACR Ontology Interface - Main Application
@@ -34,28 +31,6 @@ public class EngineApplication {
         System.out.println("========================================");
         
         SpringApplication.run(EngineApplication.class, args);
-    }
-
-    /**
-     * Configure CORS for demo website integration
-     */
-    @Bean
-    public WebMvcConfigurer corsConfigurer() {
-        return new WebMvcConfigurer() {
-            @Override
-            public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("/api/**")
-                    .allowedOrigins(
-                        "http://www.acragent.com",
-                        "https://www.acragent.com",
-                        "http://localhost:*"
-                    )
-                    .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
-                    .allowedHeaders("*")
-                    .allowCredentials(true)
-                    .maxAge(3600);
-            }
-        };
     }
 }
 

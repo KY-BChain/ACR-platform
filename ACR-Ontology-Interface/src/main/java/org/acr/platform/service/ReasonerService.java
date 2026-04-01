@@ -6,6 +6,9 @@ import org.acr.platform.model.InferenceResult;
 import org.acr.platform.model.InferenceResult.DeterministicResult;
 import org.acr.platform.model.InferenceResult.BayesianResult;
 import org.semanticweb.owlapi.model.*;
+import org.semanticweb.owlapi.reasoner.OWLReasoner;
+import org.semanticweb.owlapi.reasoner.NodeSet;
+import org.semanticweb.owlapi.reasoner.Node;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,7 +43,6 @@ public class ReasonerService {
 
     private static final Logger logger = LoggerFactory.getLogger(ReasonerService.class);
 
-    @SuppressWarnings("unused")
     private final OntologyLoader ontologyLoader;
     private final TraceService traceService;
     private final BayesianEnhancer bayesianEnhancer;
@@ -297,43 +299,235 @@ public class ReasonerService {
     // ==================== NEW: ENHANCED INFERENCE HELPER METHODS ====================
 
     /**
-     * Perform deterministic OWL/SWRL reasoning on patient data
+     * Perform OWL/SWRL reasoning with fallback to hard-coded logic.
      * 
-     * Implementation placeholder for full ontology reasoning:
-     * 1. Convert patient biomarkers to OWL assertions
-     * 2. Execute SWRL rules for inference
-     * 3. Classify patient against molecular subtype classes
-     * 4. Return inferred subtype
+     * ARCHITECTURE:
+     * - PRIMARY PATH: Execute ontology reasoning via Openllet (SWRL/SQWRL rules)
+     * - FALLBACK PATH: Use hard-coded Java logic if ontology fails/times out
      * 
-     * @param patient Patient clinical data
-     * @return Inferred molecular subtype (Luminal_A, Luminal_B, HER2_Enriched, Triple_Negative)
+     * This dual-path ensures graceful degradation for MVP while maintaining
+     * production-grade ontology reasoning capability.
      */
-    private String performOWLSWRLReasoning(PatientData patient) {
-        logger.debug("Executing OWL/SWRL reasoning for patient {}", patient.getPatientId());
+    private String performOWLSWRLReasoning(PatientData patientData) {
+        String molecularSubtype = null;
+        String reasoningMethod = "ONTOLOGY";
         
-        // TEMPORARY: Deterministic rule-based classification
-        // TODO: Replace with actual ontology reasoning when OntologyLoader is fully implemented
+        try {
+            // PRIMARY PATH: Ontology-based reasoning with timeout
+            long startTime = System.currentTimeMillis();
+            molecularSubtype = executeOntologyReasoning(patientData);
+            long elapsedTime = System.currentTimeMillis() - startTime;
+            
+            // Timeout protection: If reasoning takes > 5 seconds, fall back
+            if (elapsedTime > 5000) {
+                logger.warn("Ontology reasoning took {}ms (>5s timeout), falling back to hard-coded logic", elapsedTime);
+                molecularSubtype = null;
+            }
+            
+            // Validation: If ontology returned null or invalid subtype, fall back
+            if (molecularSubtype == null || !isValidSubtype(molecularSubtype)) {
+                logger.warn("Ontology reasoning returned invalid subtype: {}, falling back", molecularSubtype);
+                molecularSubtype = null;
+            } else {
+                logger.info("Ontology reasoning succeeded: {} in {}ms", molecularSubtype, elapsedTime);
+            }
+            
+        } catch (Exception e) {
+            // FALLBACK TRIGGER: Any exception during ontology reasoning
+            logger.error("Ontology reasoning failed: {}, falling back to hard-coded logic", e.getMessage());
+            molecularSubtype = null;
+        }
         
-        String er = patient.getErStatus() != null ? patient.getErStatus().toLowerCase() : "unknown";
-        String pr = patient.getPrStatus() != null ? patient.getPrStatus().toLowerCase() : "unknown";
-        String her2 = patient.getHer2Status() != null ? patient.getHer2Status().toLowerCase() : "unknown";
-        Double ki67 = patient.getKi67();
+        // FALLBACK PATH: Hard-coded logic (existing implementation)
+        if (molecularSubtype == null) {
+            reasoningMethod = "FALLBACK";
+            logger.info("Using hard-coded fallback reasoning for patient: {}", patientData.getPatientId());
+            molecularSubtype = executeHardcodedReasoning(patientData);
+        }
         
-        // Classification rules (simplified, to be replaced with ontology reasoning)
+        // Add reasoning method to trace for debugging
+        logger.info("Molecular subtype determined via {}: {}", reasoningMethod, molecularSubtype);
+        
+        return molecularSubtype;
+    }
+
+    /**
+     * Execute ontology-based reasoning using Openllet with SWRL rules.
+     * This is the PRIMARY reasoning path.
+     * 
+     * @param patientData Patient biomarker and clinical data
+     * @return Molecular subtype classification or null if reasoning fails
+     * @throws Exception if ontology reasoning encounters fatal error
+     */
+    private String executeOntologyReasoning(PatientData patientData) throws Exception {
+        logger.info("Executing ontology-based reasoning for patient: {}", patientData.getPatientId());
+        
+        // Get reasoner and ontology from loader
+        OWLReasoner reasoner = ontologyLoader.getReasoner();
+        OWLOntology ontology = ontologyLoader.getOntology();
+        OWLDataFactory factory = ontology.getOWLOntologyManager().getOWLDataFactory();
+        
+        if (reasoner == null || ontology == null) {
+            throw new IllegalStateException("Ontology or reasoner not initialized");
+        }
+        
+        // Create patient individual in ontology
+        String patientIRI = "http://acr.platform/ontology#Patient_" + patientData.getPatientId();
+        OWLNamedIndividual patientIndividual = factory.getOWLNamedIndividual(IRI.create(patientIRI));
+        
+        // Assert patient class membership
+        OWLClass patientClass = factory.getOWLClass(IRI.create("http://acr.platform/ontology#Patient"));
+        OWLClassAssertionAxiom classAssertion = factory.getOWLClassAssertionAxiom(patientClass, patientIndividual);
+        ontology.getOWLOntologyManager().addAxiom(ontology, classAssertion);
+        
+        // Assert biomarker data properties
+        List<OWLAxiom> biomarkerAxioms = assertBiomarkerData(patientData, patientIndividual, factory, ontology);
+        
+        try {
+            // Run reasoner
+            reasoner.flush();
+            reasoner.precomputeInferences();
+            
+            // Query for molecular subtype classification
+            return queryMolecularSubtype(patientIndividual, reasoner, factory, ontology);
+        } finally {
+            // Clean up: remove patient assertions from ontology
+            OWLOntologyManager manager = ontology.getOWLOntologyManager();
+            manager.removeAxiom(ontology, classAssertion);
+            for (OWLAxiom axiom : biomarkerAxioms) {
+                manager.removeAxiom(ontology, axiom);
+            }
+        }
+    }
+
+    /**
+     * Assert patient biomarker data as OWL data properties.
+     * Returns list of added axioms for cleanup.
+     */
+    private List<OWLAxiom> assertBiomarkerData(PatientData patientData, OWLNamedIndividual patient,
+                                     OWLDataFactory factory, OWLOntology ontology) {
+        OWLOntologyManager manager = ontology.getOWLOntologyManager();
+        List<OWLAxiom> addedAxioms = new ArrayList<>();
+        
+        // ER status
+        if (patientData.getErStatus() != null) {
+            OWLDataProperty erProp = factory.getOWLDataProperty(IRI.create("http://acr.platform/ontology#hasERStatus"));
+            OWLLiteral erValue = factory.getOWLLiteral(patientData.getErStatus());
+            OWLAxiom axiom = factory.getOWLDataPropertyAssertionAxiom(erProp, patient, erValue);
+            manager.addAxiom(ontology, axiom);
+            addedAxioms.add(axiom);
+        }
+        
+        // PR status
+        if (patientData.getPrStatus() != null) {
+            OWLDataProperty prProp = factory.getOWLDataProperty(IRI.create("http://acr.platform/ontology#hasPRStatus"));
+            OWLLiteral prValue = factory.getOWLLiteral(patientData.getPrStatus());
+            OWLAxiom axiom = factory.getOWLDataPropertyAssertionAxiom(prProp, patient, prValue);
+            manager.addAxiom(ontology, axiom);
+            addedAxioms.add(axiom);
+        }
+        
+        // HER2 status
+        if (patientData.getHer2Status() != null) {
+            OWLDataProperty her2Prop = factory.getOWLDataProperty(IRI.create("http://acr.platform/ontology#hasHER2Status"));
+            OWLLiteral her2Value = factory.getOWLLiteral(patientData.getHer2Status());
+            OWLAxiom axiom = factory.getOWLDataPropertyAssertionAxiom(her2Prop, patient, her2Value);
+            manager.addAxiom(ontology, axiom);
+            addedAxioms.add(axiom);
+        }
+        
+        // Ki67 percentage
+        if (patientData.getKi67() != null) {
+            OWLDataProperty ki67Prop = factory.getOWLDataProperty(IRI.create("http://acr.platform/ontology#hasKi67"));
+            OWLLiteral ki67Value = factory.getOWLLiteral(patientData.getKi67());
+            OWLAxiom axiom = factory.getOWLDataPropertyAssertionAxiom(ki67Prop, patient, ki67Value);
+            manager.addAxiom(ontology, axiom);
+            addedAxioms.add(axiom);
+        }
+        
+        // Grade
+        if (patientData.getGrade() != null) {
+            OWLDataProperty gradeProp = factory.getOWLDataProperty(IRI.create("http://acr.platform/ontology#hasTumourGrade"));
+            OWLLiteral gradeValue = factory.getOWLLiteral(patientData.getGrade());
+            OWLAxiom axiom = factory.getOWLDataPropertyAssertionAxiom(gradeProp, patient, gradeValue);
+            manager.addAxiom(ontology, axiom);
+            addedAxioms.add(axiom);
+        }
+        
+        return addedAxioms;
+    }
+
+    /**
+     * Query the ontology for molecular subtype classification after reasoning.
+     */
+    private String queryMolecularSubtype(OWLNamedIndividual patient, OWLReasoner reasoner,
+                                         OWLDataFactory factory, OWLOntology ontology) {
+        // Define molecular subtype classes
+        OWLClass luminalA = factory.getOWLClass(IRI.create("http://acr.platform/ontology#LuminalA"));
+        OWLClass luminalB = factory.getOWLClass(IRI.create("http://acr.platform/ontology#LuminalB"));
+        OWLClass her2Enriched = factory.getOWLClass(IRI.create("http://acr.platform/ontology#HER2Enriched"));
+        OWLClass tripleNegative = factory.getOWLClass(IRI.create("http://acr.platform/ontology#TripleNegative"));
+        OWLClass normalLike = factory.getOWLClass(IRI.create("http://acr.platform/ontology#NormalLike"));
+        
+        // Query reasoner for inferred types
+        NodeSet<OWLClass> inferredTypes = reasoner.getTypes(patient, false);
+        
+        // Check each subtype
+        for (Node<OWLClass> node : inferredTypes) {
+            for (OWLClass inferredClass : node) {
+                if (inferredClass.equals(luminalA)) return "Luminal_A";
+                if (inferredClass.equals(luminalB)) return "Luminal_B";
+                if (inferredClass.equals(her2Enriched)) return "HER2_Enriched";
+                if (inferredClass.equals(tripleNegative)) return "Triple_Negative";
+                if (inferredClass.equals(normalLike)) return "Normal_Like";
+            }
+        }
+        
+        return null; // No classification found
+    }
+
+    /**
+     * Validate molecular subtype string.
+     */
+    private boolean isValidSubtype(String subtype) {
+        if (subtype == null) return false;
+        return subtype.equals("Luminal_A") || subtype.equals("Luminal_B") ||
+               subtype.equals("HER2_Enriched") || subtype.equals("Triple_Negative") ||
+               subtype.equals("Normal_Like");
+    }
+
+    /**
+     * FALLBACK: Hard-coded reasoning logic (existing implementation preserved).
+     * This is the current working logic from Days 1-5 that uses Java if/else.
+     */
+    private String executeHardcodedReasoning(PatientData patientData) {
+        String er = patientData.getErStatus() != null ? patientData.getErStatus().toLowerCase() : "unknown";
+        String pr = patientData.getPrStatus() != null ? patientData.getPrStatus().toLowerCase() : "unknown";
+        String her2 = patientData.getHer2Status() != null ? patientData.getHer2Status().toLowerCase() : "unknown";
+        Double ki67 = patientData.getKi67();
+        
+        // Triple Negative
         if ("negative".equals(er) && "negative".equals(pr) && "negative".equals(her2)) {
             return "Triple_Negative";
-        } else if ("positive".equals(her2)) {
+        }
+        
+        // HER2-Enriched
+        if ("positive".equals(her2)) {
             return "HER2_Enriched";
-        } else if ("positive".equals(er) || "positive".equals(pr)) {
+        }
+        
+        // Luminal subtypes (ER or PR positive)
+        if ("positive".equals(er) || "positive".equals(pr)) {
             // Luminal A vs B based on Ki67
             if (ki67 != null && ki67 > 20.0) {
                 return "Luminal_B";
             } else {
                 return "Luminal_A";
             }
-        } else {
-            return "Normal_Like";
         }
+        
+        // Default to Normal-like if no clear classification
+        return "Normal_Like";
     }
 
     /**
