@@ -1,0 +1,2282 @@
+@prefix : <https://medical-ai.org/ontologies/ACR#> .
+@prefix acr: <https://medical-ai.org/ontologies/ACR#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xml: <http://www.w3.org/XML/1998/namespace> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@base <https://medical-ai.org/ontologies/ACR#> .
+
+[ rdf:type owl:Ontology ;
+   rdfs:comment ""
+ ] .
+
+#################################################################
+#    Object Properties
+#################################################################
+
+###  https://medical-ai.org/ontologies/ACR#applicableToCancerType
+acr:applicableToCancerType rdf:type owl:ObjectProperty ;
+                           rdfs:domain acr:GuidelineRecommendation ;
+                           rdfs:range acr:CancerType ;
+                           rdfs:label "applicable to cancer type"@en ,
+                                      "适用癌症类型"@zh .
+
+
+###  https://medical-ai.org/ontologies/ACR#hasGuidelineSource
+acr:hasGuidelineSource rdf:type owl:ObjectProperty ;
+                       rdfs:domain acr:GuidelineRecommendation ;
+                       rdfs:range acr:GuidelineOrganization ;
+                       rdfs:label "has guideline source"@en ,
+                                  "指南来源"@zh .
+
+
+###  https://medical-ai.org/ontologies/ACR#hasRecommendationLevel
+acr:hasRecommendationLevel rdf:type owl:ObjectProperty ;
+                           rdfs:domain acr:GuidelineRecommendation ;
+                           rdfs:range acr:RecommendationLevel ;
+                           rdfs:label "has recommendation level"@en ,
+                                      "推荐等级"@zh .
+
+
+###  https://medical-ai.org/ontologies/ACR#recommendsTreatment
+acr:recommendsTreatment rdf:type owl:ObjectProperty ;
+                        rdfs:domain acr:GuidelineRecommendation ;
+                        rdfs:range acr:TreatmentPlan ;
+                        rdfs:label "recommends treatment"@en ,
+                                   "推荐治疗方案"@zh .
+
+
+###  https://medical-ai.org/ontologies/ACR#requiresBiomarker
+acr:requiresBiomarker rdf:type owl:ObjectProperty ;
+                      rdfs:domain acr:GuidelineRecommendation ;
+                      rdfs:range acr:Biomarker ;
+                      rdfs:label "requires biomarker"@en ,
+                                 "需要生物标志物"@zh .
+
+
+#################################################################
+#    Data properties
+#################################################################
+
+###  https://medical-ai.org/ontologies/ACR#cardinality
+acr:cardinality rdf:type owl:DatatypeProperty ;
+                rdfs:label "cardinality"@en ,
+                           "基数"@zh .
+
+
+###  https://medical-ai.org/ontologies/ACR#hasBMI推导
+acr:hasBMI推导 rdf:type owl:DatatypeProperty ;
+             rdfs:domain acr:Patient ;
+             rdfs:range xsd:string .
+
+
+###  https://medical-ai.org/ontologies/ACR#hasDICOM图像访问策略
+acr:hasDICOM图像访问策略 rdf:type owl:DatatypeProperty ;
+                   rdfs:domain acr:ImagingStudy ;
+                   rdfs:range xsd:string .
+
+
+###  https://medical-ai.org/ontologies/ACR#hasER结果标志和百分比
+acr:hasER结果标志和百分比 rdf:type owl:DatatypeProperty ;
+                  rdfs:domain acr:ReceptorAssay ;
+                  rdfs:range xsd:decimal .
+
+
+###  https://medical-ai.org/ontologies/ACR#hasEvidenceLevel
+acr:hasEvidenceLevel rdf:type owl:DatatypeProperty ;
+                     rdfs:domain acr:GuidelineRecommendation ;
+                     rdfs:range xsd:string ;
+                     rdfs:label "has evidence level"@en ,
+                                "证据等级"@zh .
+
+
+###  https://medical-ai.org/ontologies/ACR#hasHER2FISH比率Or结果
+acr:hasHER2FISH比率Or结果 rdf:type owl:DatatypeProperty ;
+                      rdfs:domain acr:ReceptorAssay ;
+                      rdfs:range xsd:string .
+
+
+###  https://medical-ai.org/ontologies/ACR#hasHER2IHC评分
+acr:hasHER2IHC评分 rdf:type owl:DatatypeProperty ;
+                 rdfs:domain acr:ReceptorAssay ;
+                 rdfs:range xsd:string .
+
+
+###  https://medical-ai.org/ontologies/ACR#hasHER2最终解释
+acr:hasHER2最终解释 rdf:type owl:DatatypeProperty ;
+                rdfs:domain acr:ReceptorAssay ;
+                rdfs:range xsd:string .
+
+
+###  https://medical-ai.org/ontologies/ACR#hasHER2靶向药物和持续时间
+acr:hasHER2靶向药物和持续时间 rdf:type owl:DatatypeProperty ;
+                     rdfs:domain acr:TreatmentPlan ;
+                     rdfs:range xsd:string .
+
+
+###  https://medical-ai.org/ontologies/ACR#hasKi-67增殖指数
+acr:hasKi-67增殖指数 rdf:type owl:DatatypeProperty ;
+                 rdfs:domain acr:ReceptorAssay ;
+                 rdfs:range xsd:string .
+
+
+###  https://medical-ai.org/ontologies/ACR#hasMDT会议日期
+acr:hasMDT会议日期 rdf:type owl:DatatypeProperty ;
+               rdfs:domain acr:MDTMeeting ;
+               rdfs:range xsd:dateTime .
+
+
+###  https://medical-ai.org/ontologies/ACR#hasMDT参会人员角色
+acr:hasMDT参会人员角色 rdf:type owl:DatatypeProperty ;
+                 rdfs:domain acr:MDTMeeting ;
+                 rdfs:range xsd:string .
+
+
+###  https://medical-ai.org/ontologies/ACR#hasMDT建议摘要
+acr:hasMDT建议摘要 rdf:type owl:DatatypeProperty ;
+               rdfs:domain acr:MDTMeeting ;
+               rdfs:range xsd:string .
+
+
+###  https://medical-ai.org/ontologies/ACR#hasPR结果标志和百分比
+acr:hasPR结果标志和百分比 rdf:type owl:DatatypeProperty ;
+                  rdfs:domain acr:ReceptorAssay ;
+                  rdfs:range xsd:decimal .
+
+
+###  https://medical-ai.org/ontologies/ACR#hasSNOMED映射可用
+acr:hasSNOMED映射可用 rdf:type owl:DatatypeProperty ;
+                  rdfs:domain acr:TerminologyMapping ;
+                  rdfs:range xsd:boolean .
+
+
+###  https://medical-ai.org/ontologies/ACR#has临床TNMcTNM
+acr:has临床TNMcTNM rdf:type owl:DatatypeProperty ;
+                 rdfs:domain acr:Staging ;
+                 rdfs:range xsd:string .
+
+
+###  https://medical-ai.org/ontologies/ACR#has主诉
+acr:has主诉 rdf:type owl:DatatypeProperty ;
+          rdfs:domain acr:ClinicalAssessment ;
+          rdfs:range xsd:string .
+
+
+###  https://medical-ai.org/ontologies/ACR#has乳腺侧别
+acr:has乳腺侧别 rdf:type owl:DatatypeProperty ;
+            rdfs:domain acr:Procedure ;
+            rdfs:range xsd:string .
+
+
+###  https://medical-ai.org/ontologies/ACR#has产次和产科史
+acr:has产次和产科史 rdf:type owl:DatatypeProperty ;
+              rdfs:domain acr:ReproductiveHistory ;
+              rdfs:range xsd:string .
+
+
+###  https://medical-ai.org/ontologies/ACR#has体重千克
+acr:has体重千克 rdf:type owl:DatatypeProperty ;
+            rdfs:domain acr:Patient ;
+            rdfs:range xsd:string .
+
+
+###  https://medical-ai.org/ontologies/ACR#has全身治疗开始日期
+acr:has全身治疗开始日期 rdf:type owl:DatatypeProperty ;
+                rdfs:domain acr:TreatmentPlan ;
+                rdfs:range xsd:dateTime .
+
+
+###  https://medical-ai.org/ontologies/ACR#has内分泌治疗药物和计划持续时间
+acr:has内分泌治疗药物和计划持续时间 rdf:type owl:DatatypeProperty ;
+                      rdfs:domain acr:TreatmentPlan ;
+                      rdfs:range xsd:string .
+
+
+###  https://medical-ai.org/ontologies/ACR#has出生性别Or人口统计
+acr:has出生性别Or人口统计 rdf:type owl:DatatypeProperty ;
+                  rdfs:domain acr:Patient ;
+                  rdfs:range xsd:string .
+
+
+###  https://medical-ai.org/ontologies/ACR#has出生日期
+acr:has出生日期 rdf:type owl:DatatypeProperty ;
+            rdfs:domain acr:Patient ;
+            rdfs:range xsd:dateTime .
+
+
+###  https://medical-ai.org/ontologies/ACR#has切缘手术标本
+acr:has切缘手术标本 rdf:type owl:DatatypeProperty ;
+              rdfs:domain acr:PathologyReport ;
+              rdfs:range xsd:string .
+
+
+###  https://medical-ai.org/ontologies/ACR#has化疗计划周期和完成周期
+acr:has化疗计划周期和完成周期 rdf:type owl:DatatypeProperty ;
+                   rdfs:domain acr:TreatmentPlan ;
+                   rdfs:range xsd:string .
+
+
+###  https://medical-ai.org/ontologies/ACR#has医嘱和检验元数据代码Or结果
+acr:has医嘱和检验元数据代码Or结果 rdf:type owl:DatatypeProperty ;
+                      rdfs:domain acr:MedicalOrder ;
+                      rdfs:range xsd:boolean .
+
+
+###  https://medical-ai.org/ontologies/ACR#has合并症列表
+acr:has合并症列表 rdf:type owl:DatatypeProperty ;
+             rdfs:domain acr:MedicalHistory ;
+             rdfs:range xsd:string .
+
+
+###  https://medical-ai.org/ontologies/ACR#has吸烟状况
+acr:has吸烟状况 rdf:type owl:DatatypeProperty ;
+            rdfs:domain acr:MedicalHistory ;
+            rdfs:range xsd:string .
+
+
+###  https://medical-ai.org/ontologies/ACR#has基因组检测名称和数值评分
+acr:has基因组检测名称和数值评分 rdf:type owl:DatatypeProperty ;
+                    rdfs:domain acr:GenomicTest ;
+                    rdfs:range xsd:decimal .
+
+
+###  https://medical-ai.org/ontologies/ACR#has基因组检测执行
+acr:has基因组检测执行 rdf:type owl:DatatypeProperty ;
+               rdfs:domain acr:GenomicTest ;
+               rdfs:range xsd:boolean .
+
+
+###  https://medical-ai.org/ontologies/ACR#has复发或进展标志
+acr:has复发或进展标志 rdf:type owl:DatatypeProperty ;
+               rdfs:domain acr:FollowUp ;
+               rdfs:range xsd:string .
+
+
+###  https://medical-ai.org/ontologies/ACR#has复发日期和部位
+acr:has复发日期和部位 rdf:type owl:DatatypeProperty ;
+               rdfs:domain acr:FollowUp ;
+               rdfs:range xsd:dateTime .
+
+
+###  https://medical-ai.org/ontologies/ACR#has家族癌症史
+acr:has家族癌症史 rdf:type owl:DatatypeProperty ;
+             rdfs:domain acr:MedicalHistory ;
+             rdfs:range xsd:string .
+
+
+###  https://medical-ai.org/ontologies/ACR#has就诊日期Or时间
+acr:has就诊日期Or时间 rdf:type owl:DatatypeProperty ;
+                rdfs:domain acr:ClinicalAssessment ;
+                rdfs:range xsd:dateTime .
+
+
+###  https://medical-ai.org/ontologies/ACR#has年龄推导
+acr:has年龄推导 rdf:type owl:DatatypeProperty ;
+            rdfs:domain acr:Patient ;
+            rdfs:range xsd:string .
+
+
+###  https://medical-ai.org/ontologies/ACR#has影像发现编码
+acr:has影像发现编码 rdf:type owl:DatatypeProperty ;
+              rdfs:domain acr:ImagingStudy ;
+              rdfs:range xsd:string .
+
+
+###  https://medical-ai.org/ontologies/ACR#has影像报告完整发现
+acr:has影像报告完整发现 rdf:type owl:DatatypeProperty ;
+                rdfs:domain acr:ImagingStudy ;
+                rdfs:range xsd:string .
+
+
+###  https://medical-ai.org/ontologies/ACR#has影像报告摘要
+acr:has影像报告摘要 rdf:type owl:DatatypeProperty ;
+              rdfs:domain acr:ImagingStudy ;
+              rdfs:range xsd:string .
+
+
+###  https://medical-ai.org/ontologies/ACR#has影像检查日期Or时间
+acr:has影像检查日期Or时间 rdf:type owl:DatatypeProperty ;
+                  rdfs:domain acr:ImagingStudy ;
+                  rdfs:range xsd:dateTime .
+
+
+###  https://medical-ai.org/ontologies/ACR#has影像检查标识符
+acr:has影像检查标识符 rdf:type owl:DatatypeProperty ;
+               rdfs:domain acr:ImagingStudy ;
+               rdfs:range xsd:string .
+
+
+###  https://medical-ai.org/ontologies/ACR#has影像模态
+acr:has影像模态 rdf:type owl:DatatypeProperty ;
+            rdfs:domain acr:ImagingStudy ;
+            rdfs:range xsd:string .
+
+
+###  https://medical-ai.org/ontologies/ACR#has影像评估BI-RADS
+acr:has影像评估BI-RADS rdf:type owl:DatatypeProperty ;
+                   rdfs:domain acr:ImagingStudy ;
+                   rdfs:range xsd:string .
+
+
+###  https://medical-ai.org/ontologies/ACR#has总体分期分组
+acr:has总体分期分组 rdf:type owl:DatatypeProperty ;
+              rdfs:domain acr:Staging ;
+              rdfs:range xsd:string .
+
+
+###  https://medical-ai.org/ontologies/ACR#has患者姓名本地
+acr:has患者姓名本地 rdf:type owl:DatatypeProperty ;
+              rdfs:domain acr:Patient ;
+              rdfs:range xsd:string .
+
+
+###  https://medical-ai.org/ontologies/ACR#has患者本地标识符
+acr:has患者本地标识符 rdf:type owl:DatatypeProperty ;
+               rdfs:domain acr:Patient ;
+               rdfs:range xsd:string .
+
+
+###  https://medical-ai.org/ontologies/ACR#has患者电话
+acr:has患者电话 rdf:type owl:DatatypeProperty ;
+            rdfs:domain acr:Patient ;
+            rdfs:range xsd:string .
+
+
+###  https://medical-ai.org/ontologies/ACR#has患者身份证号
+acr:has患者身份证号 rdf:type owl:DatatypeProperty ;
+              rdfs:domain acr:Patient ;
+              rdfs:range xsd:string .
+
+
+###  https://medical-ai.org/ontologies/ACR#has按元素数据共享权限
+acr:has按元素数据共享权限 rdf:type owl:DatatypeProperty ;
+                 rdfs:domain acr:DataGovernance ;
+                 rdfs:range xsd:string .
+
+
+###  https://medical-ai.org/ontologies/ACR#has放疗区域和计划
+acr:has放疗区域和计划 rdf:type owl:DatatypeProperty ;
+               rdfs:domain acr:RadiotherapyPlan ;
+               rdfs:range xsd:string .
+
+
+###  https://medical-ai.org/ontologies/ACR#has新辅助化疗方案
+acr:has新辅助化疗方案 rdf:type owl:DatatypeProperty ;
+               rdfs:domain acr:TreatmentPlan ;
+               rdfs:range xsd:string .
+
+
+###  https://medical-ai.org/ontologies/ACR#has新辅助治疗类型
+acr:has新辅助治疗类型 rdf:type owl:DatatypeProperty ;
+               rdfs:domain acr:TreatmentPlan ;
+               rdfs:range xsd:string .
+
+
+###  https://medical-ai.org/ontologies/ACR#has月经状况
+acr:has月经状况 rdf:type owl:DatatypeProperty ;
+            rdfs:domain acr:ReproductiveHistory ;
+            rdfs:range xsd:string .
+
+
+###  https://medical-ai.org/ontologies/ACR#has未映射概念的首选本地代码
+acr:has未映射概念的首选本地代码 rdf:type owl:DatatypeProperty ;
+                    rdfs:domain acr:TerminologyMapping ;
+                    rdfs:range xsd:string .
+
+
+###  https://medical-ai.org/ontologies/ACR#has本地备注和限制
+acr:has本地备注和限制 rdf:type owl:DatatypeProperty ;
+               rdfs:domain acr:Administrative ;
+               rdfs:range xsd:string .
+
+
+###  https://medical-ai.org/ontologies/ACR#has术中失血量
+acr:has术中失血量 rdf:type owl:DatatypeProperty ;
+             rdfs:domain acr:SurgicalProcedure ;
+             rdfs:range xsd:string .
+
+
+###  https://medical-ai.org/ontologies/ACR#has术后并发症
+acr:has术后并发症 rdf:type owl:DatatypeProperty ;
+             rdfs:domain acr:SurgicalProcedure ;
+             rdfs:range xsd:string .
+
+
+###  https://medical-ai.org/ontologies/ACR#has来源：报告作者角色和日期
+acr:has来源：报告作者角色和日期 rdf:type owl:DatatypeProperty ;
+                    rdfs:domain acr:Provenance ;
+                    rdfs:range xsd:dateTime .
+
+
+###  https://medical-ai.org/ontologies/ACR#has标本类型样本类型
+acr:has标本类型样本类型 rdf:type owl:DatatypeProperty ;
+                rdfs:domain acr:PathologyReport ;
+                rdfs:range xsd:string .
+
+
+###  https://medical-ai.org/ontologies/ACR#has样本类型和样本ID
+acr:has样本类型和样本ID rdf:type owl:DatatypeProperty ;
+                 rdfs:domain acr:LaboratoryTest ;
+                 rdfs:range xsd:string .
+
+
+###  https://medical-ai.org/ontologies/ACR#has治疗期间不良事件
+acr:has治疗期间不良事件 rdf:type owl:DatatypeProperty ;
+                rdfs:domain acr:TreatmentPlan ;
+                rdfs:range xsd:string .
+
+
+###  https://medical-ai.org/ontologies/ACR#has活检影像引导
+acr:has活检影像引导 rdf:type owl:DatatypeProperty ;
+              rdfs:domain acr:BiopsyProcedure ;
+              rdfs:range xsd:string .
+
+
+###  https://medical-ai.org/ontologies/ACR#has活检技术
+acr:has活检技术 rdf:type owl:DatatypeProperty ;
+            rdfs:domain acr:BiopsyProcedure ;
+            rdfs:range xsd:string .
+
+
+###  https://medical-ai.org/ontologies/ACR#has活检日期Or时间
+acr:has活检日期Or时间 rdf:type owl:DatatypeProperty ;
+                rdfs:domain acr:BiopsyProcedure ;
+                rdfs:range xsd:dateTime .
+
+
+###  https://medical-ai.org/ontologies/ACR#has活检时放置标记夹
+acr:has活检时放置标记夹 rdf:type owl:DatatypeProperty ;
+                rdfs:domain acr:BiopsyProcedure ;
+                rdfs:range xsd:boolean .
+
+
+###  https://medical-ai.org/ontologies/ACR#has活检标本标识符
+acr:has活检标本标识符 rdf:type owl:DatatypeProperty ;
+               rdfs:domain acr:BiopsyProcedure ;
+               rdfs:range xsd:string .
+
+
+###  https://medical-ai.org/ontologies/ACR#has淋巴血管侵犯
+acr:has淋巴血管侵犯 rdf:type owl:DatatypeProperty ;
+              rdfs:domain acr:PathologyReport ;
+              rdfs:range xsd:boolean .
+
+
+###  https://medical-ai.org/ontologies/ACR#has病理TNMpTNM
+acr:has病理TNMpTNM rdf:type owl:DatatypeProperty ;
+                 rdfs:domain acr:Staging ;
+                 rdfs:range xsd:string .
+
+
+###  https://medical-ai.org/ontologies/ACR#has病理报告完整文本
+acr:has病理报告完整文本 rdf:type owl:DatatypeProperty ;
+                rdfs:domain acr:PathologyReport ;
+                rdfs:range xsd:string .
+
+
+###  https://medical-ai.org/ontologies/ACR#has病理报告日期
+acr:has病理报告日期 rdf:type owl:DatatypeProperty ;
+              rdfs:domain acr:PathologyReport ;
+              rdfs:range xsd:dateTime .
+
+
+###  https://medical-ai.org/ontologies/ACR#has病理诊断简短文本
+acr:has病理诊断简短文本 rdf:type owl:DatatypeProperty ;
+                rdfs:domain acr:PathologyReport ;
+                rdfs:range xsd:string .
+
+
+###  https://medical-ai.org/ontologies/ACR#has神经周围侵犯
+acr:has神经周围侵犯 rdf:type owl:DatatypeProperty ;
+              rdfs:domain acr:PathologyReport ;
+              rdfs:range xsd:boolean .
+
+
+###  https://medical-ai.org/ontologies/ACR#has籍贯户口
+acr:has籍贯户口 rdf:type owl:DatatypeProperty ;
+            rdfs:domain acr:Patient ;
+            rdfs:range xsd:string .
+
+
+###  https://medical-ai.org/ontologies/ACR#has组织学亚型详细
+acr:has组织学亚型详细 rdf:type owl:DatatypeProperty ;
+               rdfs:domain acr:PathologyReport ;
+               rdfs:range xsd:string .
+
+
+###  https://medical-ai.org/ontologies/ACR#has组织学分级
+acr:has组织学分级 rdf:type owl:DatatypeProperty ;
+             rdfs:domain acr:PathologyReport ;
+             rdfs:range xsd:string .
+
+
+###  https://medical-ai.org/ontologies/ACR#has肿瘤大小最大毫米
+acr:has肿瘤大小最大毫米 rdf:type owl:DatatypeProperty ;
+                rdfs:domain acr:PathologyReport ;
+                rdfs:range xsd:decimal .
+
+
+###  https://medical-ai.org/ontologies/ACR#has肿瘤标志物随访
+acr:has肿瘤标志物随访 rdf:type owl:DatatypeProperty ;
+               rdfs:domain acr:FollowUp ;
+               rdfs:range xsd:boolean .
+
+
+###  https://medical-ai.org/ontologies/ACR#has肿瘤标志物：CA15-3OrCEAOrCA125
+acr:has肿瘤标志物：CA15-3OrCEAOrCA125 rdf:type owl:DatatypeProperty ;
+                                rdfs:domain acr:LaboratoryTest ;
+                                rdfs:range xsd:boolean .
+
+
+###  https://medical-ai.org/ontologies/ACR#has胚系BRCA状态
+acr:has胚系BRCA状态 rdf:type owl:DatatypeProperty ;
+                rdfs:domain acr:GeneticTest ;
+                rdfs:range xsd:string .
+
+
+###  https://medical-ai.org/ontologies/ACR#has腋窝管理
+acr:has腋窝管理 rdf:type owl:DatatypeProperty ;
+            rdfs:domain acr:SurgicalProcedure ;
+            rdfs:range xsd:string .
+
+
+###  https://medical-ai.org/ontologies/ACR#has计划Or执行的手术类型和日期
+acr:has计划Or执行的手术类型和日期 rdf:type owl:DatatypeProperty ;
+                      rdfs:domain acr:SurgicalProcedure ;
+                      rdfs:range xsd:dateTime .
+
+
+###  https://medical-ai.org/ontologies/ACR#has计划程序开始Or结束和执行医生
+acr:has计划程序开始Or结束和执行医生 rdf:type owl:DatatypeProperty ;
+                       rdfs:domain acr:SurgicalProcedure ;
+                       rdfs:range xsd:string .
+
+
+###  https://medical-ai.org/ontologies/ACR#has负责联系人站点
+acr:has负责联系人站点 rdf:type owl:DatatypeProperty ;
+               rdfs:domain acr:Administrative ;
+               rdfs:range xsd:string .
+
+
+###  https://medical-ai.org/ontologies/ACR#has身高厘米
+acr:has身高厘米 rdf:type owl:DatatypeProperty ;
+            rdfs:domain acr:Patient ;
+            rdfs:range xsd:string .
+
+
+###  https://medical-ai.org/ontologies/ACR#has转诊医生角色
+acr:has转诊医生角色 rdf:type owl:DatatypeProperty ;
+              rdfs:domain acr:ClinicalAssessment ;
+              rdfs:range xsd:string .
+
+
+###  https://medical-ai.org/ontologies/ACR#has随访计划
+acr:has随访计划 rdf:type owl:DatatypeProperty ;
+            rdfs:domain acr:FollowUp ;
+            rdfs:range xsd:string .
+
+
+###  https://medical-ai.org/ontologies/ACR#isMandatory
+acr:isMandatory rdf:type owl:DatatypeProperty ;
+                rdfs:comment "Indicates if a field is required (是) or not (否)."@en ;
+                rdfs:label "is mandatory"@en ,
+                           "是否必填"@zh .
+
+
+###  https://medical-ai.org/ontologies/ACR#preferredCodingSystem
+acr:preferredCodingSystem rdf:type owl:DatatypeProperty ;
+                          rdfs:label "preferred coding system"@en ,
+                                     "首选标准或编码系统"@zh .
+
+
+###  https://medical-ai.org/ontologies/ACR#responsibleContact
+acr:responsibleContact rdf:type owl:DatatypeProperty ;
+                       rdfs:label "responsible contact"@en ,
+                                  "负责联系人"@zh .
+
+
+###  https://medical-ai.org/ontologies/ACR#sharingRestriction
+acr:sharingRestriction rdf:type owl:DatatypeProperty ;
+                       rdfs:label "sharing restriction"@en ,
+                                  "共享限制"@zh .
+
+
+#################################################################
+#    Classes
+#################################################################
+
+###  https://medical-ai.org/ontologies/ACR#Administrative
+acr:Administrative rdf:type owl:Class ;
+                   rdfs:subClassOf acr:Patient ;
+                   rdfs:label "Administrative"@en ,
+                              "行政管理"@zh .
+
+
+###  https://medical-ai.org/ontologies/ACR#Biomarker
+acr:Biomarker rdf:type owl:Class .
+
+
+###  https://medical-ai.org/ontologies/ACR#BiopsyProcedure
+acr:BiopsyProcedure rdf:type owl:Class ;
+                    rdfs:subClassOf acr:Procedure ;
+                    rdfs:label "BiopsyProcedure"@en ,
+                               "活检"@zh .
+
+
+###  https://medical-ai.org/ontologies/ACR#CancerType
+acr:CancerType rdf:type owl:Class .
+
+
+###  https://medical-ai.org/ontologies/ACR#ClinicalAssessment
+acr:ClinicalAssessment rdf:type owl:Class ;
+                       rdfs:subClassOf acr:Patient ;
+                       rdfs:label "ClinicalAssessment"@en ,
+                                  "临床评估"@zh .
+
+
+###  https://medical-ai.org/ontologies/ACR#DataGovernance
+acr:DataGovernance rdf:type owl:Class ;
+                   rdfs:label "DataGovernance"@en ,
+                              "治理"@zh .
+
+
+###  https://medical-ai.org/ontologies/ACR#FollowUp
+acr:FollowUp rdf:type owl:Class ;
+             rdfs:subClassOf acr:Patient ;
+             rdfs:label "FollowUp"@en ,
+                        "随访"@zh .
+
+
+###  https://medical-ai.org/ontologies/ACR#GeneticTest
+acr:GeneticTest rdf:type owl:Class ;
+                rdfs:subClassOf acr:LaboratoryTest ;
+                rdfs:label "GeneticTest"@en ,
+                           "遗传学"@zh .
+
+
+###  https://medical-ai.org/ontologies/ACR#GenomicTest
+acr:GenomicTest rdf:type owl:Class ;
+                rdfs:subClassOf acr:LaboratoryTest ;
+                rdfs:label "GenomicTest"@en ,
+                           "基因组学"@zh .
+
+
+###  https://medical-ai.org/ontologies/ACR#GuidelineOrganization
+acr:GuidelineOrganization rdf:type owl:Class ;
+                          rdfs:label "Guideline Organization"@en ,
+                                     "指南组织"@zh .
+
+
+###  https://medical-ai.org/ontologies/ACR#GuidelineRecommendation
+acr:GuidelineRecommendation rdf:type owl:Class ;
+                            rdfs:label "Guideline Recommendation"@en ,
+                                       "指南推荐"@zh .
+
+
+###  https://medical-ai.org/ontologies/ACR#ImagingStudy
+acr:ImagingStudy rdf:type owl:Class ;
+                 rdfs:subClassOf acr:Procedure ;
+                 rdfs:label "ImagingStudy"@en ,
+                            "影像"@zh .
+
+
+###  https://medical-ai.org/ontologies/ACR#LaboratoryTest
+acr:LaboratoryTest rdf:type owl:Class ;
+                   rdfs:subClassOf acr:Patient ;
+                   rdfs:label "LaboratoryTest"@en ,
+                              "实验室"@zh .
+
+
+###  https://medical-ai.org/ontologies/ACR#MDTMeeting
+acr:MDTMeeting rdf:type owl:Class ;
+               rdfs:subClassOf acr:Patient ;
+               rdfs:label "MDT"@zh ,
+                          "MDTMeeting"@en .
+
+
+###  https://medical-ai.org/ontologies/ACR#MedicalHistory
+acr:MedicalHistory rdf:type owl:Class ;
+                   rdfs:subClassOf acr:Patient ;
+                   rdfs:label "MedicalHistory"@en ,
+                              "病史"@zh .
+
+
+###  https://medical-ai.org/ontologies/ACR#MedicalOrder
+acr:MedicalOrder rdf:type owl:Class ;
+                 rdfs:subClassOf acr:Patient ;
+                 rdfs:label "MedicalOrder"@en ,
+                            "医嘱"@zh .
+
+
+###  https://medical-ai.org/ontologies/ACR#PathologyReport
+acr:PathologyReport rdf:type owl:Class ;
+                    rdfs:subClassOf acr:BiopsyProcedure ;
+                    rdfs:label "PathologyReport"@en ,
+                               "病理学"@zh .
+
+
+###  https://medical-ai.org/ontologies/ACR#Patient
+acr:Patient rdf:type owl:Class ;
+            rdfs:label "Patient"@en ,
+                       "患者"@zh .
+
+
+###  https://medical-ai.org/ontologies/ACR#Procedure
+acr:Procedure rdf:type owl:Class ;
+              rdfs:label "Procedure"@en ,
+                         "影像/活检/手术"@zh .
+
+
+###  https://medical-ai.org/ontologies/ACR#Provenance
+acr:Provenance rdf:type owl:Class ;
+               rdfs:label "Provenance"@en ,
+                          "来源"@zh .
+
+
+###  https://medical-ai.org/ontologies/ACR#RadiotherapyPlan
+acr:RadiotherapyPlan rdf:type owl:Class ;
+                     rdfs:subClassOf acr:TreatmentPlan ;
+                     rdfs:label "RadiotherapyPlan"@en ,
+                                "放疗"@zh .
+
+
+###  https://medical-ai.org/ontologies/ACR#ReceptorAssay
+acr:ReceptorAssay rdf:type owl:Class ;
+                  rdfs:subClassOf acr:PathologyReport ;
+                  rdfs:label "ReceptorAssay"@en ,
+                             "受体检测"@zh .
+
+
+###  https://medical-ai.org/ontologies/ACR#RecommendationLevel
+acr:RecommendationLevel rdf:type owl:Class ;
+                        rdfs:label "Recommendation Level"@en ,
+                                   "推荐等级"@zh .
+
+
+###  https://medical-ai.org/ontologies/ACR#ReproductiveHistory
+acr:ReproductiveHistory rdf:type owl:Class ;
+                        rdfs:subClassOf acr:MedicalHistory ;
+                        rdfs:label "ReproductiveHistory"@en ,
+                                   "生殖史"@zh .
+
+
+###  https://medical-ai.org/ontologies/ACR#Staging
+acr:Staging rdf:type owl:Class ;
+            rdfs:subClassOf acr:Patient ;
+            rdfs:label "Staging"@en ,
+                       "分期"@zh .
+
+
+###  https://medical-ai.org/ontologies/ACR#SurgicalProcedure
+acr:SurgicalProcedure rdf:type owl:Class ;
+                      rdfs:subClassOf acr:TreatmentPlan ;
+                      rdfs:label "SurgicalProcedure"@en ,
+                                 "手术"@zh .
+
+
+###  https://medical-ai.org/ontologies/ACR#TerminologyMapping
+acr:TerminologyMapping rdf:type owl:Class ;
+                       rdfs:label "TerminologyMapping"@en ,
+                                  "术语学"@zh .
+
+
+###  https://medical-ai.org/ontologies/ACR#TreatmentPlan
+acr:TreatmentPlan rdf:type owl:Class ;
+                  rdfs:subClassOf acr:MDTMeeting ;
+                  rdfs:label "TreatmentPlan"@en ,
+                             "治疗"@zh .
+
+
+#################################################################
+#    Individuals
+#################################################################
+
+###  https://medical-ai.org/ontologies/ACR#BreastCancerGuideline
+acr:BreastCancerGuideline rdf:type owl:NamedIndividual ,
+                                   acr:GuidelineRecommendation ;
+                          rdfs:label "Breast Cancer Guideline"@en ,
+                                     "乳腺癌指南"@zh .
+
+
+###  https://medical-ai.org/ontologies/ACR#CACA
+acr:CACA rdf:type owl:NamedIndividual ,
+                  acr:GuidelineOrganization ;
+         rdfs:label "Chinese Anti-Cancer Association"@en ,
+                    "中国抗癌协会"@zh .
+
+
+###  https://medical-ai.org/ontologies/ACR#CSCO
+acr:CSCO rdf:type owl:NamedIndividual ,
+                  acr:GuidelineOrganization ;
+         rdfs:label "Chinese Society of Clinical Oncology"@en ,
+                    "中国临床肿瘤学会"@zh .
+
+
+###  https://medical-ai.org/ontologies/ACR#CategoryI
+acr:CategoryI rdf:type owl:NamedIndividual ,
+                       acr:RecommendationLevel ;
+              rdfs:comment "High-level evidence, uniform consensus, widely available in China"@en ;
+              rdfs:label "1类推荐"@zh ,
+                         "Category I"@en .
+
+
+###  https://medical-ai.org/ontologies/ACR#CategoryII
+acr:CategoryII rdf:type owl:NamedIndividual ,
+                        acr:RecommendationLevel ;
+               rdfs:comment "Lower-level evidence or cost/accessibility considerations"@en ;
+               rdfs:label "2类推荐"@zh ,
+                          "Category II"@en .
+
+
+###  https://medical-ai.org/ontologies/ACR#CategoryIII
+acr:CategoryIII rdf:type owl:NamedIndividual ,
+                         acr:RecommendationLevel ;
+                rdfs:comment "Evidence exists but significant cost/access limitations"@en ;
+                rdfs:label "3类推荐"@zh ,
+                           "Category III"@en .
+
+
+###  https://medical-ai.org/ontologies/ACR#CervicalCancerGuideline
+acr:CervicalCancerGuideline rdf:type owl:NamedIndividual ,
+                                     acr:GuidelineRecommendation ;
+                            rdfs:label "Cervical Cancer Guideline"@en ,
+                                       "宫颈癌指南"@zh .
+
+
+###  https://medical-ai.org/ontologies/ACR#HER2PositiveNeoadjuvantRecommendation
+acr:HER2PositiveNeoadjuvantRecommendation rdf:type owl:NamedIndividual ,
+                                                   acr:GuidelineRecommendation ;
+                                          rdfs:comment "THP regimen for HER2+ early breast cancer"@en ;
+                                          rdfs:label "HER2 Positive Neoadjuvant Recommendation"@en ,
+                                                     "HER2阳性新辅助治疗推荐"@zh .
+
+
+###  https://medical-ai.org/ontologies/ACR#NCCN
+acr:NCCN rdf:type owl:NamedIndividual ,
+                  acr:GuidelineOrganization ;
+         rdfs:label "National Comprehensive Cancer Network"@en ,
+                    "美国国家综合癌症网络"@zh .
+
+
+###  https://medical-ai.org/ontologies/ACR#TNBCFirstLineRecommendation
+acr:TNBCFirstLineRecommendation rdf:type owl:NamedIndividual ,
+                                         acr:GuidelineRecommendation ;
+                                rdfs:comment "Immunotherapy + chemo for PD-L1+ metastatic TNBC"@en ;
+                                rdfs:label "TNBC First Line Recommendation"@en ,
+                                           "三阴性乳腺癌一线治疗推荐"@zh .
+
+
+###  https://medical-ai.org/ontologies/ACR#hasBMI推导
+acr:hasBMI推导 rdf:type owl:NamedIndividual ;
+             acr:cardinality "单数" ;
+             acr:isMandatory "否" ;
+             acr:preferredCodingSystem "本地" ;
+             acr:responsibleContact "" ;
+             acr:sharingRestriction "" .
+
+
+###  https://medical-ai.org/ontologies/ACR#hasDICOM图像访问策略
+acr:hasDICOM图像访问策略 rdf:type owl:NamedIndividual ;
+                   acr:cardinality "单数" ;
+                   acr:isMandatory "是" ;
+                   acr:preferredCodingSystem "本地策略" ;
+                   acr:responsibleContact "" ;
+                   acr:sharingRestriction "" .
+
+
+###  https://medical-ai.org/ontologies/ACR#hasER结果标志和百分比
+acr:hasER结果标志和百分比 rdf:type owl:NamedIndividual ;
+                  acr:cardinality "单数" ;
+                  acr:isMandatory "是" ;
+                  acr:preferredCodingSystem "SNOMED CT / 本地" ;
+                  acr:responsibleContact "" ;
+                  acr:sharingRestriction "" .
+
+
+###  https://medical-ai.org/ontologies/ACR#hasHER2FISH比率Or结果
+acr:hasHER2FISH比率Or结果 rdf:type owl:NamedIndividual ;
+                      acr:cardinality "单数" ;
+                      acr:isMandatory "否" ;
+                      acr:preferredCodingSystem "ASCO-CAP / 本地" ;
+                      acr:responsibleContact "" ;
+                      acr:sharingRestriction "" .
+
+
+###  https://medical-ai.org/ontologies/ACR#hasHER2IHC评分
+acr:hasHER2IHC评分 rdf:type owl:NamedIndividual ;
+                 acr:cardinality "单数" ;
+                 acr:isMandatory "是" ;
+                 acr:preferredCodingSystem "ASCO-CAP / 本地" ;
+                 acr:responsibleContact "" ;
+                 acr:sharingRestriction "" .
+
+
+###  https://medical-ai.org/ontologies/ACR#hasHER2最终解释
+acr:hasHER2最终解释 rdf:type owl:NamedIndividual ;
+                acr:cardinality "单数" ;
+                acr:isMandatory "是" ;
+                acr:preferredCodingSystem "ASCO-CAP / SNOMED CT" ;
+                acr:responsibleContact "" ;
+                acr:sharingRestriction "" .
+
+
+###  https://medical-ai.org/ontologies/ACR#hasHER2靶向药物和持续时间
+acr:hasHER2靶向药物和持续时间 rdf:type owl:NamedIndividual ;
+                     acr:cardinality "单数" ;
+                     acr:isMandatory "否" ;
+                     acr:preferredCodingSystem "RxNorm / 本地" ;
+                     acr:responsibleContact "" ;
+                     acr:sharingRestriction "" .
+
+
+###  https://medical-ai.org/ontologies/ACR#hasKi-67增殖指数
+acr:hasKi-67增殖指数 rdf:type owl:NamedIndividual ;
+                 acr:cardinality "单数" ;
+                 acr:isMandatory "否" ;
+                 acr:preferredCodingSystem "本地数值" ;
+                 acr:responsibleContact "" ;
+                 acr:sharingRestriction "" .
+
+
+###  https://medical-ai.org/ontologies/ACR#hasMDT会议日期
+acr:hasMDT会议日期 rdf:type owl:NamedIndividual ;
+               acr:cardinality "单数" ;
+               acr:isMandatory "是" ;
+               acr:preferredCodingSystem "本地日期时间" ;
+               acr:responsibleContact "" ;
+               acr:sharingRestriction "" .
+
+
+###  https://medical-ai.org/ontologies/ACR#hasMDT参会人员角色
+acr:hasMDT参会人员角色 rdf:type owl:NamedIndividual ;
+                 acr:cardinality "复数" ;
+                 acr:isMandatory "是" ;
+                 acr:preferredCodingSystem "本地" ;
+                 acr:responsibleContact "" ;
+                 acr:sharingRestriction "" .
+
+
+###  https://medical-ai.org/ontologies/ACR#hasMDT建议摘要
+acr:hasMDT建议摘要 rdf:type owl:NamedIndividual ;
+               acr:cardinality "单数" ;
+               acr:isMandatory "是" ;
+               acr:preferredCodingSystem "本地" ;
+               acr:responsibleContact "" ;
+               acr:sharingRestriction "" .
+
+
+###  https://medical-ai.org/ontologies/ACR#hasPR结果标志和百分比
+acr:hasPR结果标志和百分比 rdf:type owl:NamedIndividual ;
+                  acr:cardinality "单数" ;
+                  acr:isMandatory "是" ;
+                  acr:preferredCodingSystem "SNOMED CT / 本地" ;
+                  acr:responsibleContact "" ;
+                  acr:sharingRestriction "" .
+
+
+###  https://medical-ai.org/ontologies/ACR#hasSNOMED映射可用
+acr:hasSNOMED映射可用 rdf:type owl:NamedIndividual ;
+                  acr:cardinality "单数" ;
+                  acr:isMandatory "否" ;
+                  acr:preferredCodingSystem "SNOMED CT" ;
+                  acr:responsibleContact "" ;
+                  acr:sharingRestriction "" .
+
+
+###  https://medical-ai.org/ontologies/ACR#has临床TNMcTNM
+acr:has临床TNMcTNM rdf:type owl:NamedIndividual ;
+                 acr:cardinality "单数" ;
+                 acr:isMandatory "是" ;
+                 acr:preferredCodingSystem "AJCC/UICC" ;
+                 acr:responsibleContact "" ;
+                 acr:sharingRestriction "" .
+
+
+###  https://medical-ai.org/ontologies/ACR#has主诉
+acr:has主诉 rdf:type owl:NamedIndividual ;
+          acr:cardinality "单数" ;
+          acr:isMandatory "是" ;
+          acr:preferredCodingSystem "SNOMED CT" ;
+          acr:responsibleContact "" ;
+          acr:sharingRestriction "" .
+
+
+###  https://medical-ai.org/ontologies/ACR#has乳腺侧别
+acr:has乳腺侧别 rdf:type owl:NamedIndividual ;
+            acr:cardinality "单数" ;
+            acr:isMandatory "是" ;
+            acr:preferredCodingSystem "SNOMED CT" ;
+            acr:responsibleContact "" ;
+            acr:sharingRestriction "" .
+
+
+###  https://medical-ai.org/ontologies/ACR#has产次和产科史
+acr:has产次和产科史 rdf:type owl:NamedIndividual ;
+              acr:cardinality "单数" ;
+              acr:isMandatory "否" ;
+              acr:preferredCodingSystem "本地" ;
+              acr:responsibleContact "" ;
+              acr:sharingRestriction "" .
+
+
+###  https://medical-ai.org/ontologies/ACR#has体重千克
+acr:has体重千克 rdf:type owl:NamedIndividual ;
+            acr:cardinality "单数" ;
+            acr:isMandatory "否" ;
+            acr:preferredCodingSystem "本地" ;
+            acr:responsibleContact "" ;
+            acr:sharingRestriction "" .
+
+
+###  https://medical-ai.org/ontologies/ACR#has全身治疗开始日期
+acr:has全身治疗开始日期 rdf:type owl:NamedIndividual ;
+                acr:cardinality "单数" ;
+                acr:isMandatory "否" ;
+                acr:preferredCodingSystem "本地日期时间" ;
+                acr:responsibleContact "" ;
+                acr:sharingRestriction "" .
+
+
+###  https://medical-ai.org/ontologies/ACR#has内分泌治疗药物和计划持续时间
+acr:has内分泌治疗药物和计划持续时间 rdf:type owl:NamedIndividual ;
+                      acr:cardinality "单数" ;
+                      acr:isMandatory "否" ;
+                      acr:preferredCodingSystem "ATC / 本地" ;
+                      acr:responsibleContact "" ;
+                      acr:sharingRestriction "" .
+
+
+###  https://medical-ai.org/ontologies/ACR#has出生性别Or人口统计
+acr:has出生性别Or人口统计 rdf:type owl:NamedIndividual ;
+                  acr:cardinality "单数" ;
+                  acr:isMandatory "是" ;
+                  acr:preferredCodingSystem "SNOMED CT" ;
+                  acr:responsibleContact "" ;
+                  acr:sharingRestriction "" .
+
+
+###  https://medical-ai.org/ontologies/ACR#has出生日期
+acr:has出生日期 rdf:type owl:NamedIndividual ;
+            acr:cardinality "单数" ;
+            acr:isMandatory "是" ;
+            acr:preferredCodingSystem "本地/人口统计" ;
+            acr:responsibleContact "" ;
+            acr:sharingRestriction "" .
+
+
+###  https://medical-ai.org/ontologies/ACR#has切缘手术标本
+acr:has切缘手术标本 rdf:type owl:NamedIndividual ;
+              acr:cardinality "单数" ;
+              acr:isMandatory "否" ;
+              acr:preferredCodingSystem "本地" ;
+              acr:responsibleContact "" ;
+              acr:sharingRestriction "" .
+
+
+###  https://medical-ai.org/ontologies/ACR#has化疗计划周期和完成周期
+acr:has化疗计划周期和完成周期 rdf:type owl:NamedIndividual ;
+                   acr:cardinality "复数" ;
+                   acr:isMandatory "否" ;
+                   acr:preferredCodingSystem "本地" ;
+                   acr:responsibleContact "" ;
+                   acr:sharingRestriction "" .
+
+
+###  https://medical-ai.org/ontologies/ACR#has医嘱和检验元数据代码Or结果
+acr:has医嘱和检验元数据代码Or结果 rdf:type owl:NamedIndividual ;
+                      acr:cardinality "复数" ;
+                      acr:isMandatory "否" ;
+                      acr:preferredCodingSystem "本地/实验室代码" ;
+                      acr:responsibleContact "" ;
+                      acr:sharingRestriction "" .
+
+
+###  https://medical-ai.org/ontologies/ACR#has合并症列表
+acr:has合并症列表 rdf:type owl:NamedIndividual ;
+             acr:cardinality "复数" ;
+             acr:isMandatory "是" ;
+             acr:preferredCodingSystem "SNOMED CT" ;
+             acr:responsibleContact "" ;
+             acr:sharingRestriction "" .
+
+
+###  https://medical-ai.org/ontologies/ACR#has吸烟状况
+acr:has吸烟状况 rdf:type owl:NamedIndividual ;
+            acr:cardinality "单数" ;
+            acr:isMandatory "否" ;
+            acr:preferredCodingSystem "SNOMED CT / 本地" ;
+            acr:responsibleContact "" ;
+            acr:sharingRestriction "" .
+
+
+###  https://medical-ai.org/ontologies/ACR#has基因组检测名称和数值评分
+acr:has基因组检测名称和数值评分 rdf:type owl:NamedIndividual ;
+                    acr:cardinality "单数" ;
+                    acr:isMandatory "否" ;
+                    acr:preferredCodingSystem "供应商标准" ;
+                    acr:responsibleContact "" ;
+                    acr:sharingRestriction "" .
+
+
+###  https://medical-ai.org/ontologies/ACR#has基因组检测执行
+acr:has基因组检测执行 rdf:type owl:NamedIndividual ;
+               acr:cardinality "单数" ;
+               acr:isMandatory "否" ;
+               acr:preferredCodingSystem "供应商/本地" ;
+               acr:responsibleContact "" ;
+               acr:sharingRestriction "" .
+
+
+###  https://medical-ai.org/ontologies/ACR#has复发或进展标志
+acr:has复发或进展标志 rdf:type owl:NamedIndividual ;
+               acr:cardinality "单数" ;
+               acr:isMandatory "否" ;
+               acr:preferredCodingSystem "本地" ;
+               acr:responsibleContact "" ;
+               acr:sharingRestriction "" .
+
+
+###  https://medical-ai.org/ontologies/ACR#has复发日期和部位
+acr:has复发日期和部位 rdf:type owl:NamedIndividual ;
+               acr:cardinality "单数" ;
+               acr:isMandatory "否" ;
+               acr:preferredCodingSystem "本地" ;
+               acr:responsibleContact "" ;
+               acr:sharingRestriction "" .
+
+
+###  https://medical-ai.org/ontologies/ACR#has家族癌症史
+acr:has家族癌症史 rdf:type owl:NamedIndividual ;
+             acr:cardinality "复数" ;
+             acr:isMandatory "否" ;
+             acr:preferredCodingSystem "SNOMED CT / 本地" ;
+             acr:responsibleContact "" ;
+             acr:sharingRestriction "" .
+
+
+###  https://medical-ai.org/ontologies/ACR#has就诊日期Or时间
+acr:has就诊日期Or时间 rdf:type owl:NamedIndividual ;
+                acr:cardinality "单数" ;
+                acr:isMandatory "是" ;
+                acr:preferredCodingSystem "本地日期时间" ;
+                acr:responsibleContact "" ;
+                acr:sharingRestriction "" .
+
+
+###  https://medical-ai.org/ontologies/ACR#has年龄推导
+acr:has年龄推导 rdf:type owl:NamedIndividual ;
+            acr:cardinality "单数" ;
+            acr:isMandatory "是" ;
+            acr:preferredCodingSystem "本地" ;
+            acr:responsibleContact "" ;
+            acr:sharingRestriction "" .
+
+
+###  https://medical-ai.org/ontologies/ACR#has影像发现编码
+acr:has影像发现编码 rdf:type owl:NamedIndividual ;
+              acr:cardinality "复数" ;
+              acr:isMandatory "否" ;
+              acr:preferredCodingSystem "SNOMED CT" ;
+              acr:responsibleContact "" ;
+              acr:sharingRestriction "" .
+
+
+###  https://medical-ai.org/ontologies/ACR#has影像报告完整发现
+acr:has影像报告完整发现 rdf:type owl:NamedIndividual ;
+                acr:cardinality "单数" ;
+                acr:isMandatory "是" ;
+                acr:preferredCodingSystem "本地" ;
+                acr:responsibleContact "" ;
+                acr:sharingRestriction "" .
+
+
+###  https://medical-ai.org/ontologies/ACR#has影像报告摘要
+acr:has影像报告摘要 rdf:type owl:NamedIndividual ;
+              acr:cardinality "单数" ;
+              acr:isMandatory "是" ;
+              acr:preferredCodingSystem "SNOMED CT / 本地" ;
+              acr:responsibleContact "" ;
+              acr:sharingRestriction "" .
+
+
+###  https://medical-ai.org/ontologies/ACR#has影像检查日期Or时间
+acr:has影像检查日期Or时间 rdf:type owl:NamedIndividual ;
+                  acr:cardinality "单数" ;
+                  acr:isMandatory "是" ;
+                  acr:preferredCodingSystem "DICOM日期时间" ;
+                  acr:responsibleContact "" ;
+                  acr:sharingRestriction "" .
+
+
+###  https://medical-ai.org/ontologies/ACR#has影像检查标识符
+acr:has影像检查标识符 rdf:type owl:NamedIndividual ;
+               acr:cardinality "单数" ;
+               acr:isMandatory "是" ;
+               acr:preferredCodingSystem "DICOM StudyInstanceUID" ;
+               acr:responsibleContact "" ;
+               acr:sharingRestriction "" .
+
+
+###  https://medical-ai.org/ontologies/ACR#has影像模态
+acr:has影像模态 rdf:type owl:NamedIndividual ;
+            acr:cardinality "单数" ;
+            acr:isMandatory "是" ;
+            acr:preferredCodingSystem "DICOM模态代码" ;
+            acr:responsibleContact "" ;
+            acr:sharingRestriction "" .
+
+
+###  https://medical-ai.org/ontologies/ACR#has影像评估BI-RADS
+acr:has影像评估BI-RADS rdf:type owl:NamedIndividual ;
+                   acr:cardinality "单数" ;
+                   acr:isMandatory "是" ;
+                   acr:preferredCodingSystem "BI-RADS / 本地" ;
+                   acr:responsibleContact "" ;
+                   acr:sharingRestriction "" .
+
+
+###  https://medical-ai.org/ontologies/ACR#has总体分期分组
+acr:has总体分期分组 rdf:type owl:NamedIndividual ;
+              acr:cardinality "单数" ;
+              acr:isMandatory "否" ;
+              acr:preferredCodingSystem "AJCC/UICC" ;
+              acr:responsibleContact "" ;
+              acr:sharingRestriction "" .
+
+
+###  https://medical-ai.org/ontologies/ACR#has患者姓名本地
+acr:has患者姓名本地 rdf:type owl:NamedIndividual ;
+              acr:cardinality "单数" ;
+              acr:isMandatory "否" ;
+              acr:preferredCodingSystem "本地" ;
+              acr:responsibleContact "" ;
+              acr:sharingRestriction "" .
+
+
+###  https://medical-ai.org/ontologies/ACR#has患者本地标识符
+acr:has患者本地标识符 rdf:type owl:NamedIndividual ;
+               acr:cardinality "单数" ;
+               acr:isMandatory "是" ;
+               acr:preferredCodingSystem "本地病历号" ;
+               acr:responsibleContact "" ;
+               acr:sharingRestriction "" .
+
+
+###  https://medical-ai.org/ontologies/ACR#has患者电话
+acr:has患者电话 rdf:type owl:NamedIndividual ;
+            acr:cardinality "单数" ;
+            acr:isMandatory "否" ;
+            acr:preferredCodingSystem "本地" ;
+            acr:responsibleContact "" ;
+            acr:sharingRestriction "" .
+
+
+###  https://medical-ai.org/ontologies/ACR#has患者身份证号
+acr:has患者身份证号 rdf:type owl:NamedIndividual ;
+              acr:cardinality "单数" ;
+              acr:isMandatory "否" ;
+              acr:preferredCodingSystem "本地/国民身份证" ;
+              acr:responsibleContact "" ;
+              acr:sharingRestriction "" .
+
+
+###  https://medical-ai.org/ontologies/ACR#has按元素数据共享权限
+acr:has按元素数据共享权限 rdf:type owl:NamedIndividual ;
+                 acr:cardinality "单数" ;
+                 acr:isMandatory "是" ;
+                 acr:preferredCodingSystem "本地策略" ;
+                 acr:responsibleContact "" ;
+                 acr:sharingRestriction "" .
+
+
+###  https://medical-ai.org/ontologies/ACR#has放疗区域和计划
+acr:has放疗区域和计划 rdf:type owl:NamedIndividual ;
+               acr:cardinality "单数" ;
+               acr:isMandatory "否" ;
+               acr:preferredCodingSystem "本地" ;
+               acr:responsibleContact "" ;
+               acr:sharingRestriction "" .
+
+
+###  https://medical-ai.org/ontologies/ACR#has新辅助化疗方案
+acr:has新辅助化疗方案 rdf:type owl:NamedIndividual ;
+               acr:cardinality "单数" ;
+               acr:isMandatory "否" ;
+               acr:preferredCodingSystem "RxNorm / 本地" ;
+               acr:responsibleContact "" ;
+               acr:sharingRestriction "" .
+
+
+###  https://medical-ai.org/ontologies/ACR#has新辅助治疗类型
+acr:has新辅助治疗类型 rdf:type owl:NamedIndividual ;
+               acr:cardinality "单数" ;
+               acr:isMandatory "否" ;
+               acr:preferredCodingSystem "本地" ;
+               acr:responsibleContact "" ;
+               acr:sharingRestriction "" .
+
+
+###  https://medical-ai.org/ontologies/ACR#has月经状况
+acr:has月经状况 rdf:type owl:NamedIndividual ;
+            acr:cardinality "单数" ;
+            acr:isMandatory "是" ;
+            acr:preferredCodingSystem "SNOMED CT" ;
+            acr:responsibleContact "" ;
+            acr:sharingRestriction "" .
+
+
+###  https://medical-ai.org/ontologies/ACR#has未映射概念的首选本地代码
+acr:has未映射概念的首选本地代码 rdf:type owl:NamedIndividual ;
+                    acr:cardinality "复数" ;
+                    acr:isMandatory "否" ;
+                    acr:preferredCodingSystem "本地" ;
+                    acr:responsibleContact "" ;
+                    acr:sharingRestriction "" .
+
+
+###  https://medical-ai.org/ontologies/ACR#has本地备注和限制
+acr:has本地备注和限制 rdf:type owl:NamedIndividual ;
+               acr:cardinality "单数" ;
+               acr:isMandatory "否" ;
+               acr:preferredCodingSystem "本地" ;
+               acr:responsibleContact "" ;
+               acr:sharingRestriction "" .
+
+
+###  https://medical-ai.org/ontologies/ACR#has术中失血量
+acr:has术中失血量 rdf:type owl:NamedIndividual ;
+             acr:cardinality "单数" ;
+             acr:isMandatory "否" ;
+             acr:preferredCodingSystem "本地数值" ;
+             acr:responsibleContact "" ;
+             acr:sharingRestriction "" .
+
+
+###  https://medical-ai.org/ontologies/ACR#has术后并发症
+acr:has术后并发症 rdf:type owl:NamedIndividual ;
+             acr:cardinality "复数" ;
+             acr:isMandatory "否" ;
+             acr:preferredCodingSystem "本地" ;
+             acr:responsibleContact "" ;
+             acr:sharingRestriction "" .
+
+
+###  https://medical-ai.org/ontologies/ACR#has来源：报告作者角色和日期
+acr:has来源：报告作者角色和日期 rdf:type owl:NamedIndividual ;
+                    acr:cardinality "单数" ;
+                    acr:isMandatory "是" ;
+                    acr:preferredCodingSystem "本地" ;
+                    acr:responsibleContact "" ;
+                    acr:sharingRestriction "" .
+
+
+###  https://medical-ai.org/ontologies/ACR#has标本类型样本类型
+acr:has标本类型样本类型 rdf:type owl:NamedIndividual ;
+                acr:cardinality "单数" ;
+                acr:isMandatory "是" ;
+                acr:preferredCodingSystem "本地" ;
+                acr:responsibleContact "" ;
+                acr:sharingRestriction "" .
+
+
+###  https://medical-ai.org/ontologies/ACR#has样本类型和样本ID
+acr:has样本类型和样本ID rdf:type owl:NamedIndividual ;
+                 acr:cardinality "单数" ;
+                 acr:isMandatory "是" ;
+                 acr:preferredCodingSystem "本地" ;
+                 acr:responsibleContact "" ;
+                 acr:sharingRestriction "" .
+
+
+###  https://medical-ai.org/ontologies/ACR#has治疗期间不良事件
+acr:has治疗期间不良事件 rdf:type owl:NamedIndividual ;
+                acr:cardinality "复数" ;
+                acr:isMandatory "否" ;
+                acr:preferredCodingSystem "CTCAE / 本地" ;
+                acr:responsibleContact "" ;
+                acr:sharingRestriction "" .
+
+
+###  https://medical-ai.org/ontologies/ACR#has活检影像引导
+acr:has活检影像引导 rdf:type owl:NamedIndividual ;
+              acr:cardinality "单数" ;
+              acr:isMandatory "是" ;
+              acr:preferredCodingSystem "DICOM模态" ;
+              acr:responsibleContact "" ;
+              acr:sharingRestriction "" .
+
+
+###  https://medical-ai.org/ontologies/ACR#has活检技术
+acr:has活检技术 rdf:type owl:NamedIndividual ;
+            acr:cardinality "单数" ;
+            acr:isMandatory "是" ;
+            acr:preferredCodingSystem "SNOMED CT" ;
+            acr:responsibleContact "" ;
+            acr:sharingRestriction "" .
+
+
+###  https://medical-ai.org/ontologies/ACR#has活检日期Or时间
+acr:has活检日期Or时间 rdf:type owl:NamedIndividual ;
+                acr:cardinality "单数" ;
+                acr:isMandatory "是" ;
+                acr:preferredCodingSystem "本地日期时间" ;
+                acr:responsibleContact "" ;
+                acr:sharingRestriction "" .
+
+
+###  https://medical-ai.org/ontologies/ACR#has活检时放置标记夹
+acr:has活检时放置标记夹 rdf:type owl:NamedIndividual ;
+                acr:cardinality "单数" ;
+                acr:isMandatory "否" ;
+                acr:preferredCodingSystem "本地" ;
+                acr:responsibleContact "" ;
+                acr:sharingRestriction "" .
+
+
+###  https://medical-ai.org/ontologies/ACR#has活检标本标识符
+acr:has活检标本标识符 rdf:type owl:NamedIndividual ;
+               acr:cardinality "单数" ;
+               acr:isMandatory "是" ;
+               acr:preferredCodingSystem "本地标本ID" ;
+               acr:responsibleContact "" ;
+               acr:sharingRestriction "" .
+
+
+###  https://medical-ai.org/ontologies/ACR#has淋巴血管侵犯
+acr:has淋巴血管侵犯 rdf:type owl:NamedIndividual ;
+              acr:cardinality "单数" ;
+              acr:isMandatory "否" ;
+              acr:preferredCodingSystem "本地" ;
+              acr:responsibleContact "" ;
+              acr:sharingRestriction "" .
+
+
+###  https://medical-ai.org/ontologies/ACR#has病理TNMpTNM
+acr:has病理TNMpTNM rdf:type owl:NamedIndividual ;
+                 acr:cardinality "单数" ;
+                 acr:isMandatory "否" ;
+                 acr:preferredCodingSystem "AJCC/UICC" ;
+                 acr:responsibleContact "" ;
+                 acr:sharingRestriction "" .
+
+
+###  https://medical-ai.org/ontologies/ACR#has病理报告完整文本
+acr:has病理报告完整文本 rdf:type owl:NamedIndividual ;
+                acr:cardinality "单数" ;
+                acr:isMandatory "是" ;
+                acr:preferredCodingSystem "本地" ;
+                acr:responsibleContact "" ;
+                acr:sharingRestriction "" .
+
+
+###  https://medical-ai.org/ontologies/ACR#has病理报告日期
+acr:has病理报告日期 rdf:type owl:NamedIndividual ;
+              acr:cardinality "单数" ;
+              acr:isMandatory "是" ;
+              acr:preferredCodingSystem "本地日期时间" ;
+              acr:responsibleContact "" ;
+              acr:sharingRestriction "" .
+
+
+###  https://medical-ai.org/ontologies/ACR#has病理诊断简短文本
+acr:has病理诊断简短文本 rdf:type owl:NamedIndividual ;
+                acr:cardinality "单数" ;
+                acr:isMandatory "是" ;
+                acr:preferredCodingSystem "ICD-O / SNOMED CT" ;
+                acr:responsibleContact "" ;
+                acr:sharingRestriction "" .
+
+
+###  https://medical-ai.org/ontologies/ACR#has神经周围侵犯
+acr:has神经周围侵犯 rdf:type owl:NamedIndividual ;
+              acr:cardinality "单数" ;
+              acr:isMandatory "否" ;
+              acr:preferredCodingSystem "本地" ;
+              acr:responsibleContact "" ;
+              acr:sharingRestriction "" .
+
+
+###  https://medical-ai.org/ontologies/ACR#has籍贯户口
+acr:has籍贯户口 rdf:type owl:NamedIndividual ;
+            acr:cardinality "单数" ;
+            acr:isMandatory "否" ;
+            acr:preferredCodingSystem "本地" ;
+            acr:responsibleContact "" ;
+            acr:sharingRestriction "" .
+
+
+###  https://medical-ai.org/ontologies/ACR#has组织学亚型详细
+acr:has组织学亚型详细 rdf:type owl:NamedIndividual ;
+               acr:cardinality "单数" ;
+               acr:isMandatory "是" ;
+               acr:preferredCodingSystem "ICD-O / SNOMED CT" ;
+               acr:responsibleContact "" ;
+               acr:sharingRestriction "" .
+
+
+###  https://medical-ai.org/ontologies/ACR#has组织学分级
+acr:has组织学分级 rdf:type owl:NamedIndividual ;
+             acr:cardinality "单数" ;
+             acr:isMandatory "是" ;
+             acr:preferredCodingSystem "WHO / 本地" ;
+             acr:responsibleContact "" ;
+             acr:sharingRestriction "" .
+
+
+###  https://medical-ai.org/ontologies/ACR#has肿瘤大小最大毫米
+acr:has肿瘤大小最大毫米 rdf:type owl:NamedIndividual ;
+                acr:cardinality "单数" ;
+                acr:isMandatory "是" ;
+                acr:preferredCodingSystem "本地数值" ;
+                acr:responsibleContact "" ;
+                acr:sharingRestriction "" .
+
+
+###  https://medical-ai.org/ontologies/ACR#has肿瘤标志物随访
+acr:has肿瘤标志物随访 rdf:type owl:NamedIndividual ;
+               acr:cardinality "复数" ;
+               acr:isMandatory "否" ;
+               acr:preferredCodingSystem "本地" ;
+               acr:responsibleContact "" ;
+               acr:sharingRestriction "" .
+
+
+###  https://medical-ai.org/ontologies/ACR#has肿瘤标志物：CA15-3OrCEAOrCA125
+acr:has肿瘤标志物：CA15-3OrCEAOrCA125 rdf:type owl:NamedIndividual ;
+                                acr:cardinality "复数" ;
+                                acr:isMandatory "否" ;
+                                acr:preferredCodingSystem "本地实验室单位" ;
+                                acr:responsibleContact "" ;
+                                acr:sharingRestriction "" .
+
+
+###  https://medical-ai.org/ontologies/ACR#has胚系BRCA状态
+acr:has胚系BRCA状态 rdf:type owl:NamedIndividual ;
+                acr:cardinality "单数" ;
+                acr:isMandatory "否" ;
+                acr:preferredCodingSystem "HGVS / 本地" ;
+                acr:responsibleContact "" ;
+                acr:sharingRestriction "" .
+
+
+###  https://medical-ai.org/ontologies/ACR#has腋窝管理
+acr:has腋窝管理 rdf:type owl:NamedIndividual ;
+            acr:cardinality "单数" ;
+            acr:isMandatory "否" ;
+            acr:preferredCodingSystem "SNOMED CT / 本地" ;
+            acr:responsibleContact "" ;
+            acr:sharingRestriction "" .
+
+
+###  https://medical-ai.org/ontologies/ACR#has计划Or执行的手术类型和日期
+acr:has计划Or执行的手术类型和日期 rdf:type owl:NamedIndividual ;
+                      acr:cardinality "单数" ;
+                      acr:isMandatory "是" ;
+                      acr:preferredCodingSystem "SNOMED CT / 本地" ;
+                      acr:responsibleContact "" ;
+                      acr:sharingRestriction "" .
+
+
+###  https://medical-ai.org/ontologies/ACR#has计划程序开始Or结束和执行医生
+acr:has计划程序开始Or结束和执行医生 rdf:type owl:NamedIndividual ;
+                       acr:cardinality "复数" ;
+                       acr:isMandatory "否" ;
+                       acr:preferredCodingSystem "本地" ;
+                       acr:responsibleContact "" ;
+                       acr:sharingRestriction "" .
+
+
+###  https://medical-ai.org/ontologies/ACR#has负责联系人站点
+acr:has负责联系人站点 rdf:type owl:NamedIndividual ;
+               acr:cardinality "单数" ;
+               acr:isMandatory "是" ;
+               acr:preferredCodingSystem "本地" ;
+               acr:responsibleContact "" ;
+               acr:sharingRestriction "" .
+
+
+###  https://medical-ai.org/ontologies/ACR#has身高厘米
+acr:has身高厘米 rdf:type owl:NamedIndividual ;
+            acr:cardinality "单数" ;
+            acr:isMandatory "否" ;
+            acr:preferredCodingSystem "本地" ;
+            acr:responsibleContact "" ;
+            acr:sharingRestriction "" .
+
+
+###  https://medical-ai.org/ontologies/ACR#has转诊医生角色
+acr:has转诊医生角色 rdf:type owl:NamedIndividual ;
+              acr:cardinality "单数" ;
+              acr:isMandatory "是" ;
+              acr:preferredCodingSystem "本地/SNOMED CT" ;
+              acr:responsibleContact "" ;
+              acr:sharingRestriction "" .
+
+
+###  https://medical-ai.org/ontologies/ACR#has随访计划
+acr:has随访计划 rdf:type owl:NamedIndividual ;
+            acr:cardinality "复数" ;
+            acr:isMandatory "是" ;
+            acr:preferredCodingSystem "本地" ;
+            acr:responsibleContact "" ;
+            acr:sharingRestriction "" .
+
+
+#################################################################
+#    Annotations
+#################################################################
+
+acr:hasBMI推导 rdfs:comment "身体质量指数（kg/m2）"@zh ;
+             rdfs:label "BMI（推导）"@zh .
+
+
+acr:hasDICOM图像访问策略 rdfs:comment "确认图像保留在医院PACS中，外部仅引用元数据/UID"@zh ;
+                   rdfs:label "DICOM图像访问策略"@zh .
+
+
+acr:hasER结果标志和百分比 rdfs:comment "ER阳性/阴性及百分比（如可用）"@zh ;
+                  rdfs:label "ER结果（标志和百分比）"@zh .
+
+
+acr:hasHER2FISH比率Or结果 rdfs:comment "FISH数值比率或扩增/未扩增"@zh ;
+                      rdfs:label "HER2 FISH比率/结果"@zh .
+
+
+acr:hasHER2IHC评分 rdfs:comment "IHC 0 / 1+ / 2+ / 3+"@zh ;
+                 rdfs:label "HER2 IHC评分"@zh .
+
+
+acr:hasHER2最终解释 rdfs:comment "HER2阳性或阴性（按指南）"@zh ;
+                rdfs:label "HER2最终解释"@zh .
+
+
+acr:hasHER2靶向药物和持续时间 rdfs:comment "药物名称和计划持续时间（月）"@zh ;
+                     rdfs:label "HER2靶向药物和持续时间"@zh .
+
+
+acr:hasKi-67增殖指数 rdfs:comment "Ki-67百分比（如报告）"@zh ;
+                 rdfs:label "Ki-67增殖指数"@zh .
+
+
+acr:hasMDT会议日期 rdfs:comment "讨论病例的多学科会议日期/时间"@zh ;
+               rdfs:label "MDT会议日期"@zh .
+
+
+acr:hasMDT参会人员角色 rdfs:comment "出席临床角色列表（外科医生；肿瘤医生；放射科医生；病理医生）"@zh ;
+                 rdfs:label "MDT参会人员（角色）"@zh .
+
+
+acr:hasMDT建议摘要 rdfs:comment "结构化临床建议（手术vs新辅助；辅助计划）"@zh ;
+               rdfs:label "MDT建议摘要"@zh .
+
+
+acr:hasPR结果标志和百分比 rdfs:comment "PR阳性/阴性及百分比（如可用）"@zh ;
+                  rdfs:label "PR结果（标志和百分比）"@zh .
+
+
+acr:hasSNOMED映射可用 rdfs:comment "此元素是否有SNOMED CT映射可用（是/否）"@zh ;
+                  rdfs:label "SNOMED映射可用"@zh .
+
+
+acr:has临床TNMcTNM rdfs:comment "临床T、N、M组分结构化（cT、cN、cM）"@zh ;
+                 rdfs:label "临床TNM（cTNM）"@zh .
+
+
+acr:has主诉 rdfs:comment "主要临床症状或转诊原因"@zh ;
+          rdfs:label "主诉"@zh .
+
+
+acr:has乳腺侧别 rdfs:comment "受影响侧：左/右/双侧"@zh ;
+            rdfs:label "乳腺侧别"@zh .
+
+
+acr:has产次和产科史 rdfs:comment "怀孕/生育次数及相关产科史"@zh ;
+              rdfs:label "产次和产科史"@zh .
+
+
+acr:has体重千克 rdfs:comment "体重（千克）"@zh ;
+            rdfs:label "体重（千克）"@zh .
+
+
+acr:has全身治疗开始日期 rdfs:comment "全身治疗开始日期"@zh ;
+                rdfs:label "全身治疗开始日期"@zh .
+
+
+acr:has内分泌治疗药物和计划持续时间 rdfs:comment "药物和持续时间（年）"@zh ;
+                      rdfs:label "内分泌治疗药物和计划持续时间"@zh .
+
+
+acr:has出生性别Or人口统计 rdfs:comment "患者生理性别（女/男）"@zh ;
+                  rdfs:label "出生性别/人口统计"@zh .
+
+
+acr:has出生日期 rdfs:comment "出生日期"@zh ;
+            rdfs:label "出生日期"@zh .
+
+
+acr:has切缘手术标本 rdfs:comment "切缘干净/受累/接近及距离（如可用）"@zh ;
+              rdfs:label "切缘（手术标本）"@zh .
+
+
+acr:has化疗计划周期和完成周期 rdfs:comment "计划周期数和实际完成周期数"@zh ;
+                   rdfs:label "化疗计划周期和完成周期"@zh .
+
+
+acr:has医嘱和检验元数据代码Or结果 rdfs:comment "医嘱项目代码、名称、时间戳、结果和异常标志"@zh ;
+                      rdfs:label "医嘱和检验元数据（代码/结果）"@zh .
+
+
+acr:has合并症列表 rdfs:comment "与肿瘤学相关的关键合并症（高血压、糖尿病、冠心病、自身免疫性疾病、甲状腺疾病）"@zh ;
+             rdfs:label "合并症列表"@zh .
+
+
+acr:has吸烟状况 rdfs:comment "当前/曾经/从未吸烟及吸烟年限（如吸烟）"@zh ;
+            rdfs:label "吸烟状况"@zh .
+
+
+acr:has基因组检测名称和数值评分 rdfs:comment "检测名称（Oncotype、MammaPrint）和数值评分"@zh ;
+                    rdfs:label "基因组检测名称和数值评分"@zh .
+
+
+acr:has基因组检测执行 rdfs:comment "是否执行多基因预后检测（是/否）"@zh ;
+               rdfs:label "基因组检测执行"@zh .
+
+
+acr:has复发或进展标志 rdfs:comment "患者是否有局部复发或远处进展"@zh ;
+               rdfs:label "复发或进展标志"@zh .
+
+
+acr:has复发日期和部位 rdfs:comment "复发日期和解剖部位（如存在）"@zh ;
+               rdfs:label "复发日期和部位"@zh .
+
+
+acr:has家族癌症史 rdfs:comment "结构化家族癌症史（关系和癌症类型）"@zh ;
+             rdfs:label "家族癌症史"@zh .
+
+
+acr:has就诊日期Or时间 rdfs:comment "患者首次出现症状的日期/时间"@zh ;
+                rdfs:label "就诊日期/时间"@zh .
+
+
+acr:has年龄推导 rdfs:comment "就诊时年龄（岁）"@zh ;
+            rdfs:label "年龄（推导）"@zh .
+
+
+acr:has影像发现编码 rdfs:comment "关键发现尽可能映射到SNOMED CT"@zh ;
+              rdfs:label "影像发现编码"@zh .
+
+
+acr:has影像报告完整发现 rdfs:comment "完整放射学报告文本"@zh ;
+                rdfs:label "影像报告完整发现"@zh .
+
+
+acr:has影像报告摘要 rdfs:comment "放射科医生印象简短文本"@zh ;
+              rdfs:label "影像报告摘要"@zh .
+
+
+acr:has影像检查日期Or时间 rdfs:comment "影像检查执行的日期和时间"@zh ;
+                  rdfs:label "影像检查日期/时间"@zh .
+
+
+acr:has影像检查标识符 rdfs:comment "DICOM StudyInstanceUID或本地影像ID"@zh ;
+               rdfs:label "影像检查标识符"@zh .
+
+
+acr:has影像模态 rdfs:comment "执行的影像类型（乳腺X线、超声、MRI、CT、PET）"@zh ;
+            rdfs:label "影像模态"@zh .
+
+
+acr:has影像评估BI-RADS rdfs:comment "BI-RADS或本地风险/评估类别"@zh ;
+                   rdfs:label "影像评估（BI-RADS）"@zh .
+
+
+acr:has总体分期分组 rdfs:comment "分期组别I-IV含亚期"@zh ;
+              rdfs:label "总体分期分组"@zh .
+
+
+acr:has患者姓名本地 rdfs:comment "本地医院记录中的患者全名"@zh ;
+              rdfs:label "患者姓名（本地）"@zh .
+
+
+acr:has患者本地标识符 rdfs:comment "医院病历号或本地患者标识符"@zh ;
+               rdfs:label "患者本地标识符"@zh .
+
+
+acr:has患者电话 rdfs:comment "联系电话号码"@zh ;
+            rdfs:label "患者电话"@zh .
+
+
+acr:has患者身份证号 rdfs:comment "国民身份证号（如有）"@zh ;
+              rdfs:label "患者身份证号"@zh .
+
+
+acr:has按元素数据共享权限 rdfs:comment "此字段允许共享级别（不共享/仅元数据/去标识化/假名化）"@zh ;
+                 rdfs:label "按元素数据共享权限"@zh .
+
+
+acr:has放疗区域和计划 rdfs:comment "治疗区域和分次计划"@zh ;
+               rdfs:label "放疗区域和计划"@zh .
+
+
+acr:has新辅助化疗方案 rdfs:comment "计划/执行的方案名称"@zh ;
+               rdfs:label "新辅助化疗方案"@zh .
+
+
+acr:has新辅助治疗类型 rdfs:comment "新辅助治疗类型（化疗/靶向/内分泌）"@zh ;
+               rdfs:label "新辅助治疗类型"@zh .
+
+
+acr:has月经状况 rdfs:comment "绝经前、围绝经期或绝经后"@zh ;
+            rdfs:label "月经状况"@zh .
+
+
+acr:has未映射概念的首选本地代码 rdfs:comment "如SNOMED不可用时的本地首选术语/代码"@zh ;
+                    rdfs:label "未映射概念的首选本地代码"@zh .
+
+
+acr:has本地备注和限制 rdfs:comment "站点特定限制的自由文本"@zh ;
+               rdfs:label "本地备注和限制"@zh .
+
+
+acr:has术中失血量 rdfs:comment "估计失血量（毫升）"@zh ;
+             rdfs:label "术中失血量"@zh .
+
+
+acr:has术后并发症 rdfs:comment "重大术后并发症文本"@zh ;
+             rdfs:label "术后并发症"@zh .
+
+
+acr:has来源：报告作者角色和日期 rdfs:comment "作者角色（病理医生/放射医生）和报告日期"@zh ;
+                    rdfs:label "来源：报告作者角色和日期"@zh .
+
+
+acr:has标本类型样本类型 rdfs:comment "标本类型（空心针活检、切除）"@zh ;
+                rdfs:label "标本类型（样本类型）"@zh .
+
+
+acr:has样本类型和样本ID rdfs:comment "样本类型和实验室标本标识符"@zh ;
+                 rdfs:label "样本类型和样本ID"@zh .
+
+
+acr:has治疗期间不良事件 rdfs:comment "重大不良事件和CTCAE等级（如可用）"@zh ;
+                rdfs:label "治疗期间不良事件"@zh .
+
+
+acr:has活检影像引导 rdfs:comment "用于引导活检的影像（超声、立体定位、MRI）"@zh ;
+              rdfs:label "活检影像引导"@zh .
+
+
+acr:has活检技术 rdfs:comment "空心针穿刺/FNA/切除等"@zh ;
+            rdfs:label "活检技术"@zh .
+
+
+acr:has活检日期Or时间 rdfs:comment "活检程序日期和时间"@zh ;
+                rdfs:label "活检日期/时间"@zh .
+
+
+acr:has活检时放置标记夹 rdfs:comment "是否放置标记夹（是/否）"@zh ;
+                rdfs:label "活检时放置标记夹"@zh .
+
+
+acr:has活检标本标识符 rdfs:comment "活检病理标本ID"@zh ;
+               rdfs:label "活检标本标识符"@zh .
+
+
+acr:has淋巴血管侵犯 rdfs:comment "存在/缺失"@zh ;
+              rdfs:label "淋巴血管侵犯"@zh .
+
+
+acr:has病理TNMpTNM rdfs:comment "术后病理T、N、M组分（pT、pN、pM）"@zh ;
+                 rdfs:label "病理TNM（pTNM）"@zh .
+
+
+acr:has病理报告完整文本 rdfs:comment "完整病理叙述"@zh ;
+                rdfs:label "病理报告完整文本"@zh .
+
+
+acr:has病理报告日期 rdfs:comment "病理报告定稿日期"@zh ;
+              rdfs:label "病理报告日期"@zh .
+
+
+acr:has病理诊断简短文本 rdfs:comment "诊断短语（例如，浸润性导管癌）"@zh ;
+                rdfs:label "病理诊断简短文本"@zh .
+
+
+acr:has神经周围侵犯 rdfs:comment "存在/缺失"@zh ;
+              rdfs:label "神经周围侵犯"@zh .
+
+
+acr:has籍贯户口 rdfs:comment "患者籍贯"@zh ;
+            rdfs:label "籍贯（户口）"@zh .
+
+
+acr:has组织学亚型详细 rdfs:comment "详细组织学亚型"@zh ;
+               rdfs:label "组织学亚型（详细）"@zh .
+
+
+acr:has组织学分级 rdfs:comment "1、2或3级"@zh ;
+             rdfs:label "组织学分级"@zh .
+
+
+acr:has肿瘤大小最大毫米 rdfs:comment "肿瘤最大尺寸（毫米）"@zh ;
+                rdfs:label "肿瘤大小（最大毫米）"@zh .
+
+
+acr:has肿瘤标志物随访 rdfs:comment "系列肿瘤标志物值和检测日期"@zh ;
+               rdfs:label "肿瘤标志物随访"@zh .
+
+
+acr:has肿瘤标志物：CA15-3OrCEAOrCA125 rdfs:comment "结果含单位和异常标志"@zh ;
+                                rdfs:label "肿瘤标志物：CA15-3 / CEA / CA125"@zh .
+
+
+acr:has胚系BRCA状态 rdfs:comment "BRCA1/2致病性/VUS/阴性（如检测）"@zh ;
+                rdfs:label "胚系BRCA状态"@zh .
+
+
+acr:has腋窝管理 rdfs:comment "前哨淋巴结活检或腋窝清扫"@zh ;
+            rdfs:label "腋窝管理"@zh .
+
+
+acr:has计划Or执行的手术类型和日期 rdfs:comment "乳腺手术类型和执行日期"@zh ;
+                      rdfs:label "计划/执行的手术类型和日期"@zh .
+
+
+acr:has计划程序开始Or结束和执行医生 rdfs:comment "计划日期和执行医生"@zh ;
+                       rdfs:label "计划程序开始/结束和执行医生"@zh .
+
+
+acr:has负责联系人站点 rdfs:comment "站点确认此字段的负责姓名或角色"@zh ;
+               rdfs:label "负责联系人（站点）"@zh .
+
+
+acr:has身高厘米 rdfs:comment "身高（厘米）"@zh ;
+            rdfs:label "身高（厘米）"@zh .
+
+
+acr:has转诊医生角色 rdfs:comment "转诊医生角色（全科医生、乳腺外科医生、放射科医生）"@zh ;
+              rdfs:label "转诊医生角色"@zh .
+
+
+acr:has随访计划 rdfs:comment "计划随访间隔和影像"@zh ;
+            rdfs:label "随访计划"@zh .
+
+
+###  Generated by the OWL API (version 4.5.29.2024-05-13T12:11:03Z) https://github.com/owlcs/owlapi
+
+
+
+#################################################################
+#    2026 CDS Extension - Added important rule domains
+#################################################################
+
+###  https://medical-ai.org/ontologies/ACR#hasADC适应证
+acr:hasADC适应证 rdf:type owl:DatatypeProperty ;
+    rdfs:domain acr:Patient ;
+    rdfs:range xsd:string .
+
+###  https://medical-ai.org/ontologies/ACR#hasHER2ISH执行
+acr:hasHER2ISH执行 rdf:type owl:DatatypeProperty ;
+    rdfs:domain acr:ReceptorAssay ;
+    rdfs:range xsd:string .
+
+###  https://medical-ai.org/ontologies/ACR#hasHER2低表达状态
+acr:hasHER2低表达状态 rdf:type owl:DatatypeProperty ;
+    rdfs:domain acr:ReceptorAssay ;
+    rdfs:range xsd:string .
+
+###  https://medical-ai.org/ontologies/ACR#hasLVEF百分比
+acr:hasLVEF百分比 rdf:type owl:DatatypeProperty ;
+    rdfs:domain acr:Patient ;
+    rdfs:range xsd:decimal .
+
+###  https://medical-ai.org/ontologies/ACR#hasPARP适应证
+acr:hasPARP适应证 rdf:type owl:DatatypeProperty ;
+    rdfs:domain acr:Patient ;
+    rdfs:range xsd:string .
+
+###  https://medical-ai.org/ontologies/ACR#has保乳手术适宜性
+acr:has保乳手术适宜性 rdf:type owl:DatatypeProperty ;
+    rdfs:domain acr:Patient ;
+    rdfs:range xsd:string .
+
+###  https://medical-ai.org/ontologies/ACR#has妊娠状态
+acr:has妊娠状态 rdf:type owl:DatatypeProperty ;
+    rdfs:domain acr:Patient ;
+    rdfs:range xsd:string .
+
+###  https://medical-ai.org/ontologies/ACR#has寡转移标志
+acr:has寡转移标志 rdf:type owl:DatatypeProperty ;
+    rdfs:domain acr:Patient ;
+    rdfs:range xsd:boolean .
+
+###  https://medical-ai.org/ontologies/ACR#has影像病理一致性
+acr:has影像病理一致性 rdf:type owl:DatatypeProperty ;
+    rdfs:domain acr:Patient ;
+    rdfs:range xsd:string .
+
+###  https://medical-ai.org/ontologies/ACR#has手术推荐
+acr:has手术推荐 rdf:type owl:DatatypeProperty ;
+    rdfs:domain acr:Patient ;
+    rdfs:range xsd:string .
+
+###  https://medical-ai.org/ontologies/ACR#has放疗建议
+acr:has放疗建议 rdf:type owl:DatatypeProperty ;
+    rdfs:domain acr:Patient ;
+    rdfs:range xsd:string .
+
+###  https://medical-ai.org/ontologies/ACR#has活检建议
+acr:has活检建议 rdf:type owl:DatatypeProperty ;
+    rdfs:domain acr:Patient ;
+    rdfs:range xsd:string .
+
+###  https://medical-ai.org/ontologies/ACR#has淋巴结阳性个数
+acr:has淋巴结阳性个数 rdf:type owl:DatatypeProperty ;
+    rdfs:domain acr:PathologyReport ;
+    rdfs:range xsd:integer .
+
+###  https://medical-ai.org/ontologies/ACR#has残余病灶状态
+acr:has残余病灶状态 rdf:type owl:DatatypeProperty ;
+    rdfs:domain acr:Patient ;
+    rdfs:range xsd:string .
+
+###  https://medical-ai.org/ontologies/ACR#has病理完全缓解pCR
+acr:has病理完全缓解pCR rdf:type owl:DatatypeProperty ;
+    rdfs:domain acr:Patient ;
+    rdfs:range xsd:boolean .
+
+###  https://medical-ai.org/ontologies/ACR#has远处转移部位
+acr:has远处转移部位 rdf:type owl:DatatypeProperty ;
+    rdfs:domain acr:Patient ;
+    rdfs:range xsd:string .
+
+###  https://medical-ai.org/ontologies/ACR#has遗传咨询建议
+acr:has遗传咨询建议 rdf:type owl:DatatypeProperty ;
+    rdfs:domain acr:Patient ;
+    rdfs:range xsd:string .
+
+###  https://medical-ai.org/ontologies/ACR#has转移治疗线别
+acr:has转移治疗线别 rdf:type owl:DatatypeProperty ;
+    rdfs:domain acr:Patient ;
+    rdfs:range xsd:string .
+
+###  https://medical-ai.org/ontologies/ACR#has肿瘤多灶性
+acr:has肿瘤多灶性 rdf:type owl:DatatypeProperty ;
+    rdfs:domain acr:ImagingStudy ;
+    rdfs:range xsd:string .
+
+###  https://medical-ai.org/ontologies/ACR#has铂类适应证
+acr:has铂类适应证 rdf:type owl:DatatypeProperty ;
+    rdfs:domain acr:Patient ;
+    rdfs:range xsd:string .
+
+
+#################################################################
+#    Field metadata individuals for extension properties
+#################################################################
+
+acr:hasADC适应证 rdf:type owl:NamedIndividual ;
+    acr:cardinality "单数" ;
+    acr:isMandatory "否" ;
+    acr:preferredCodingSystem "本地 / 指南映射" ;
+    acr:responsibleContact "" ;
+    acr:sharingRestriction "" .
+
+acr:hasHER2ISH执行 rdf:type owl:NamedIndividual ;
+    acr:cardinality "单数" ;
+    acr:isMandatory "否" ;
+    acr:preferredCodingSystem "ASCO-CAP / 本地" ;
+    acr:responsibleContact "" ;
+    acr:sharingRestriction "" .
+
+acr:hasHER2低表达状态 rdf:type owl:NamedIndividual ;
+    acr:cardinality "单数" ;
+    acr:isMandatory "否" ;
+    acr:preferredCodingSystem "ASCO-CAP / 本地" ;
+    acr:responsibleContact "" ;
+    acr:sharingRestriction "" .
+
+acr:hasLVEF百分比 rdf:type owl:NamedIndividual ;
+    acr:cardinality "单数" ;
+    acr:isMandatory "否" ;
+    acr:preferredCodingSystem "Echo / MUGA / 本地" ;
+    acr:responsibleContact "" ;
+    acr:sharingRestriction "" .
+
+acr:hasPARP适应证 rdf:type owl:NamedIndividual ;
+    acr:cardinality "单数" ;
+    acr:isMandatory "否" ;
+    acr:preferredCodingSystem "本地 / 指南映射" ;
+    acr:responsibleContact "" ;
+    acr:sharingRestriction "" .
+
+acr:has保乳手术适宜性 rdf:type owl:NamedIndividual ;
+    acr:cardinality "单数" ;
+    acr:isMandatory "否" ;
+    acr:preferredCodingSystem "本地" ;
+    acr:responsibleContact "" ;
+    acr:sharingRestriction "" .
+
+acr:has妊娠状态 rdf:type owl:NamedIndividual ;
+    acr:cardinality "单数" ;
+    acr:isMandatory "否" ;
+    acr:preferredCodingSystem "SNOMED CT / 本地" ;
+    acr:responsibleContact "" ;
+    acr:sharingRestriction "" .
+
+acr:has寡转移标志 rdf:type owl:NamedIndividual ;
+    acr:cardinality "单数" ;
+    acr:isMandatory "否" ;
+    acr:preferredCodingSystem "本地" ;
+    acr:responsibleContact "" ;
+    acr:sharingRestriction "" .
+
+acr:has影像病理一致性 rdf:type owl:NamedIndividual ;
+    acr:cardinality "单数" ;
+    acr:isMandatory "否" ;
+    acr:preferredCodingSystem "本地" ;
+    acr:responsibleContact "" ;
+    acr:sharingRestriction "" .
+
+acr:has手术推荐 rdf:type owl:NamedIndividual ;
+    acr:cardinality "单数" ;
+    acr:isMandatory "否" ;
+    acr:preferredCodingSystem "本地 / 指南映射" ;
+    acr:responsibleContact "" ;
+    acr:sharingRestriction "" .
+
+acr:has放疗建议 rdf:type owl:NamedIndividual ;
+    acr:cardinality "单数" ;
+    acr:isMandatory "否" ;
+    acr:preferredCodingSystem "本地 / 指南映射" ;
+    acr:responsibleContact "" ;
+    acr:sharingRestriction "" .
+
+acr:has活检建议 rdf:type owl:NamedIndividual ;
+    acr:cardinality "单数" ;
+    acr:isMandatory "否" ;
+    acr:preferredCodingSystem "BI-RADS / 本地" ;
+    acr:responsibleContact "" ;
+    acr:sharingRestriction "" .
+
+acr:has淋巴结阳性个数 rdf:type owl:NamedIndividual ;
+    acr:cardinality "单数" ;
+    acr:isMandatory "否" ;
+    acr:preferredCodingSystem "AJCC / 本地" ;
+    acr:responsibleContact "" ;
+    acr:sharingRestriction "" .
+
+acr:has残余病灶状态 rdf:type owl:NamedIndividual ;
+    acr:cardinality "单数" ;
+    acr:isMandatory "否" ;
+    acr:preferredCodingSystem "RCB / 本地" ;
+    acr:responsibleContact "" ;
+    acr:sharingRestriction "" .
+
+acr:has病理完全缓解pCR rdf:type owl:NamedIndividual ;
+    acr:cardinality "单数" ;
+    acr:isMandatory "否" ;
+    acr:preferredCodingSystem "本地 / 研究定义" ;
+    acr:responsibleContact "" ;
+    acr:sharingRestriction "" .
+
+acr:has远处转移部位 rdf:type owl:NamedIndividual ;
+    acr:cardinality "复数" ;
+    acr:isMandatory "否" ;
+    acr:preferredCodingSystem "SNOMED CT / ICD-O / 本地" ;
+    acr:responsibleContact "" ;
+    acr:sharingRestriction "" .
+
+acr:has遗传咨询建议 rdf:type owl:NamedIndividual ;
+    acr:cardinality "单数" ;
+    acr:isMandatory "否" ;
+    acr:preferredCodingSystem "本地 / 指南映射" ;
+    acr:responsibleContact "" ;
+    acr:sharingRestriction "" .
+
+acr:has转移治疗线别 rdf:type owl:NamedIndividual ;
+    acr:cardinality "单数" ;
+    acr:isMandatory "否" ;
+    acr:preferredCodingSystem "本地" ;
+    acr:responsibleContact "" ;
+    acr:sharingRestriction "" .
+
+acr:has肿瘤多灶性 rdf:type owl:NamedIndividual ;
+    acr:cardinality "单数" ;
+    acr:isMandatory "否" ;
+    acr:preferredCodingSystem "BI-RADS / 本地" ;
+    acr:responsibleContact "" ;
+    acr:sharingRestriction "" .
+
+acr:has铂类适应证 rdf:type owl:NamedIndividual ;
+    acr:cardinality "单数" ;
+    acr:isMandatory "否" ;
+    acr:preferredCodingSystem "本地 / 指南映射" ;
+    acr:responsibleContact "" ;
+    acr:sharingRestriction "" .
+
+
+#################################################################
+#    Annotations for extension properties
+#################################################################
+
+acr:hasADC适应证 rdfs:comment "ADC治疗适应证摘要，例如HER2低表达或特定晚线情形"@zh ;
+    rdfs:label "ADC适应证"@zh .
+
+acr:hasHER2ISH执行 rdfs:comment "HER2 IHC 2+ 后是否执行ISH/FISH复核"@zh ;
+    rdfs:label "HER2 ISH/FISH已执行"@zh .
+
+acr:hasHER2低表达状态 rdfs:comment "HER2-low状态（如IHC 1+ 或 IHC 2+/ISH阴性）"@zh ;
+    rdfs:label "HER2低表达状态"@zh .
+
+acr:hasLVEF百分比 rdfs:comment "左心室射血分数百分比，用于HER2治疗前后安全评估"@zh ;
+    rdfs:label "LVEF百分比"@zh .
+
+acr:hasPARP适应证 rdfs:comment "PARP抑制剂适应证摘要，通常与胚系BRCA状态相关"@zh ;
+    rdfs:label "PARP适应证"@zh .
+
+acr:has保乳手术适宜性 rdfs:comment "是否适合保乳手术，基于病灶范围、多灶性、切缘可达性等"@zh ;
+    rdfs:label "保乳手术适宜性"@zh .
+
+acr:has妊娠状态 rdfs:comment "当前是否妊娠/备孕/哺乳期，用于系统治疗和放疗安全判断"@zh ;
+    rdfs:label "妊娠状态"@zh .
+
+acr:has寡转移标志 rdfs:comment "是否为寡转移疾病表型"@zh ;
+    rdfs:label "寡转移标志"@zh .
+
+acr:has影像病理一致性 rdfs:comment "影像表现与病理结果是否一致；不一致时需再次取材或复核"@zh ;
+    rdfs:label "影像-病理一致性"@zh .
+
+acr:has手术推荐 rdfs:comment "结构化手术建议，如保乳+前哨、全乳切除等"@zh ;
+    rdfs:label "手术推荐"@zh .
+
+acr:has放疗建议 rdfs:comment "结构化放疗建议，如全乳放疗、胸壁/区域淋巴结放疗"@zh ;
+    rdfs:label "放疗建议"@zh .
+
+acr:has活检建议 rdfs:comment "结构化活检建议，如粗针穿刺活检、真空辅助活检、短期随访"@zh ;
+    rdfs:label "活检建议"@zh .
+
+acr:has淋巴结阳性个数 rdfs:comment "术后病理明确的阳性淋巴结个数"@zh ;
+    rdfs:label "淋巴结阳性个数"@zh .
+
+acr:has残余病灶状态 rdfs:comment "新辅助治疗后残余病灶状态摘要，如残余浸润癌/仅原位癌/无残余"@zh ;
+    rdfs:label "残余病灶状态"@zh .
+
+acr:has病理完全缓解pCR rdfs:comment "新辅助治疗后是否达到病理完全缓解"@zh ;
+    rdfs:label "病理完全缓解pCR"@zh .
+
+acr:has远处转移部位 rdfs:comment "远处转移部位列表，例如骨、肝、肺、脑"@zh ;
+    rdfs:label "远处转移部位"@zh .
+
+acr:has遗传咨询建议 rdfs:comment "是否建议遗传咨询/检测及其理由"@zh ;
+    rdfs:label "遗传咨询建议"@zh .
+
+acr:has转移治疗线别 rdfs:comment "转移性乳腺癌治疗线别，如一线、二线、三线及以上"@zh ;
+    rdfs:label "转移治疗线别"@zh .
+
+acr:has肿瘤多灶性 rdfs:comment "影像或病理提示单灶/多灶/多中心"@zh ;
+    rdfs:label "肿瘤多灶性"@zh .
+
+acr:has铂类适应证 rdfs:comment "铂类化疗适应证摘要，常用于部分TNBC/BRCA相关情景"@zh ;
+    rdfs:label "铂类适应证"@zh .

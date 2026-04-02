@@ -1,0 +1,82 @@
+# ACR CDS Rule Extension 2026
+# Intended for Protégé SWRLTab / Openllet review.
+# Notes:
+# 1) Rules are written as one-rule-per-line text for manual import/review.
+# 2) OR logic is split into separate rules because plain SWRL does not support infix OR.
+# 3) Some recommendations remain guideline-policy mappings and should be validated by clinicians before activation.
+
+@prefix : <https://medical-ai.org/ontologies/ACR#> .
+
+### Imaging domain
+# R23: BI-RADS 4 -> biopsy recommendation
+Patient(?p) ^ has影像评估BI-RADS(?p, ?birads) ^ swrlb:stringContains(?birads, "4") -> has活检建议(?p, "建议粗针穿刺活检") ^ requiresMDT(?p, true)
+
+# R24: BI-RADS 5 -> urgent biopsy recommendation
+Patient(?p) ^ has影像评估BI-RADS(?p, ?birads) ^ swrlb:stringContains(?birads, "5") -> has活检建议(?p, "高度怀疑恶性，建议尽快粗针穿刺活检") ^ alertType(?p, "高危影像")
+
+# R25: imaging/pathology discordance -> repeat sampling / MDT
+Patient(?p) ^ has影像病理一致性(?p, "不一致") -> requiresUrgentMDT(?p, true) ^ has活检建议(?p, "影像病理不一致，建议重复取材或病理复核")
+
+### Pathology reflex domain
+# R26: HER2 IHC 2+ without ISH/FISH -> reflex confirmation
+Patient(?p) ^ hasHER2IHC评分(?p, "2+") ^ hasHER2ISH执行(?p, "否") -> guidelineDeviation(?p, true) ^ deviationType(?p, "HER2 2+ 缺少ISH/FISH复核") ^ requiresJustification(?p, true)
+
+# R27: HER2-low assignment from IHC 1+
+Patient(?p) ^ hasHER2IHC评分(?p, "1+") -> hasHER2低表达状态(?p, "是")
+
+# R28: HER2-low assignment from IHC 2+/ISH negative
+Patient(?p) ^ hasHER2IHC评分(?p, "2+") ^ hasHER2FISH比率Or结果(?p, ?fish) ^ swrlb:stringContains(?fish, "阴性") -> hasHER2低表达状态(?p, "是")
+
+### Genetics domain
+# R29: young age + family history -> genetics referral
+Patient(?p) ^ has年龄推导(?p, ?age) ^ swrlb:lessThan(?age, 50) ^ has家族癌症史(?p, ?fhx) ^ swrlb:stringContains(?fhx, "乳腺癌") -> recommendsGeneticTesting(?p, true) ^ has遗传咨询建议(?p, "建议胚系遗传咨询及BRCA检测")
+
+# R30: germline BRCA pathogenic -> PARP consideration
+Patient(?p) ^ has胚系BRCA状态(?p, ?brca) ^ swrlb:stringContains(?brca, "致病") -> hasPARP适应证(?p, "是") ^ has铂类适应证(?p, "可考虑")
+
+### Surgery domain
+# R31: likely breast-conserving eligibility
+Patient(?p) ^ has肿瘤大小最大毫米(?p, ?size) ^ swrlb:lessThanOrEqual(?size, 30) ^ has肿瘤多灶性(?p, "单灶") -> has保乳手术适宜性(?p, "较适合") ^ has手术推荐(?p, "可评估保乳手术")
+
+# R32: multifocal disease -> mastectomy discussion
+Patient(?p) ^ has肿瘤多灶性(?p, ?mf) ^ swrlb:stringContains(?mf, "多") -> requiresMDT(?p, true) ^ has手术推荐(?p, "需讨论全乳切除或扩大切除")
+
+# R33: positive margin -> re-excision discussion
+Patient(?p) ^ has切缘手术标本(?p, ?margin) ^ swrlb:stringContains(?margin, "受累") -> requiresUrgentMDT(?p, true) ^ has手术推荐(?p, "建议讨论再切除或改行其他局部治疗")
+
+### Radiotherapy domain
+# R34: breast-conserving surgery -> whole breast RT
+Patient(?p) ^ has计划Or执行的手术类型和日期(?p, ?surg) ^ swrlb:stringContains(?surg, "保乳") -> has放疗建议(?p, "建议术后全乳放疗")
+
+# R35: node positive disease -> regional nodal RT discussion
+Patient(?p) ^ has淋巴结阳性个数(?p, ?npos) ^ swrlb:greaterThan(?npos, 0) -> has放疗建议(?p, "建议评估区域淋巴结放疗")
+
+### Adjuvant escalation/de-escalation domain
+# R36: residual TNBC after neoadjuvant therapy -> consider capecitabine
+Patient(?p) ^ hasMolecularSubtype(?p, "TripleNegative") ^ has残余病灶状态(?p, ?residual) ^ swrlb:stringContains(?residual, "残余") -> recommendTreatment(?p, "可考虑辅助卡培他滨") ^ hasGuidelineSource(?p, :NCCN)
+
+# R37: residual HER2-positive disease after neoadjuvant therapy -> escalation
+Patient(?p) ^ hasHER2最终解释(?p, "阳性") ^ has残余病灶状态(?p, ?residual) ^ swrlb:stringContains(?residual, "残余") -> recommendTreatment(?p, "可考虑术后升级抗HER2治疗") ^ hasGuidelineSource(?p, :NCCN)
+
+# R38: pCR after neoadjuvant HER2 therapy -> continue planned anti-HER2 course
+Patient(?p) ^ hasHER2最终解释(?p, "阳性") ^ has病理完全缓解pCR(?p, true) -> hasHER2靶向药物和持续时间(?p, "按既定辅助抗HER2总疗程完成")
+
+### Safety / contraindication domain
+# R39: low LVEF -> cardiac review before anti-HER2 therapy
+Patient(?p) ^ hasHER2最终解释(?p, "阳性") ^ hasLVEF百分比(?p, ?lvef) ^ swrlb:lessThan(?lvef, 50) -> guidelineDeviation(?p, true) ^ deviationType(?p, "HER2治疗前需心功能评估/心脏会诊") ^ requiresJustification(?p, true)
+
+# R40: premenopausal endocrine context
+Patient(?p) ^ hasER结果标志和百分比(?p, ?er) ^ swrlb:greaterThan(?er, 0) ^ has月经状况(?p, "绝经前") -> treatmentRationale(?p, "内分泌方案需结合绝经前状态评估")
+
+# R41: pregnancy status -> urgent MDT before systemic therapy / RT
+Patient(?p) ^ has妊娠状态(?p, "妊娠中") -> requiresUrgentMDT(?p, true) ^ alertType(?p, "妊娠相关肿瘤") ^ alertMessage(?p, "妊娠中患者需在系统治疗或放疗前进行专门MDT评估")
+
+### Metastatic / recurrence sequencing domain
+# R42: metastatic disease with bone-only spread
+Patient(?p) ^ has总体分期分组(?p, "IV期") ^ has远处转移部位(?p, ?site) ^ swrlb:stringContains(?site, "骨") -> treatmentIntent(?p, "姑息治疗并评估局部控制/骨改良治疗")
+
+# R43: metastatic HER2-low late-line ADC consideration
+Patient(?p) ^ has总体分期分组(?p, "IV期") ^ hasHER2低表达状态(?p, "是") ^ has转移治疗线别(?p, ?line) ^ swrlb:stringContains(?line, "二线") -> hasADC适应证(?p, "可评估")
+
+# R44: oligometastatic phenotype -> MDT discussion for local ablative options
+Patient(?p) ^ has总体分期分组(?p, "IV期") ^ has寡转移标志(?p, true) -> requiresUrgentMDT(?p, true) ^ mdtReason(?p, "寡转移表型，需讨论系统治疗联合局部消融/放疗/手术")
