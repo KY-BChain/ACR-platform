@@ -47,11 +47,12 @@ public class ValidationReportGenerator {
 
         List<String> blockers = new ArrayList<>();
         List<String> warnings = new ArrayList<>();
+        long embeddedSWRLCount = 0;
 
         try (PrintWriter out = new PrintWriter(new FileWriter(reportFile))) {
 
             // ── Header ──────────────────────────────────────────────────
-            out.println("# ACR Ontology v2.0 — Technical Validation Report");
+            out.println("# ACR Ontology v2.1 — Technical Validation Report");
             out.println();
             out.println("**Generated:** " + LocalDateTime.now().format(
                 DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
@@ -343,18 +344,18 @@ public class ValidationReportGenerator {
             if (ontologyLoaded) {
                 OWLOntologyManager execManager = OWLManager.createOWLOntologyManager();
                 OWLOntology execOntology = execManager.loadOntologyFromOntologyDocument(new File(OWL_FILE));
-                long embeddedSWRL = execOntology.getAxioms(AxiomType.SWRL_RULE).size();
+                embeddedSWRLCount = execOntology.getAxioms(AxiomType.SWRL_RULE).size();
 
-                out.println("- Embedded SWRL axioms in OWL: " + embeddedSWRL);
+                out.println("- Embedded SWRL axioms in OWL: " + embeddedSWRLCount);
                 out.println("- External SWRL rules in .swrl file: " + ruleLines.size());
 
-                if (embeddedSWRL == 0) {
+                if (embeddedSWRLCount == 0) {
                     out.println("- **External rules NOT loaded into runtime**");
                     out.println("- Status: **STRUCTURAL PASS / EXECUTION FAIL — external rules not loaded**");
                     blockers.add("External SWRL rules not loaded into reasoner runtime (0 embedded SWRL axioms in OWL)");
                     gate4Pass = false;
                 } else {
-                    out.println("- SWRL rules available for execution: " + embeddedSWRL);
+                    out.println("- SWRL rules available for execution: " + embeddedSWRLCount);
                 }
             }
 
@@ -364,19 +365,22 @@ public class ValidationReportGenerator {
             out.println("| # | Scenario | Expected Rule | Status |");
             out.println("|---|----------|---------------|--------|");
 
+            String fixtureStatus = embeddedSWRLCount > 0
+                ? "READY (" + embeddedSWRLCount + " rules embedded)"
+                : "BLOCKED (rules not loaded)";
             String[][] fixtures = {
-                {"1", "Luminal A low-risk early stage", "R1, R6", "BLOCKED (rules not loaded)"},
-                {"2", "Luminal B HER2-neg high-risk", "R2, R9, R11", "BLOCKED (rules not loaded)"},
-                {"3", "HER2+ neoadjuvant candidate", "R3/R5, R7, R12", "BLOCKED (rules not loaded)"},
-                {"4", "TNBC PD-L1 positive", "R4, R8, R11", "BLOCKED (rules not loaded)"},
-                {"5", "BI-RADS 5 benign discordance", "R24, R25", "BLOCKED (rules not loaded)"},
-                {"6", "HER2 IHC 2+ without ISH", "R26", "BLOCKED (rules not loaded)"},
-                {"7", "Young patient family history", "R13, R29", "BLOCKED (rules not loaded)"},
-                {"8", "Positive margin after BCS", "R33", "BLOCKED (rules not loaded)"},
-                {"9", "Residual TNBC after NAC", "R36", "BLOCKED (rules not loaded)"},
-                {"10", "Low LVEF HER2+", "R39", "BLOCKED (rules not loaded)"},
-                {"11", "Pregnancy-associated", "R41", "BLOCKED (rules not loaded)"},
-                {"12", "Metastatic HER2-low", "R43", "BLOCKED (rules not loaded)"},
+                {"1", "Luminal A low-risk early stage", "R1, R7", fixtureStatus},
+                {"2", "Luminal B HER2-neg high-risk", "R2/R3, R15-R17, R19-R21", fixtureStatus},
+                {"3", "HER2+ neoadjuvant candidate", "R4/R6, R8-R11, R22", fixtureStatus},
+                {"4", "TNBC PD-L1 positive", "R5, R12-R14, R19-R21", fixtureStatus},
+                {"5", "BI-RADS 5 benign discordance", "R38, R39", fixtureStatus},
+                {"6", "HER2 IHC 2+ without ISH", "R40", fixtureStatus},
+                {"7", "Young patient family history", "R23, R43", fixtureStatus},
+                {"8", "Positive margin after BCS", "R47", fixtureStatus},
+                {"9", "Residual TNBC after NAC", "R50", fixtureStatus},
+                {"10", "Low LVEF HER2+", "R53", fixtureStatus},
+                {"11", "Pregnancy-associated", "R55", fixtureStatus},
+                {"12", "Metastatic HER2-low", "R57", fixtureStatus},
             };
 
             for (String[] fixture : fixtures) {
