@@ -114,3 +114,25 @@ Thumbs.db
 # OS / macOS
 .DS_Store
 **/.DS_Store
+
+# local operational docs
+docs/
+
+# node_modules 
+node_modules/
+# --- ACR v2.1.2-b additions ---
+target/
+*.class
+*.jar
+*.war
+.venv/
+*.iml
+.env.*
+postgres-data/
+docker-data/
+cleanup_logs/
+ACR Platform V2.1/
+
+microservices/backup-20260405-012750/
+microservices/target/
+services/acr-reasoner-service/target/
