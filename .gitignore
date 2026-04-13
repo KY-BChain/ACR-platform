@@ -118,6 +118,9 @@ Thumbs.db
 # local operational docs
 docs/
 
+# CLaude Code control para
+.claude/
+
 # node_modules 
 node_modules/
 # --- ACR v2.1.2-b additions ---

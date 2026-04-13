@@ -6,6 +6,7 @@ import org.acr.platform.model.InferenceResult;
 import org.acr.platform.model.InferenceResult.DeterministicResult;
 import org.acr.platform.model.InferenceResult.BayesianResult;
 import org.semanticweb.owlapi.model.*;
+import org.semanticweb.owlapi.vocab.OWL2Datatype;
 import org.semanticweb.owlapi.reasoner.OWLReasoner;
 import org.semanticweb.owlapi.reasoner.NodeSet;
 import org.semanticweb.owlapi.reasoner.Node;
@@ -372,11 +373,11 @@ public class ReasonerService {
         }
         
         // Create patient individual in ontology
-        String patientIRI = "http://acr.platform/ontology#Patient_" + patientData.getPatientId();
+        String patientIRI = ontologyLoader.getBaseIRI() + "Patient_" + patientData.getPatientId();
         OWLNamedIndividual patientIndividual = factory.getOWLNamedIndividual(IRI.create(patientIRI));
         
         // Assert patient class membership
-        OWLClass patientClass = factory.getOWLClass(IRI.create("http://acr.platform/ontology#Patient"));
+        OWLClass patientClass = factory.getOWLClass(IRI.create(ontologyLoader.getBaseIRI() + "Patient"));
         OWLClassAssertionAxiom classAssertion = factory.getOWLClassAssertionAxiom(patientClass, patientIndividual);
         ontology.getOWLOntologyManager().addAxiom(ontology, classAssertion);
         
@@ -409,47 +410,59 @@ public class ReasonerService {
         OWLOntologyManager manager = ontology.getOWLOntologyManager();
         List<OWLAxiom> addedAxioms = new ArrayList<>();
         
-        // ER status
+        // ER status (SWRL expects numeric: >0 = positive, 0 = negative) — OWL range: xsd:decimal
         if (patientData.getErStatus() != null) {
-            OWLDataProperty erProp = factory.getOWLDataProperty(IRI.create("http://acr.platform/ontology#hasERStatus"));
-            OWLLiteral erValue = factory.getOWLLiteral(patientData.getErStatus());
+            OWLDataProperty erProp = factory.getOWLDataProperty(IRI.create(ontologyLoader.getBaseIRI() + "hasER结果标志和百分比"));
+            int erNumeric = "positive".equalsIgnoreCase(patientData.getErStatus()) ? 1 : 0;
+            OWLLiteral erValue = factory.getOWLLiteral(String.valueOf(erNumeric), OWL2Datatype.XSD_DECIMAL);
             OWLAxiom axiom = factory.getOWLDataPropertyAssertionAxiom(erProp, patient, erValue);
             manager.addAxiom(ontology, axiom);
             addedAxioms.add(axiom);
         }
         
-        // PR status
+        // PR status (SWRL expects numeric: >0 = positive, 0 = negative) — OWL range: xsd:decimal
         if (patientData.getPrStatus() != null) {
-            OWLDataProperty prProp = factory.getOWLDataProperty(IRI.create("http://acr.platform/ontology#hasPRStatus"));
-            OWLLiteral prValue = factory.getOWLLiteral(patientData.getPrStatus());
+            OWLDataProperty prProp = factory.getOWLDataProperty(IRI.create(ontologyLoader.getBaseIRI() + "hasPR结果标志和百分比"));
+            int prNumeric = "positive".equalsIgnoreCase(patientData.getPrStatus()) ? 1 : 0;
+            OWLLiteral prValue = factory.getOWLLiteral(String.valueOf(prNumeric), OWL2Datatype.XSD_DECIMAL);
             OWLAxiom axiom = factory.getOWLDataPropertyAssertionAxiom(prProp, patient, prValue);
             manager.addAxiom(ontology, axiom);
             addedAxioms.add(axiom);
         }
         
-        // HER2 status
+        // HER2 status (SWRL expects Chinese string: "阳性" or "阴性")
         if (patientData.getHer2Status() != null) {
-            OWLDataProperty her2Prop = factory.getOWLDataProperty(IRI.create("http://acr.platform/ontology#hasHER2Status"));
-            OWLLiteral her2Value = factory.getOWLLiteral(patientData.getHer2Status());
+            OWLDataProperty her2Prop = factory.getOWLDataProperty(IRI.create(ontologyLoader.getBaseIRI() + "hasHER2最终解释"));
+            String her2Chinese = "positive".equalsIgnoreCase(patientData.getHer2Status()) ? "阳性" : "阴性";
+            OWLLiteral her2Value = factory.getOWLLiteral(her2Chinese);
             OWLAxiom axiom = factory.getOWLDataPropertyAssertionAxiom(her2Prop, patient, her2Value);
             manager.addAxiom(ontology, axiom);
             addedAxioms.add(axiom);
         }
         
-        // Ki67 percentage
+        // Ki-67 proliferation index — OWL range: xsd:integer
         if (patientData.getKi67() != null) {
-            OWLDataProperty ki67Prop = factory.getOWLDataProperty(IRI.create("http://acr.platform/ontology#hasKi67"));
-            OWLLiteral ki67Value = factory.getOWLLiteral(patientData.getKi67());
+            OWLDataProperty ki67Prop = factory.getOWLDataProperty(IRI.create(ontologyLoader.getBaseIRI() + "hasKi-67增殖指数"));
+            OWLLiteral ki67Value = factory.getOWLLiteral(String.valueOf(patientData.getKi67().intValue()), OWL2Datatype.XSD_INTEGER);
             OWLAxiom axiom = factory.getOWLDataPropertyAssertionAxiom(ki67Prop, patient, ki67Value);
             manager.addAxiom(ontology, axiom);
             addedAxioms.add(axiom);
         }
         
-        // Grade
+        // Histological grade (Chinese property name)
         if (patientData.getGrade() != null) {
-            OWLDataProperty gradeProp = factory.getOWLDataProperty(IRI.create("http://acr.platform/ontology#hasTumourGrade"));
+            OWLDataProperty gradeProp = factory.getOWLDataProperty(IRI.create(ontologyLoader.getBaseIRI() + "has组织学分级"));
             OWLLiteral gradeValue = factory.getOWLLiteral(patientData.getGrade());
             OWLAxiom axiom = factory.getOWLDataPropertyAssertionAxiom(gradeProp, patient, gradeValue);
+            manager.addAxiom(ontology, axiom);
+            addedAxioms.add(axiom);
+        }
+        
+        // Age (derived age — used by MDT trigger and genetic testing rules) — OWL range: xsd:integer
+        if (patientData.getAge() != null) {
+            OWLDataProperty ageProp = factory.getOWLDataProperty(IRI.create(ontologyLoader.getBaseIRI() + "has年龄推导"));
+            OWLLiteral ageValue = factory.getOWLLiteral(String.valueOf(patientData.getAge()), OWL2Datatype.XSD_INTEGER);
+            OWLAxiom axiom = factory.getOWLDataPropertyAssertionAxiom(ageProp, patient, ageValue);
             manager.addAxiom(ontology, axiom);
             addedAxioms.add(axiom);
         }
@@ -462,12 +475,22 @@ public class ReasonerService {
      */
     private String queryMolecularSubtype(OWLNamedIndividual patient, OWLReasoner reasoner,
                                          OWLDataFactory factory, OWLOntology ontology) {
-        // Define molecular subtype classes
-        OWLClass luminalA = factory.getOWLClass(IRI.create("http://acr.platform/ontology#LuminalA"));
-        OWLClass luminalB = factory.getOWLClass(IRI.create("http://acr.platform/ontology#LuminalB"));
-        OWLClass her2Enriched = factory.getOWLClass(IRI.create("http://acr.platform/ontology#HER2Enriched"));
-        OWLClass tripleNegative = factory.getOWLClass(IRI.create("http://acr.platform/ontology#TripleNegative"));
-        OWLClass normalLike = factory.getOWLClass(IRI.create("http://acr.platform/ontology#NormalLike"));
+        // PRIMARY: Check hasMolecularSubtype data property (set by SWRL rules)
+        OWLDataProperty subtypeProp = factory.getOWLDataProperty(
+            IRI.create(ontologyLoader.getBaseIRI() + "hasMolecularSubtype"));
+        Set<OWLLiteral> subtypeValues = reasoner.getDataPropertyValues(patient, subtypeProp);
+        if (!subtypeValues.isEmpty()) {
+            String swrlSubtype = subtypeValues.iterator().next().getLiteral();
+            logger.info("SWRL-inferred molecular subtype via data property: {}", swrlSubtype);
+            return swrlSubtype;
+        }
+        
+        // FALLBACK: Check class membership (OWL-DL classification)
+        OWLClass luminalA = factory.getOWLClass(IRI.create(ontologyLoader.getBaseIRI() + "LuminalA"));
+        OWLClass luminalB = factory.getOWLClass(IRI.create(ontologyLoader.getBaseIRI() + "LuminalB"));
+        OWLClass her2Enriched = factory.getOWLClass(IRI.create(ontologyLoader.getBaseIRI() + "HER2Enriched"));
+        OWLClass tripleNegative = factory.getOWLClass(IRI.create(ontologyLoader.getBaseIRI() + "TripleNegative"));
+        OWLClass normalLike = factory.getOWLClass(IRI.create(ontologyLoader.getBaseIRI() + "NormalLike"));
         
         // Query reasoner for inferred types
         NodeSet<OWLClass> inferredTypes = reasoner.getTypes(patient, false);
@@ -475,11 +498,11 @@ public class ReasonerService {
         // Check each subtype
         for (Node<OWLClass> node : inferredTypes) {
             for (OWLClass inferredClass : node) {
-                if (inferredClass.equals(luminalA)) return "Luminal_A";
-                if (inferredClass.equals(luminalB)) return "Luminal_B";
-                if (inferredClass.equals(her2Enriched)) return "HER2_Enriched";
-                if (inferredClass.equals(tripleNegative)) return "Triple_Negative";
-                if (inferredClass.equals(normalLike)) return "Normal_Like";
+                if (inferredClass.equals(luminalA)) return "LuminalA";
+                if (inferredClass.equals(luminalB)) return "LuminalB";
+                if (inferredClass.equals(her2Enriched)) return "HER2Enriched";
+                if (inferredClass.equals(tripleNegative)) return "TripleNegative";
+                if (inferredClass.equals(normalLike)) return "NormalLike";
             }
         }
         
@@ -493,7 +516,10 @@ public class ReasonerService {
         if (subtype == null) return false;
         return subtype.equals("Luminal_A") || subtype.equals("Luminal_B") ||
                subtype.equals("HER2_Enriched") || subtype.equals("Triple_Negative") ||
-               subtype.equals("Normal_Like");
+               subtype.equals("Normal_Like") ||
+               subtype.equals("LuminalA") || subtype.startsWith("LuminalB") ||
+               subtype.equals("HER2Enriched") || subtype.equals("TripleNegative") ||
+               subtype.equals("NormalLike");
     }
 
     /**
