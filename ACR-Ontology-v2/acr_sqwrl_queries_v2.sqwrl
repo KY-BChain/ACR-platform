@@ -1,0 +1,156 @@
+# acr_sqwrl_queries_v2.sqwrl
+# ===========================================================================
+# ACR Platform — Merged SQWRL Query Set v2.0
+# ===========================================================================
+# Total: 25 queries (Q1-Q25)
+#
+# Sources:
+#   Q1-Q15  — Original  (ACR-Ontology-Staging/acr_sqwrl_queries.sqwrl)
+#   Q16-Q25 — Extension (ACR-Ontology-v2/acr_sqwrl_queries_v2.txt, April 2026)
+#
+# Sections:
+#   Q1-Q15  — Core clinical queries (cohort, adherence, follow-up, trials)
+#   Q16-Q25 — Extension queries (imaging gaps, pathology reflex, genetics,
+#              surgery, safety, metastatic/ADC, guideline deviations)
+#
+# Notes:
+#   - Queries depend on SWRL-inferred properties (run rules first).
+#   - Validate property IRIs in Protégé before activation.
+# ===========================================================================
+
+@prefix : <https://medical-ai.org/ontologies/ACR#> .
+
+# ═══════════════════════════════════════════════════════════════════════════
+# ORIGINAL QUERIES (Q1–Q15)
+# ═══════════════════════════════════════════════════════════════════════════
+
+### Query 1: Get All HER2+ Patients Requiring Neoadjuvant Therapy
+Patient(?p) ^ hasHER2最终解释(?p, "阳性") ^ has临床TNMcTNM(?p, ?tnm) ^
+has患者本地标识符(?p, ?mrn) ^ has患者姓名本地(?p, ?name)
+→ sqwrl:select(?p, ?mrn, ?name, ?tnm) ^ sqwrl:orderBy(?name)
+
+### Query 2: Triple Negative Cohort Analysis
+Patient(?p) ^ hasMolecularSubtype(?p, "TripleNegative") ^
+has年龄推导(?p, ?age) ^ has总体分期分组(?p, ?stage) ^
+has患者本地标识符(?p, ?mrn)
+→ sqwrl:select(?p, ?mrn, ?age, ?stage) ^ sqwrl:orderBy(?stage)
+
+### Query 3: Guideline Adherence Rate by Subtype
+Patient(?p) ^ hasMolecularSubtype(?p, ?subtype) ^
+guidelineDeviation(?p, ?deviation)
+→ sqwrl:select(?subtype, sqwrl:count(?p), sqwrl:countDistinct(?deviation)) ^
+sqwrl:groupBy(?subtype)
+
+### Query 4: MDT Discussion Cases This Month
+Patient(?p) ^ requiresMDT(?p, true) ^ hasMDT会议日期(?p, ?mdtDate) ^
+swrlb:subtractDateTimes(?currentDate, ?mdtDate, ?days) ^
+swrlb:lessThanOrEqual(?days, 30) ^ has患者本地标识符(?p, ?mrn)
+→ sqwrl:select(?p, ?mrn, ?mdtDate) ^ sqwrl:orderByDescending(?mdtDate)
+
+### Query 5: Patients Due for Follow-up This Week
+Patient(?p) ^ has随访计划(?p, ?plan) ^ followUpDueDate(?p, ?dueDate) ^
+swrlb:subtractDateTimes(?dueDate, ?currentDate, ?days) ^
+swrlb:lessThanOrEqual(?days, 7) ^ has患者本地标识符(?p, ?mrn) ^
+has患者电话(?p, ?phone)
+→ sqwrl:select(?p, ?mrn, ?phone, ?dueDate) ^ sqwrl:orderBy(?dueDate)
+
+### Query 6: Treatment Response Analysis (pCR Rates)
+Patient(?p) ^ has新辅助化疗方案(?p, ?regimen) ^
+has病理TNMpTNM(?p, ?ptnm) ^ swrlb:stringContains(?ptnm, "T0N0")
+→ sqwrl:select(?regimen, sqwrl:count(?p)) ^ sqwrl:groupBy(?regimen)
+
+### Query 7: Recurrence by Molecular Subtype
+Patient(?p) ^ hasMolecularSubtype(?p, ?subtype) ^
+has复发或进展标志(?p, "是") ^ has复发日期和部位(?p, ?recDate) ^
+has计划Or执行的手术类型和日期(?p, ?surgDate) ^
+swrlb:subtractDateTimes(?recDate, ?surgDate, ?dfs)
+→ sqwrl:select(?subtype, sqwrl:avg(?dfs), sqwrl:count(?p)) ^
+sqwrl:groupBy(?subtype)
+
+### Query 8: Genomic Testing Utilization Rate
+Patient(?p) ^ hasMolecularSubtype(?p, "LuminalB_HER2neg") ^
+has基因组检测执行(?p, ?tested)
+→ sqwrl:select(?tested, sqwrl:count(?p)) ^ sqwrl:groupBy(?tested)
+
+### Query 9: Treatment Timeline Compliance
+Patient(?p) ^ has活检日期Or时间(?p, ?biopsyDate) ^
+has全身治疗开始日期(?p, ?txStart) ^
+swrlb:subtractDateTimes(?txStart, ?biopsyDate, ?days) ^
+has患者本地标识符(?p, ?mrn)
+→ sqwrl:select(?p, ?mrn, ?days) ^ sqwrl:orderByDescending(?days)
+
+### Query 10: CSCO Category I Recommendation Adoption Rate
+Patient(?p) ^ recommendTreatment(?p, ?treatment) ^
+hasGuidelineSource(?p, :CSCO) ^ hasRecommendationLevel(?p, :CategoryI) ^
+treatmentActuallyReceived(?p, ?actualTx)
+→ sqwrl:select(?treatment, sqwrl:count(?p), 
+sqwrl:countDistinct(?actualTx WHERE swrlb:equal(?treatment, ?actualTx))) ^
+sqwrl:groupBy(?treatment)
+
+### Query 11: Young Patients Requiring Genetic Counseling
+Patient(?p) ^ has年龄推导(?p, ?age) ^ swrlb:lessThan(?age, 45) ^
+(hasMolecularSubtype(?p, "TripleNegative") ∨ has家族癌症史(?p, ?fhx) ^ swrlb:stringContains(?fhx, "乳腺癌")) ^
+has胚系BRCA状态(?p, ?brcaStatus) ^ has患者本地标识符(?p, ?mrn)
+→ sqwrl:select(?p, ?mrn, ?age, ?brcaStatus) ^ sqwrl:orderBy(?age)
+
+### Query 12: BI-RADS 4/5 Findings Requiring Biopsy
+Patient(?p) ^ has影像评估BI-RADS(?p, ?birads) ^
+(swrlb:stringContains(?birads, "4") ∨ swrlb:stringContains(?birads, "5")) ^
+has活检日期Or时间(?p, ?biopsyDate) ^ has患者本地标识符(?p, ?mrn)
+→ sqwrl:select(?p, ?mrn, ?birads, ?biopsyDate) ^ sqwrl:orderBy(?biopsyDate)
+
+### Query 13: Adverse Events by Treatment Regimen
+Patient(?p) ^ has新辅助化疗方案(?p, ?regimen) ^
+has治疗期间不良事件(?p, ?ae) ^ has患者本地标识符(?p, ?mrn)
+→ sqwrl:select(?regimen, ?ae, sqwrl:count(?p)) ^
+sqwrl:groupBy(?regimen, ?ae) ^ sqwrl:orderByDescending(sqwrl:count(?p))
+
+### Query 14: Surgery Wait Time Analysis
+Patient(?p) ^ has活检日期Or时间(?p, ?biopsyDate) ^
+has计划Or执行的手术类型和日期(?p, ?surgDate) ^
+swrlb:subtractDateTimes(?surgDate, ?biopsyDate, ?waitDays) ^
+has患者本地标识符(?p, ?mrn)
+→ sqwrl:select(?mrn, ?waitDays) ^ sqwrl:orderByDescending(?waitDays) ^
+sqwrl:limit(20)
+
+### Query 15: Patients Eligible for Clinical Trials (HER2+ Novel ADC)
+Patient(?p) ^ hasHER2最终解释(?p, "阳性") ^
+has临床TNMcTNM(?p, ?tnm) ^ swrlb:stringContains(?tnm, "M1") ^
+hasHER2靶向药物和持续时间(?p, ?priorHER2) ^
+swrlb:stringContains(?priorHER2, "曲妥珠单抗") ^
+has患者本地标识符(?p, ?mrn) ^ has患者电话(?p, ?phone)
+→ sqwrl:select(?p, ?mrn, ?phone, ?tnm) ^ sqwrl:orderBy(?mrn)
+
+# ═══════════════════════════════════════════════════════════════════════════
+# EXTENSION QUERIES (Q16–Q25) — April 2026
+# ═══════════════════════════════════════════════════════════════════════════
+
+### Query 16: Patients with BI-RADS 4/5 but no biopsy recommendation recorded
+Patient(?p) ^ has影像评估BI-RADS(?p, ?birads) ^ swrlb:stringContains(?birads, "4") ^ sqwrl:notBound(?bx) -> sqwrl:select(?p, ?birads)
+
+### Query 17: HER2 IHC 2+ cases missing ISH/FISH
+Patient(?p) ^ hasHER2IHC评分(?p, "2+") ^ hasHER2ISH执行(?p, "否") -> sqwrl:select(?p)
+
+### Query 18: Young/family-history cases needing genetics review
+Patient(?p) ^ has年龄推导(?p, ?age) ^ swrlb:lessThan(?age, 50) ^ has家族癌症史(?p, ?fhx) ^ swrlb:stringContains(?fhx, "乳腺癌") -> sqwrl:select(?p, ?age, ?fhx)
+
+### Query 19: Breast-conserving candidates
+Patient(?p) ^ has保乳手术适宜性(?p, "较适合") -> sqwrl:select(?p)
+
+### Query 20: Positive-margin cases
+Patient(?p) ^ has切缘手术标本(?p, ?margin) ^ swrlb:stringContains(?margin, "受累") -> sqwrl:select(?p, ?margin)
+
+### Query 21: Residual TNBC after neoadjuvant therapy
+Patient(?p) ^ hasMolecularSubtype(?p, "TripleNegative") ^ has残余病灶状态(?p, ?residual) ^ swrlb:stringContains(?residual, "残余") -> sqwrl:select(?p, ?residual)
+
+### Query 22: HER2-positive patients with low LVEF
+Patient(?p) ^ hasHER2最终解释(?p, "阳性") ^ hasLVEF百分比(?p, ?lvef) ^ swrlb:lessThan(?lvef, 50) -> sqwrl:select(?p, ?lvef)
+
+### Query 23: Oligometastatic patients for advanced MDT review
+Patient(?p) ^ has总体分期分组(?p, "IV期") ^ has寡转移标志(?p, true) -> sqwrl:select(?p)
+
+### Query 24: HER2-low metastatic second-line-or-later candidates
+Patient(?p) ^ has总体分期分组(?p, "IV期") ^ hasHER2低表达状态(?p, "是") ^ has转移治疗线别(?p, ?line) -> sqwrl:select(?p, ?line)
+
+### Query 25: Cases with guideline deviation flags from the extension
+Patient(?p) ^ guidelineDeviation(?p, true) ^ deviationType(?p, ?dtype) -> sqwrl:select(?p, ?dtype)

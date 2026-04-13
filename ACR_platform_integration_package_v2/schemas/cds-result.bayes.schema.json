@@ -1,0 +1,915 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://acragent.com/schemas/cds-result-bayes.schema.json",
+  "title": "ACRAgent CDS Result - Bayes Enabled",
+  "description": "Clinician-facing CDS output for ACRAgent supporting interim hard-coded JS reasoning, eventual ontology reasoning, and optional Bayesian posterior assessment.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "cds_result_id",
+    "generated_at",
+    "platform",
+    "execution_mode",
+    "case_context",
+    "clinical_summary",
+    "classification",
+    "risk_assessment",
+    "recommendations",
+    "alerts",
+    "explanation",
+    "rule_trace",
+    "query_trace",
+    "bayesian_assessment",
+    "comparison_trace",
+    "audit"
+  ],
+  "properties": {
+    "cds_result_id": {
+      "type": "string"
+    },
+    "generated_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "execution_mode": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "runtime_type",
+        "bayes_enabled",
+        "comparison_mode_available"
+      ],
+      "properties": {
+        "runtime_type": {
+          "type": "string",
+          "enum": [
+            "js_hardcoded_bridge",
+            "ontology_reasoner",
+            "hybrid"
+          ]
+        },
+        "bayes_enabled": {
+          "type": "boolean"
+        },
+        "comparison_mode_available": {
+          "type": "boolean"
+        },
+        "comparison_mode_selected": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "deterministic_only",
+            "deterministic_vs_bayes",
+            "bayes_only",
+            null
+          ]
+        }
+      }
+    },
+    "platform": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "product_name",
+        "ontology_version",
+        "swrl_package_version",
+        "sqwrl_package_version",
+        "bayesian_module_version",
+        "reasoner_runtime_version"
+      ],
+      "properties": {
+        "product_name": {
+          "type": "string"
+        },
+        "ontology_version": {
+          "type": "string"
+        },
+        "swrl_package_version": {
+          "type": "string"
+        },
+        "sqwrl_package_version": {
+          "type": "string"
+        },
+        "bayesian_module_version": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "reasoner_runtime_version": {
+          "type": "string"
+        }
+      }
+    },
+    "case_context": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "site_id",
+        "patient_local_id",
+        "case_id",
+        "jurisdiction",
+        "disease_area",
+        "data_completeness",
+        "input_facts_used"
+      ],
+      "properties": {
+        "site_id": {
+          "type": "string"
+        },
+        "site_name": {
+          "type": "string"
+        },
+        "patient_local_id": {
+          "type": "string"
+        },
+        "case_id": {
+          "type": "string"
+        },
+        "jurisdiction": {
+          "type": "string",
+          "enum": [
+            "EU",
+            "EEA",
+            "UK",
+            "HKSAR",
+            "China",
+            "Other"
+          ]
+        },
+        "disease_area": {
+          "type": "string"
+        },
+        "data_completeness": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "biomarkers_complete",
+            "pathology_complete",
+            "staging_complete",
+            "imaging_available"
+          ],
+          "properties": {
+            "biomarkers_complete": {
+              "type": "boolean"
+            },
+            "pathology_complete": {
+              "type": "boolean"
+            },
+            "staging_complete": {
+              "type": "boolean"
+            },
+            "imaging_available": {
+              "type": "boolean"
+            }
+          }
+        },
+        "input_facts_used": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "clinical_summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "headline",
+        "one_line_recommendation",
+        "urgency",
+        "confidence_band"
+      ],
+      "properties": {
+        "headline": {
+          "type": "string"
+        },
+        "one_line_recommendation": {
+          "type": "string"
+        },
+        "urgency": {
+          "type": "string",
+          "enum": [
+            "routine",
+            "priority",
+            "urgent"
+          ]
+        },
+        "confidence_band": {
+          "type": "string",
+          "enum": [
+            "high",
+            "moderate",
+            "low"
+          ]
+        }
+      }
+    },
+    "classification": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "molecular_subtype",
+        "disease_state",
+        "hormone_receptor_status",
+        "her2_classification"
+      ],
+      "properties": {
+        "molecular_subtype": {
+          "$ref": "#/$defs/inferred_value"
+        },
+        "disease_state": {
+          "$ref": "#/$defs/inferred_value"
+        },
+        "hormone_receptor_status": {
+          "$ref": "#/$defs/inferred_value"
+        },
+        "her2_classification": {
+          "$ref": "#/$defs/inferred_value"
+        }
+      }
+    },
+    "risk_assessment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "overall_risk_level",
+        "risk_factors",
+        "recurrence_risk_note",
+        "deterministic_risk",
+        "posterior_risk"
+      ],
+      "properties": {
+        "overall_risk_level": {
+          "$ref": "#/$defs/inferred_value"
+        },
+        "risk_factors": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/risk_factor"
+          }
+        },
+        "recurrence_risk_note": {
+          "type": "string"
+        },
+        "deterministic_risk": {
+          "$ref": "#/$defs/risk_snapshot"
+        },
+        "posterior_risk": {
+          "$ref": "#/$defs/risk_snapshot"
+        }
+      }
+    },
+    "recommendations": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "treatment_pathway",
+        "medications",
+        "monitoring",
+        "timeline"
+      ],
+      "properties": {
+        "treatment_pathway": {
+          "$ref": "#/$defs/treatment_pathway"
+        },
+        "medications": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/medication"
+          }
+        },
+        "monitoring": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "timeline": {
+          "$ref": "#/$defs/timeline"
+        }
+      }
+    },
+    "alerts": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/alert"
+      }
+    },
+    "explanation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "narrative_summary",
+        "key_supporting_facts",
+        "uncertainties",
+        "missing_data_impact"
+      ],
+      "properties": {
+        "narrative_summary": {
+          "type": "string"
+        },
+        "key_supporting_facts": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "uncertainties": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "missing_data_impact": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "rule_trace": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "executed_rules_total",
+        "implemented_rule_count",
+        "triggered_rules",
+        "not_triggered_rules",
+        "coverage_summary"
+      ],
+      "properties": {
+        "executed_rules_total": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "implemented_rule_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "coverage_summary": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "rules_in_ontology",
+            "rules_mirrored_in_runtime",
+            "rules_with_bayesian_effect"
+          ],
+          "properties": {
+            "rules_in_ontology": {
+              "type": "integer"
+            },
+            "rules_mirrored_in_runtime": {
+              "type": "integer"
+            },
+            "rules_with_bayesian_effect": {
+              "type": "integer"
+            }
+          }
+        },
+        "triggered_rules": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/rule_trace_item"
+          }
+        },
+        "not_triggered_rules": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/rule_trace_item_not_triggered"
+          }
+        }
+      }
+    },
+    "query_trace": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "executed_queries_total",
+        "implemented_query_count",
+        "queries"
+      ],
+      "properties": {
+        "executed_queries_total": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "implemented_query_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "queries": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/query_trace_item"
+          }
+        }
+      }
+    },
+    "bayesian_assessment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "enabled",
+        "hypothesis",
+        "prior_probability",
+        "posterior_probability",
+        "prior_percent",
+        "posterior_percent",
+        "classification",
+        "evidence_count",
+        "evidence",
+        "summary"
+      ],
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        },
+        "hypothesis": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "prior_probability": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "minimum": 0,
+          "maximum": 1
+        },
+        "posterior_probability": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "minimum": 0,
+          "maximum": 1
+        },
+        "prior_percent": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "minimum": 0,
+          "maximum": 100
+        },
+        "posterior_percent": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "minimum": 0,
+          "maximum": 100
+        },
+        "classification": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "evidence_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "evidence": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/bayes_evidence_item"
+          }
+        },
+        "summary": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    },
+    "comparison_trace": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "before_bayes",
+        "after_bayes"
+      ],
+      "properties": {
+        "before_bayes": {
+          "$ref": "#/$defs/comparison_state"
+        },
+        "after_bayes": {
+          "$ref": "#/$defs/comparison_state"
+        }
+      }
+    },
+    "audit": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "generated_by",
+        "site_id",
+        "generated_timestamp",
+        "ontology_version",
+        "rule_package_version",
+        "review_status",
+        "explainability_mode_available"
+      ],
+      "properties": {
+        "generated_by": {
+          "type": "string"
+        },
+        "site_id": {
+          "type": "string"
+        },
+        "generated_timestamp": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "ontology_version": {
+          "type": "string"
+        },
+        "rule_package_version": {
+          "type": "string"
+        },
+        "review_status": {
+          "type": "string",
+          "enum": [
+            "pending_clinician_review",
+            "reviewed",
+            "accepted",
+            "modified",
+            "rejected"
+          ]
+        },
+        "explainability_mode_available": {
+          "type": "boolean"
+        }
+      }
+    }
+  },
+  "$defs": {
+    "inferred_value": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "value",
+        "source"
+      ],
+      "properties": {
+        "value": {
+          "type": "string"
+        },
+        "source": {
+          "type": "string"
+        },
+        "supporting_rules": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "risk_factor": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "factor"
+      ],
+      "properties": {
+        "factor": {
+          "type": "string"
+        },
+        "source_fact": {
+          "type": "string"
+        }
+      }
+    },
+    "risk_snapshot": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "label"
+      ],
+      "properties": {
+        "label": {
+          "type": "string"
+        },
+        "score": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "source": {
+          "type": "string"
+        }
+      }
+    },
+    "treatment_pathway": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "primary_recommendation",
+        "secondary_considerations",
+        "contraindications",
+        "recommended_next_steps"
+      ],
+      "properties": {
+        "primary_recommendation": {
+          "type": "string"
+        },
+        "secondary_considerations": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "contraindications": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "recommended_next_steps": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "medication": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "class",
+        "indicated",
+        "reason"
+      ],
+      "properties": {
+        "class": {
+          "type": "string"
+        },
+        "indicated": {
+          "type": "boolean"
+        },
+        "reason": {
+          "type": "string"
+        }
+      }
+    },
+    "timeline": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "initial_action_window",
+        "therapy_start_target",
+        "first_review_target"
+      ],
+      "properties": {
+        "initial_action_window": {
+          "type": "string"
+        },
+        "therapy_start_target": {
+          "type": "string"
+        },
+        "first_review_target": {
+          "type": "string"
+        }
+      }
+    },
+    "alert": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "severity",
+        "code",
+        "message",
+        "source"
+      ],
+      "properties": {
+        "severity": {
+          "type": "string",
+          "enum": [
+            "low",
+            "medium",
+            "high",
+            "critical"
+          ]
+        },
+        "code": {
+          "type": "string"
+        },
+        "message": {
+          "type": "string"
+        },
+        "source": {
+          "type": "string"
+        }
+      }
+    },
+    "rule_trace_item": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "rule_id",
+        "rule_name",
+        "status",
+        "input_facts",
+        "inferred_facts",
+        "contributes_to"
+      ],
+      "properties": {
+        "rule_id": {
+          "type": "string"
+        },
+        "rule_name": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string",
+          "const": "triggered"
+        },
+        "input_facts": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "inferred_facts": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "contributes_to": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "clinical_summary",
+              "classification",
+              "risk_assessment",
+              "recommendations",
+              "alerts",
+              "explanation",
+              "audit",
+              "bayesian_assessment",
+              "comparison_trace"
+            ]
+          }
+        },
+        "bayesian_evidence_refs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "rule_trace_item_not_triggered": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "rule_id",
+        "rule_name",
+        "status",
+        "failed_conditions"
+      ],
+      "properties": {
+        "rule_id": {
+          "type": "string"
+        },
+        "rule_name": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string",
+          "const": "not_triggered"
+        },
+        "failed_conditions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "query_trace_item": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "query_id",
+        "query_name",
+        "result_type",
+        "feeds"
+      ],
+      "properties": {
+        "query_id": {
+          "type": "string"
+        },
+        "query_name": {
+          "type": "string"
+        },
+        "result_type": {
+          "type": "string",
+          "enum": [
+            "single_value",
+            "list",
+            "count",
+            "object",
+            "boolean",
+            "none"
+          ]
+        },
+        "result": {},
+        "feeds": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "clinical_summary",
+              "classification",
+              "risk_assessment",
+              "recommendations",
+              "alerts",
+              "explanation",
+              "audit",
+              "bayesian_assessment",
+              "comparison_trace"
+            ]
+          }
+        }
+      }
+    },
+    "bayes_evidence_item": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "label",
+        "state",
+        "lr",
+        "rationale"
+      ],
+      "properties": {
+        "label": {
+          "type": "string"
+        },
+        "state": {
+          "type": "string"
+        },
+        "lr": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "rationale": {
+          "type": "string"
+        },
+        "source_refs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "comparison_state": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "headline",
+        "recommendation",
+        "risk_label"
+      ],
+      "properties": {
+        "headline": {
+          "type": "string"
+        },
+        "recommendation": {
+          "type": "string"
+        },
+        "risk_label": {
+          "type": "string"
+        },
+        "confidence_band": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "posterior_percent": {
+          "type": [
+            "number",
+            "null"
+          ]
+        }
+      }
+    }
+  }
+}

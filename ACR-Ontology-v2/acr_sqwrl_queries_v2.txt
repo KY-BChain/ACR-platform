@@ -1,0 +1,34 @@
+# ACR SQWRL Query Extension 2026
+# For manual copy into Protégé SQWRLTab after confirming property IRIs.
+
+@prefix : <https://medical-ai.org/ontologies/ACR#> .
+
+# Q16: Patients with BI-RADS 4/5 but no biopsy recommendation recorded
+Patient(?p) ^ has影像评估BI-RADS(?p, ?birads) ^ swrlb:stringContains(?birads, "4") ^ sqwrl:notBound(?bx) -> sqwrl:select(?p, ?birads)
+
+# Q17: HER2 IHC 2+ cases missing ISH/FISH
+Patient(?p) ^ hasHER2IHC评分(?p, "2+") ^ hasHER2ISH执行(?p, "否") -> sqwrl:select(?p)
+
+# Q18: Young/family-history cases needing genetics review
+Patient(?p) ^ has年龄推导(?p, ?age) ^ swrlb:lessThan(?age, 50) ^ has家族癌症史(?p, ?fhx) ^ swrlb:stringContains(?fhx, "乳腺癌") -> sqwrl:select(?p, ?age, ?fhx)
+
+# Q19: Breast-conserving candidates
+Patient(?p) ^ has保乳手术适宜性(?p, "较适合") -> sqwrl:select(?p)
+
+# Q20: Positive-margin cases
+Patient(?p) ^ has切缘手术标本(?p, ?margin) ^ swrlb:stringContains(?margin, "受累") -> sqwrl:select(?p, ?margin)
+
+# Q21: Residual TNBC after neoadjuvant therapy
+Patient(?p) ^ hasMolecularSubtype(?p, "TripleNegative") ^ has残余病灶状态(?p, ?residual) ^ swrlb:stringContains(?residual, "残余") -> sqwrl:select(?p, ?residual)
+
+# Q22: HER2-positive patients with low LVEF
+Patient(?p) ^ hasHER2最终解释(?p, "阳性") ^ hasLVEF百分比(?p, ?lvef) ^ swrlb:lessThan(?lvef, 50) -> sqwrl:select(?p, ?lvef)
+
+# Q23: Oligometastatic patients for advanced MDT review
+Patient(?p) ^ has总体分期分组(?p, "IV期") ^ has寡转移标志(?p, true) -> sqwrl:select(?p)
+
+# Q24: HER2-low metastatic second-line-or-later candidates
+Patient(?p) ^ has总体分期分组(?p, "IV期") ^ hasHER2低表达状态(?p, "是") ^ has转移治疗线别(?p, ?line) -> sqwrl:select(?p, ?line)
+
+# Q25: Cases with guideline deviation flags from the extension
+Patient(?p) ^ guidelineDeviation(?p, true) ^ deviationType(?p, ?dtype) -> sqwrl:select(?p, ?dtype)

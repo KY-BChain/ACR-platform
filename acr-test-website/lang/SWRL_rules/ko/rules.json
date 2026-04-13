@@ -1,0 +1,134 @@
+[
+  {
+    "id": 1,
+    "category": "biomarker",
+    "technical": "Patient(?p) ^ hasERStatus(?p, Positive) ^ hasPRStatus(?p, Positive) ^ hasHER2Status(?p, Negative) ^ hasKi67(?p, ?k) ^ swrlb:lessThan(?k, 20) -> hasMolecularSubtype(?p, LuminalA)",
+    "natural": "ER과 PR이 양성이고 HER2가 음성이며 Ki-67 < 20%인 경우, Luminal A 아형으로 분류"
+  },
+  {
+    "id": 2,
+    "category": "biomarker",
+    "technical": "Patient(?p) ^ hasERStatus(?p, Positive) ^ hasPRStatus(?p, Positive) ^ hasHER2Status(?p, Negative) ^ hasKi67(?p, ?k) ^ swrlb:greaterThanOrEqual(?k, 20) -> hasMolecularSubtype(?p, LuminalB)",
+    "natural": "ER과 PR이 양성이고 HER2가 음성이며 Ki-67 ≥ 20%인 경우, Luminal B 아형으로 분류"
+  },
+  {
+    "id": 3,
+    "category": "biomarker",
+    "technical": "Patient(?p) ^ hasHER2Status(?p, Positive) -> hasMolecularSubtype(?p, HER2Positive)",
+    "natural": "HER2가 양성인 경우, HER2 양성 아형으로 분류"
+  },
+  {
+    "id": 4,
+    "category": "biomarker",
+    "technical": "Patient(?p) ^ hasERStatus(?p, Negative) ^ hasPRStatus(?p, Negative) ^ hasHER2Status(?p, Negative) -> hasMolecularSubtype(?p, TripleNegative)",
+    "natural": "ER, PR, HER2가 모두 음성인 경우, 삼중 음성 아형으로 분류"
+  },
+  {
+    "id": 5,
+    "category": "risk",
+    "technical": "Patient(?p) ^ hasTumorSize(?p, ?size) ^ swrlb:greaterThan(?size, 50) -> hasRiskLevel(?p, High)",
+    "natural": "종양 크기 > 5cm이면, 고위험으로 분류"
+  },
+  {
+    "id": 6,
+    "category": "risk",
+    "technical": "Patient(?p) ^ hasLymphNodeStatus(?p, Positive) ^ hasPositiveNodes(?p, ?n) ^ swrlb:greaterThan(?n, 3) -> hasRiskLevel(?p, High)",
+    "natural": "림프절 양성이고 양성 림프절 수 > 3이면, 고위험으로 분류"
+  },
+  {
+    "id": 7,
+    "category": "risk",
+    "technical": "Patient(?p) ^ hasGrade(?p, 3) -> hasRiskLevel(?p, High)",
+    "natural": "종양 등급이 3이면, 고위험으로 분류"
+  },
+  {
+    "id": 8,
+    "category": "risk",
+    "technical": "Patient(?p) ^ hasLVIStatus(?p, Positive) -> hasRiskLevel(?p, Intermediate)",
+    "natural": "림프관 침범이 있으면, 중간 위험으로 분류"
+  },
+  {
+    "id": 9,
+    "category": "treatment",
+    "technical": "Patient(?p) ^ hasMolecularSubtype(?p, LuminalA) -> recommendTreatment(?p, EndocrineTherapy)",
+    "natural": "Luminal A 아형인 경우, 내분비 치료 권장"
+  },
+  {
+    "id": 10,
+    "category": "treatment",
+    "technical": "Patient(?p) ^ hasMolecularSubtype(?p, LuminalB) -> recommendTreatment(?p, ChemotherapyPlusEndocrine)",
+    "natural": "Luminal B 아형인 경우, 화학요법 더하기 내분비 치료 권장"
+  },
+  {
+    "id": 11,
+    "category": "treatment",
+    "technical": "Patient(?p) ^ hasMolecularSubtype(?p, HER2Positive) -> recommendTreatment(?p, AntiHER2Therapy)",
+    "natural": "HER2 양성 아형인 경우, 항HER2 치료 권장"
+  },
+  {
+    "id": 12,
+    "category": "treatment",
+    "technical": "Patient(?p) ^ hasMolecularSubtype(?p, TripleNegative) -> recommendTreatment(?p, Chemotherapy)",
+    "natural": "삼중 음성 아형인 경우, 화학요법 권장"
+  },
+  {
+    "id": 13,
+    "category": "imaging",
+    "technical": "Patient(?p) ^ hasImagingStudy(?p, ?study) ^ hasTextureScore(?study, ?t) ^ swrlb:greaterThan(?t, 0.8) ^ hasShapeIrregularity(?study, ?s) ^ swrlb:greaterThan(?s, 0.75) -> hasRiskLevel(?p, High)",
+    "natural": "영상에서 질감 > 0.8이고 형태 불규칙성 > 0.75이면, 고위험으로 분류"
+  },
+  {
+    "id": 14,
+    "category": "imaging",
+    "technical": "Patient(?p) ^ hasImagingStudy(?p, ?study) ^ hasEnhancementScore(?study, ?e) ^ swrlb:greaterThan(?e, 0.9) -> hasSuspicionLevel(?p, High)",
+    "natural": "조영 점수 > 0.9이면, 높은 의심으로 분류"
+  },
+  {
+    "id": 15,
+    "category": "monitoring",
+    "technical": "Patient(?p) ^ hasRiskLevel(?p, High) -> requiresFollowupInterval(?p, 3)",
+    "natural": "고위험인 경우, 3개월 추적 관찰 간격 필요"
+  },
+  {
+    "id": 16,
+    "category": "monitoring",
+    "technical": "Patient(?p) ^ hasRiskLevel(?p, Intermediate) -> requiresFollowupInterval(?p, 6)",
+    "natural": "중간 위험인 경우, 6개월 추적 관찰 간격 필요"
+  },
+  {
+    "id": 17,
+    "category": "monitoring",
+    "technical": "Patient(?p) ^ hasRiskLevel(?p, Low) -> requiresFollowupInterval(?p, 12)",
+    "natural": "저위험인 경우, 12개월 추적 관찰 간격 필요"
+  },
+  {
+    "id": 18,
+    "category": "genetic",
+    "technical": "Patient(?p) ^ hasBRCAStatus(?p, Positive) -> recommendGeneticCounseling(?p, true)",
+    "natural": "BRCA 양성인 경우, 유전 상담 권장"
+  },
+  {
+    "id": 19,
+    "category": "genetic",
+    "technical": "Patient(?p) ^ hasFamilyHistory(?p, Strong) -> recommendGeneticTesting(?p, true)",
+    "natural": "강한 가족력이 있는 경우, 유전자 검사 권장"
+  },
+  {
+    "id": 20,
+    "category": "response",
+    "technical": "Patient(?p) ^ hasTreatmentResponse(?p, ?resp) ^ swrlb:lessThan(?resp, 0.5) -> requiresTreatmentAdjustment(?p, true)",
+    "natural": "치료 반응 < 50%인 경우, 치료 조정 필요"
+  },
+  {
+    "id": 21,
+    "category": "response",
+    "technical": "Patient(?p) ^ hasPathologicalResponse(?p, Complete) -> hasPrognosis(?p, Favorable)",
+    "natural": "병리학적 완전 반응인 경우, 유리한 예후로 분류"
+  },
+  {
+    "id": 22,
+    "category": "federated",
+    "technical": "Patient(?p) ^ hasDataQualityScore(?p, ?q) ^ swrlb:greaterThan(?q, 90) ^ hasConsentStatus(?p, Approved) ^ hasImagingQuality(?p, Standard) -> includeInFederatedLearning(?p, true)",
+    "natural": "다음의 경우 연합 학습에 포함: 데이터 품질 > 90%, 동의 승인, 영상 기준 충족"
+  }
+]

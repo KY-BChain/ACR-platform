@@ -1,0 +1,134 @@
+[
+  {
+    "id": 1,
+    "category": "biomarker",
+    "technical": "Patient(?p) ^ hasERStatus(?p, Positive) ^ hasPRStatus(?p, Positive) ^ hasHER2Status(?p, Negative) ^ hasKi67(?p, ?k) ^ swrlb:lessThan(?k, 20) -> hasMolecularSubtype(?p, LuminalA)",
+    "natural": "如果ER和PR均为阳性且HER2为阴性且Ki-67 < 20%，分类为Luminal A亚型"
+  },
+  {
+    "id": 2,
+    "category": "biomarker",
+    "technical": "Patient(?p) ^ hasERStatus(?p, Positive) ^ hasPRStatus(?p, Positive) ^ hasHER2Status(?p, Negative) ^ hasKi67(?p, ?k) ^ swrlb:greaterThanOrEqual(?k, 20) -> hasMolecularSubtype(?p, LuminalB)",
+    "natural": "如果ER和PR均为阳性且HER2为阴性且Ki-67 ≥ 20%，分类为Luminal B亚型"
+  },
+  {
+    "id": 3,
+    "category": "biomarker",
+    "technical": "Patient(?p) ^ hasHER2Status(?p, Positive) -> hasMolecularSubtype(?p, HER2Positive)",
+    "natural": "如果HER2为阳性，分类为HER2阳性亚型"
+  },
+  {
+    "id": 4,
+    "category": "biomarker",
+    "technical": "Patient(?p) ^ hasERStatus(?p, Negative) ^ hasPRStatus(?p, Negative) ^ hasHER2Status(?p, Negative) -> hasMolecularSubtype(?p, TripleNegative)",
+    "natural": "如果ER、PR和HER2均为阴性，分类为三阴性亚型"
+  },
+  {
+    "id": 5,
+    "category": "risk",
+    "technical": "Patient(?p) ^ hasTumorSize(?p, ?size) ^ swrlb:greaterThan(?size, 50) -> hasRiskLevel(?p, High)",
+    "natural": "如果肿瘤大小 > 5厘米，分类为高风险"
+  },
+  {
+    "id": 6,
+    "category": "risk",
+    "technical": "Patient(?p) ^ hasLymphNodeStatus(?p, Positive) ^ hasPositiveNodes(?p, ?n) ^ swrlb:greaterThan(?n, 3) -> hasRiskLevel(?p, High)",
+    "natural": "如果淋巴结阳性且阳性淋巴结数 > 3，分类为高风险"
+  },
+  {
+    "id": 7,
+    "category": "risk",
+    "technical": "Patient(?p) ^ hasGrade(?p, 3) -> hasRiskLevel(?p, High)",
+    "natural": "如果肿瘤分级为3级，分类为高风险"
+  },
+  {
+    "id": 8,
+    "category": "risk",
+    "technical": "Patient(?p) ^ hasLVIStatus(?p, Positive) -> hasRiskLevel(?p, Intermediate)",
+    "natural": "如果存在淋巴血管侵犯，分类为中风险"
+  },
+  {
+    "id": 9,
+    "category": "treatment",
+    "technical": "Patient(?p) ^ hasMolecularSubtype(?p, LuminalA) -> recommendTreatment(?p, EndocrineTherapy)",
+    "natural": "如果是Luminal A亚型，推荐内分泌治疗"
+  },
+  {
+    "id": 10,
+    "category": "treatment",
+    "technical": "Patient(?p) ^ hasMolecularSubtype(?p, LuminalB) -> recommendTreatment(?p, ChemotherapyPlusEndocrine)",
+    "natural": "如果是Luminal B亚型，推荐化疗加内分泌治疗"
+  },
+  {
+    "id": 11,
+    "category": "treatment",
+    "technical": "Patient(?p) ^ hasMolecularSubtype(?p, HER2Positive) -> recommendTreatment(?p, AntiHER2Therapy)",
+    "natural": "如果是HER2阳性亚型，推荐抗HER2治疗"
+  },
+  {
+    "id": 12,
+    "category": "treatment",
+    "technical": "Patient(?p) ^ hasMolecularSubtype(?p, TripleNegative) -> recommendTreatment(?p, Chemotherapy)",
+    "natural": "如果是三阴性亚型，推荐化疗"
+  },
+  {
+    "id": 13,
+    "category": "imaging",
+    "technical": "Patient(?p) ^ hasImagingStudy(?p, ?study) ^ hasTextureScore(?study, ?t) ^ swrlb:greaterThan(?t, 0.8) ^ hasShapeIrregularity(?study, ?s) ^ swrlb:greaterThan(?s, 0.75) -> hasRiskLevel(?p, High)",
+    "natural": "如果影像显示纹理 > 0.8 且形状不规则性 > 0.75，分类为高风险"
+  },
+  {
+    "id": 14,
+    "category": "imaging",
+    "technical": "Patient(?p) ^ hasImagingStudy(?p, ?study) ^ hasEnhancementScore(?study, ?e) ^ swrlb:greaterThan(?e, 0.9) -> hasSuspicionLevel(?p, High)",
+    "natural": "如果增强评分 > 0.9，分类为高度可疑"
+  },
+  {
+    "id": 15,
+    "category": "monitoring",
+    "technical": "Patient(?p) ^ hasRiskLevel(?p, High) -> requiresFollowupInterval(?p, 3)",
+    "natural": "如果是高风险，需要3个月随访间隔"
+  },
+  {
+    "id": 16,
+    "category": "monitoring",
+    "technical": "Patient(?p) ^ hasRiskLevel(?p, Intermediate) -> requiresFollowupInterval(?p, 6)",
+    "natural": "如果是中风险，需要6个月随访间隔"
+  },
+  {
+    "id": 17,
+    "category": "monitoring",
+    "technical": "Patient(?p) ^ hasRiskLevel(?p, Low) -> requiresFollowupInterval(?p, 12)",
+    "natural": "如果是低风险，需要12个月随访间隔"
+  },
+  {
+    "id": 18,
+    "category": "genetic",
+    "technical": "Patient(?p) ^ hasBRCAStatus(?p, Positive) -> recommendGeneticCounseling(?p, true)",
+    "natural": "如果BRCA阳性，推荐遗传咨询"
+  },
+  {
+    "id": 19,
+    "category": "genetic",
+    "technical": "Patient(?p) ^ hasFamilyHistory(?p, Strong) -> recommendGeneticTesting(?p, true)",
+    "natural": "如果有强家族史，推荐基因检测"
+  },
+  {
+    "id": 20,
+    "category": "response",
+    "technical": "Patient(?p) ^ hasTreatmentResponse(?p, ?resp) ^ swrlb:lessThan(?resp, 0.5) -> requiresTreatmentAdjustment(?p, true)",
+    "natural": "如果治疗反应 < 50%，需要调整治疗"
+  },
+  {
+    "id": 21,
+    "category": "response",
+    "technical": "Patient(?p) ^ hasPathologicalResponse(?p, Complete) -> hasPrognosis(?p, Favorable)",
+    "natural": "如果病理完全缓解，分类为良好预后"
+  },
+  {
+    "id": 22,
+    "category": "federated",
+    "technical": "Patient(?p) ^ hasDataQualityScore(?p, ?q) ^ swrlb:greaterThan(?q, 90) ^ hasConsentStatus(?p, Approved) ^ hasImagingQuality(?p, Standard) -> includeInFederatedLearning(?p, true)",
+    "natural": "如果数据质量 > 90%、同意批准、影像符合标准，则纳入联邦学习"
+  }
+]

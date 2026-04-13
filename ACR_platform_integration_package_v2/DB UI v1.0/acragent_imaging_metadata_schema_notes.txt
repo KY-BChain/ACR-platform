@@ -1,0 +1,46 @@
+ACRAgent imaging metadata extension
+
+Added study-level fields to imaging_study:
+- facility_name
+- facility_address
+- operator_name
+- operator_code
+- overlay_patient_id
+- overlay_accession
+- source_import_note
+
+Added new table imaging_image_instance:
+One row per image/view instance, including:
+- laterality
+- view_position
+- acquisition_datetime
+- source_image_filename
+- source_scan_type
+- overlay identifiers
+- facility/operator fields
+- raw_ocr_text
+- cleaned_extracted_text
+- ocr_confidence
+- extraction_quality_note
+- image_notes
+
+Added new table mammography_acquisition:
+One row per mammography image instance, including:
+- window_width / window_level
+- kvp / mas
+- agd_mgy / ese_mgy
+- compression_dan
+- breast_thickness_mm
+- detector_format
+- target_filter
+- grid_setting
+- aop_mode
+- econtrast
+- inc_angle
+- view_label
+
+The patched HTML pages:
+- capture these new fields in the Imaging tab
+- store them in the JSON payload
+- sync them into SQLite after each save
+- preserve export of the updated local SQLite database

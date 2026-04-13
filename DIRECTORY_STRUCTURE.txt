@@ -1,0 +1,29 @@
+ACR Platform v2.1.2-b Directory Structure
+Generated: Fri 10 Apr 2026 11:47:39 CEST
+
+/Users/Kraken/DAPP/ACR-platform/
+├── services/
+│   ├── acr-reasoner-service/
+│   ├── acr-bayes-service/
+│   ├── acr-openclaw-agent-service/
+│   ├── acr-fusion-service/
+│   ├── acr-site-adapter-service/
+│   ├── acr-audit-service/
+│   └── acr-imaging-cds-service/
+├── ontology/
+│   ├── breast-cancer/
+│   ├── shared/
+│   └── validation/
+├── data/
+│   ├── sqlite-demo/
+│   ├── fixtures/
+│   └── mapping-schemas/
+├── federation/
+├── rl/
+├── blockchain/
+├── deployment/
+├── docs/
+└── cleanup_logs/
+
+External archive:
+/Users/Kraken/DAPP/ACR-archive/

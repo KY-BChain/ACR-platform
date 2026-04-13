@@ -1,0 +1,26 @@
+# Maven
+/target/
+/dependency-reduced-pom.xml
+
+# IDE
+/.idea/
+/.vscode/
+/*.iml
+/*.ipr
+/*.iws
+
+# Logs
+/logs/
+/*.log
+
+# Traces
+/traces/
+/*.json
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Build
+/build/
+/out/

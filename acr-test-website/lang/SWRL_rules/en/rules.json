@@ -1,0 +1,134 @@
+[
+  {
+    "id": 1,
+    "category": "biomarker",
+    "technical": "Patient(?p) ^ hasERStatus(?p, Positive) ^ hasPRStatus(?p, Positive) ^ hasHER2Status(?p, Negative) ^ hasKi67(?p, ?k) ^ swrlb:lessThan(?k, 20) -> hasMolecularSubtype(?p, LuminalA)",
+    "natural": "If ER and PR are positive and HER2 is negative and Ki-67 < 20%, classify as Luminal A subtype"
+  },
+  {
+    "id": 2,
+    "category": "biomarker",
+    "technical": "Patient(?p) ^ hasERStatus(?p, Positive) ^ hasPRStatus(?p, Positive) ^ hasHER2Status(?p, Negative) ^ hasKi67(?p, ?k) ^ swrlb:greaterThanOrEqual(?k, 20) -> hasMolecularSubtype(?p, LuminalB)",
+    "natural": "If ER and PR are positive and HER2 is negative and Ki-67 ≥ 20%, classify as Luminal B subtype"
+  },
+  {
+    "id": 3,
+    "category": "biomarker",
+    "technical": "Patient(?p) ^ hasHER2Status(?p, Positive) -> hasMolecularSubtype(?p, HER2Positive)",
+    "natural": "If HER2 is positive, classify as HER2-positive subtype"
+  },
+  {
+    "id": 4,
+    "category": "biomarker",
+    "technical": "Patient(?p) ^ hasERStatus(?p, Negative) ^ hasPRStatus(?p, Negative) ^ hasHER2Status(?p, Negative) -> hasMolecularSubtype(?p, TripleNegative)",
+    "natural": "If ER, PR, and HER2 are all negative, classify as Triple Negative subtype"
+  },
+  {
+    "id": 5,
+    "category": "risk",
+    "technical": "Patient(?p) ^ hasTumorSize(?p, ?size) ^ swrlb:greaterThan(?size, 50) -> hasRiskLevel(?p, High)",
+    "natural": "If tumor size > 5cm, classify as high risk"
+  },
+  {
+    "id": 6,
+    "category": "risk",
+    "technical": "Patient(?p) ^ hasLymphNodeStatus(?p, Positive) ^ hasPositiveNodes(?p, ?n) ^ swrlb:greaterThan(?n, 3) -> hasRiskLevel(?p, High)",
+    "natural": "If lymph node positive with >3 positive nodes, classify as high risk"
+  },
+  {
+    "id": 7,
+    "category": "risk",
+    "technical": "Patient(?p) ^ hasGrade(?p, 3) -> hasRiskLevel(?p, High)",
+    "natural": "If tumor grade is 3, classify as high risk"
+  },
+  {
+    "id": 8,
+    "category": "risk",
+    "technical": "Patient(?p) ^ hasLVIStatus(?p, Positive) -> hasRiskLevel(?p, Intermediate)",
+    "natural": "If lymphovascular invasion present, classify as intermediate risk"
+  },
+  {
+    "id": 9,
+    "category": "treatment",
+    "technical": "Patient(?p) ^ hasMolecularSubtype(?p, LuminalA) -> recommendTreatment(?p, EndocrineTherapy)",
+    "natural": "If Luminal A subtype, recommend endocrine therapy"
+  },
+  {
+    "id": 10,
+    "category": "treatment",
+    "technical": "Patient(?p) ^ hasMolecularSubtype(?p, LuminalB) -> recommendTreatment(?p, ChemotherapyPlusEndocrine)",
+    "natural": "If Luminal B subtype, recommend chemotherapy plus endocrine therapy"
+  },
+  {
+    "id": 11,
+    "category": "treatment",
+    "technical": "Patient(?p) ^ hasMolecularSubtype(?p, HER2Positive) -> recommendTreatment(?p, AntiHER2Therapy)",
+    "natural": "If HER2-positive subtype, recommend anti-HER2 therapy"
+  },
+  {
+    "id": 12,
+    "category": "treatment",
+    "technical": "Patient(?p) ^ hasMolecularSubtype(?p, TripleNegative) -> recommendTreatment(?p, Chemotherapy)",
+    "natural": "If Triple Negative subtype, recommend chemotherapy"
+  },
+  {
+    "id": 13,
+    "category": "imaging",
+    "technical": "Patient(?p) ^ hasImagingStudy(?p, ?study) ^ hasTextureScore(?study, ?t) ^ swrlb:greaterThan(?t, 0.8) ^ hasShapeIrregularity(?study, ?s) ^ swrlb:greaterThan(?s, 0.75) -> hasRiskLevel(?p, High)",
+    "natural": "If imaging shows texture > 0.8 AND shape irregularity > 0.75, classify as high risk"
+  },
+  {
+    "id": 14,
+    "category": "imaging",
+    "technical": "Patient(?p) ^ hasImagingStudy(?p, ?study) ^ hasEnhancementScore(?study, ?e) ^ swrlb:greaterThan(?e, 0.9) -> hasSuspicionLevel(?p, High)",
+    "natural": "If enhancement score > 0.9, classify as high suspicion"
+  },
+  {
+    "id": 15,
+    "category": "monitoring",
+    "technical": "Patient(?p) ^ hasRiskLevel(?p, High) -> requiresFollowupInterval(?p, 3)",
+    "natural": "If high risk, require 3-month follow-up interval"
+  },
+  {
+    "id": 16,
+    "category": "monitoring",
+    "technical": "Patient(?p) ^ hasRiskLevel(?p, Intermediate) -> requiresFollowupInterval(?p, 6)",
+    "natural": "If intermediate risk, require 6-month follow-up interval"
+  },
+  {
+    "id": 17,
+    "category": "monitoring",
+    "technical": "Patient(?p) ^ hasRiskLevel(?p, Low) -> requiresFollowupInterval(?p, 12)",
+    "natural": "If low risk, require 12-month follow-up interval"
+  },
+  {
+    "id": 18,
+    "category": "genetic",
+    "technical": "Patient(?p) ^ hasBRCAStatus(?p, Positive) -> recommendGeneticCounseling(?p, true)",
+    "natural": "If BRCA positive, recommend genetic counseling"
+  },
+  {
+    "id": 19,
+    "category": "genetic",
+    "technical": "Patient(?p) ^ hasFamilyHistory(?p, Strong) -> recommendGeneticTesting(?p, true)",
+    "natural": "If strong family history, recommend genetic testing"
+  },
+  {
+    "id": 20,
+    "category": "response",
+    "technical": "Patient(?p) ^ hasTreatmentResponse(?p, ?resp) ^ swrlb:lessThan(?resp, 0.5) -> requiresTreatmentAdjustment(?p, true)",
+    "natural": "If treatment response < 50%, require treatment adjustment"
+  },
+  {
+    "id": 21,
+    "category": "response",
+    "technical": "Patient(?p) ^ hasPathologicalResponse(?p, Complete) -> hasPrognosis(?p, Favorable)",
+    "natural": "If pathological complete response, classify as favorable prognosis"
+  },
+  {
+    "id": 22,
+    "category": "federated",
+    "technical": "Patient(?p) ^ hasDataQualityScore(?p, ?q) ^ swrlb:greaterThan(?q, 90) ^ hasConsentStatus(?p, Approved) ^ hasImagingQuality(?p, Standard) -> includeInFederatedLearning(?p, true)",
+    "natural": "Include in federated learning if: data quality > 90%, consent approved, imaging meets standards"
+  }
+]
