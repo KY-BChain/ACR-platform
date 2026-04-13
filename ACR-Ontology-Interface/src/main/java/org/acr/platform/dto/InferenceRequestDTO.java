@@ -9,7 +9,7 @@ import org.acr.platform.model.PatientData;
 public class InferenceRequestDTO {
     
     private PatientData patientData;
-    private boolean bayesianEnhanced;  // Enable/disable Bayesian enhancement
+    private boolean bayesianEnhanced = true;  // Default ON — Bayes is advisory layer
     private String analysisVersion;     // For API versioning
     
     public InferenceRequestDTO() {}
