@@ -1,0 +1,108 @@
+ACR Platform pre-cleanup snapshot
+Generated: Fri 10 Apr 2026 11:46:25 CEST
+Workspace: /Users/Kraken/DAPP/ACR-platform
+
+== pwd ==
+/Users/Kraken/DAPP/ACR-platform
+
+== branch ==
+claude/integrate-swrl-sqwrl-01NXHJNa5XYheECQW8AhHYMj
+
+== git status --short ==
+ M .gitignore
+?? "ACR Platform V2.1/"
+?? microservices/
+
+== top-level entries ==
+.DS_Store
+.env
+.env.example
+.eslintrc.json
+.git
+.github
+.gitignore
+.prettierrc
+.vscode
+ACR Platform V2.1
+ACR_ClaudeCode-cosebase-v2.0.md
+ACR_ONTOLOGY_INTERFACE_FINAL_PACKAGE_v2.md
+ACR_platform_integration_package_v2
+ACR_reasoner_service
+acr-agents
+acr-api-gateway
+acr-blockchain
+acr-core
+acr-federated-ml
+ACR-Ontology-Interface
+ACR-Ontology-Interface-Claude-Code-Instructions-CORRECTED.md
+ACR-Ontology-Staging
+ACR-Ontology-v2
+acr-test-website
+acr-web-portal
+API-DOCUMENTATION.md
+ARCHITECTURE-VALIDATION.md
+cleanup_logs
+CODE-CHANGES-DETAILED.md
+CURRENT-STATUS.md
+docker-compose.yml
+docs
+files.zip
+FRONTEND-INTEGRATION-SUMMARY.md
+FRONTEND-ONTOLOGY-INTEGRATION.md
+FRONTEND-TESTING-QUICK-START.md
+INTEGRATION-GUIDE.md
+LICENSE
+microservices
+package-lock.json
+package.json
+QUICK-STATUS.md
+README.md
+SETUP-NO-DOCKER.md
+SETUP.md
+start-acr.sh
+stop-acr.sh
+tsconfig.base.json
+VISUAL-ARCHITECTURE-GUIDE.md
+
+== services tree depth 2 ==
+
+== microservices tree depth 2 ==
+microservices
+microservices/.DS_Store
+microservices/backup-20260405-012750
+microservices/backup-20260405-012750/.env.example
+microservices/backup-20260405-012750/01_create_tables.sql
+microservices/backup-20260405-012750/application.properties
+microservices/backup-20260405-012750/deploy-hospital.sh
+microservices/backup-20260405-012750/DIRECTORY_STRUCTURE.md
+microservices/backup-20260405-012750/docker-compose.yml
+microservices/backup-20260405-012750/Dockerfile
+microservices/backup-20260405-012750/IMPLEMENTATION_PLAN.md
+microservices/backup-20260405-012750/InferenceResult.java
+microservices/backup-20260405-012750/OntologyLoader.java
+microservices/backup-20260405-012750/OpenlletReasonerApplication.java
+microservices/backup-20260405-012750/pom.xml
+microservices/backup-20260405-012750/README.md
+microservices/backup-20260405-012750/ReasonerController.java
+microservices/backup-20260405-012750/ReasonerService.java
+microservices/backup-20260405-012750/target
+microservices/openllet-reasoner
+microservices/openllet-reasoner/.env.example
+microservices/openllet-reasoner/deploy-hospital.sh
+microservices/openllet-reasoner/DIRECTORY_STRUCTURE.md
+microservices/openllet-reasoner/docker-compose.yml
+microservices/openllet-reasoner/Dockerfile
+microservices/openllet-reasoner/IMPLEMENTATION_PLAN.md
+microservices/openllet-reasoner/init-db
+microservices/openllet-reasoner/ontologies
+microservices/openllet-reasoner/pom.xml
+microservices/openllet-reasoner/README.md
+microservices/openllet-reasoner/src
+microservices/openllet-reasoner/target
+microservices/setup-directory-structure.sh
+microservices/target
+microservices/target/classes
+microservices/target/generated-sources
+microservices/target/generated-test-sources
+microservices/target/test-classes
+

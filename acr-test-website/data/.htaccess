@@ -1,0 +1,8 @@
+# /www/data/.htaccess
+# Block ALL access to database files
+<FilesMatch "\.">
+    Require all denied
+</FilesMatch>
+
+# Alternative
+Deny from all

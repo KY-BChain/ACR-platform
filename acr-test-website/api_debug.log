@@ -1,0 +1,466 @@
+[2025-11-20 21:41:27] Error in auth API
+Array
+(
+    [error] => Login failed: Unable to prepare statement: no such column: last_login
+)
+
+---
+[2025-11-20 21:46:57] Error in auth API
+Array
+(
+    [error] => Login failed: Unable to prepare statement: no such column: session_token
+)
+
+---
+[2025-11-20 21:48:54] User logged in
+Array
+(
+    [email] => test@blockenergy.eu
+)
+
+---
+[2025-11-20 21:50:12] User logged in
+Array
+(
+    [email] => test@blockenergy.eu
+)
+
+---
+[2025-11-20 21:54:28] getDashboardSummary
+Array
+(
+    [patientCount] => 200
+)
+
+---
+[2025-11-20 22:04:06] User logged in
+Array
+(
+    [email] => test@blockenergy.eu
+)
+
+---
+[2025-11-20 22:04:07] getDashboardSummary
+Array
+(
+    [patientCount] => 200
+)
+
+---
+[2025-11-20 22:09:08] User logged in
+Array
+(
+    [email] => test@blockenergy.eu
+)
+
+---
+[2025-11-20 22:09:08] getDashboardSummary
+Array
+(
+    [patientCount] => 200
+)
+
+---
+[2025-11-20 22:09:16] getPatientDetails
+Array
+(
+    [patientId] => ACR-001-ZZU
+)
+
+---
+[2025-11-20 22:09:28] getDashboardSummary
+Array
+(
+    [patientCount] => 200
+)
+
+---
+[2025-11-20 22:09:44] getPatientDetails
+Array
+(
+    [patientId] => ACR-001-ZZU
+)
+
+---
+[2025-11-20 22:10:42] getDashboardSummary
+Array
+(
+    [patientCount] => 200
+)
+
+---
+[2025-11-20 22:10:57] getPatientDetails
+Array
+(
+    [patientId] => ACR-001-ZZU
+)
+
+---
+[2025-11-20 22:11:27] Error in recommendations API
+Array
+(
+    [method] => POST
+    [patientId] => 
+    [error] => Failed to generate recommendation: Unable to prepare statement: table recommendations has no column named subtype
+)
+
+---
+[2025-11-20 22:19:40] User logged in
+Array
+(
+    [email] => test@blockenergy.eu
+)
+
+---
+[2025-11-20 22:19:40] getDashboardSummary
+Array
+(
+    [patientCount] => 200
+)
+
+---
+[2025-11-20 22:19:48] getPatientDetails
+Array
+(
+    [patientId] => ACR-001-ZZU
+)
+
+---
+[2025-11-20 22:20:15] Error in recommendations API
+Array
+(
+    [method] => POST
+    [patientId] => 
+    [error] => Failed to generate recommendation: Unable to prepare statement: table recommendations has no column named subtype
+)
+
+---
+[2025-11-20 22:21:05] getPatientDetails
+Array
+(
+    [patientId] => ACR-001-ZZU
+)
+
+---
+[2025-11-20 22:23:04] getPatientDetails
+Array
+(
+    [patientId] => ACR-001-ZZU
+)
+
+---
+[2025-11-20 22:23:38] Error in recommendations API
+Array
+(
+    [method] => POST
+    [patientId] => 
+    [error] => Failed to generate recommendation: Unable to prepare statement: table recommendations has no column named subtype
+)
+
+---
+[2025-11-20 22:39:51] Recommendation generated
+Array
+(
+    [patientId] => ACR-001-ZZU
+    [recId] => REC-3486CDFD
+)
+
+---
+[2025-11-20 22:42:05] getPatientDetails
+Array
+(
+    [patientId] => ACR-001-ZZU
+)
+
+---
+[2025-11-20 22:42:20] Recommendation generated
+Array
+(
+    [patientId] => ACR-001-ZZU
+    [recId] => REC-F6ED2B4B
+)
+
+---
+[2025-11-20 22:44:19] User logged in
+Array
+(
+    [email] => test@blockenergy.eu
+)
+
+---
+[2025-11-20 22:44:19] getDashboardSummary
+Array
+(
+    [patientCount] => 200
+)
+
+---
+[2025-11-20 22:44:25] getPatientDetails
+Array
+(
+    [patientId] => ACR-001-ZZU
+)
+
+---
+[2025-11-20 22:44:57] Recommendation generated
+Array
+(
+    [patientId] => ACR-001-ZZU
+    [recId] => REC-E15E47DF
+)
+
+---
+[2025-11-20 22:49:24] User logged in
+Array
+(
+    [email] => test@blockenergy.eu
+)
+
+---
+[2025-11-20 22:49:25] getDashboardSummary
+Array
+(
+    [patientCount] => 200
+)
+
+---
+[2025-11-20 22:49:31] getPatientDetails
+Array
+(
+    [patientId] => ACR-001-ZZU
+)
+
+---
+[2025-11-20 22:49:46] Recommendation generated
+Array
+(
+    [patientId] => ACR-001-ZZU
+    [recId] => REC-E3D2D80A
+)
+
+---
+[2025-11-20 22:49:48] getAllPatients
+Array
+(
+    [count] => 200
+)
+
+---
+[2025-11-20 22:49:48] getAllPatients
+Array
+(
+    [count] => 200
+)
+
+---
+[2025-11-20 22:49:51] getPatientDetails
+Array
+(
+    [patientId] => ACR-001-ZZU
+)
+
+---
+[2025-11-20 22:49:51] Recommendation generated
+Array
+(
+    [patientId] => ACR-001-ZZU
+    [recId] => REC-FE9E9DBD
+)
+
+---
+[2025-11-20 22:51:04] getPatientDetails
+Array
+(
+    [patientId] => ACR-001-ZZU
+)
+
+---
+[2025-11-20 22:51:17] Recommendation generated
+Array
+(
+    [patientId] => ACR-001-ZZU
+    [recId] => REC-FE32612C
+)
+
+---
+[2025-11-20 22:51:19] getAllPatients
+Array
+(
+    [count] => 200
+)
+
+---
+[2025-11-20 22:51:19] getAllPatients
+Array
+(
+    [count] => 200
+)
+
+---
+[2025-11-20 22:51:23] getPatientDetails
+Array
+(
+    [patientId] => ACR-001-ZZU
+)
+
+---
+[2025-11-20 22:51:23] Recommendation generated
+Array
+(
+    [patientId] => ACR-001-ZZU
+    [recId] => REC-B34B0AB9
+)
+
+---
+[2025-11-20 22:51:30] getPatientDetails
+Array
+(
+    [patientId] => ACR-001-ZZU
+)
+
+---
+[2025-11-20 22:51:30] Recommendation generated
+Array
+(
+    [patientId] => ACR-001-ZZU
+    [recId] => REC-B431A986
+)
+
+---
+[2025-11-20 22:52:21] getDashboardSummary
+Array
+(
+    [patientCount] => 200
+)
+
+---
+[2025-11-20 22:58:55] User logged in
+Array
+(
+    [email] => test@blockenergy.eu
+)
+
+---
+[2025-11-20 22:58:55] getDashboardSummary
+Array
+(
+    [patientCount] => 200
+)
+
+---
+[2025-11-20 22:59:02] getPatientDetails
+Array
+(
+    [patientId] => ACR-001-ZZU
+)
+
+---
+[2025-11-20 22:59:13] Recommendation generated
+Array
+(
+    [patientId] => ACR-001-ZZU
+    [recId] => REC-137D9AD4
+)
+
+---
+[2025-11-20 22:59:15] getAllPatients
+Array
+(
+    [count] => 200
+)
+
+---
+[2025-11-20 22:59:15] getAllPatients
+Array
+(
+    [count] => 200
+)
+
+---
+[2025-11-20 22:59:18] getPatientDetails
+Array
+(
+    [patientId] => ACR-001-ZZU
+)
+
+---
+[2025-11-20 22:59:18] Recommendation generated
+Array
+(
+    [patientId] => ACR-001-ZZU
+    [recId] => REC-2532E088
+)
+
+---
+[2025-11-20 22:59:33] getDashboardSummary
+Array
+(
+    [patientCount] => 200
+)
+
+---
+[2025-11-20 22:59:40] getPatientDetails
+Array
+(
+    [patientId] => ACR-001-ZZU
+)
+
+---
+[2025-11-20 22:59:51] Recommendation generated
+Array
+(
+    [patientId] => ACR-001-ZZU
+    [recId] => REC-42AA9E34
+)
+
+---
+[2025-11-20 22:59:53] getAllPatients
+Array
+(
+    [count] => 200
+)
+
+---
+[2025-11-20 22:59:53] getAllPatients
+Array
+(
+    [count] => 200
+)
+
+---
+[2025-11-20 22:59:56] getPatientDetails
+Array
+(
+    [patientId] => ACR-001-ZZU
+)
+
+---
+[2025-11-20 22:59:56] Recommendation generated
+Array
+(
+    [patientId] => ACR-001-ZZU
+    [recId] => REC-C6F02F46
+)
+
+---
+[2025-11-20 23:00:19] User logged in
+Array
+(
+    [email] => test@blockenergy.eu
+)
+
+---
+[2025-11-20 23:00:19] getDashboardSummary
+Array
+(
+    [patientCount] => 200
+)
+
+---
+[2025-11-20 23:00:28] getPatientDetails
+Array
+(
+    [patientId] => ACR-001-ZZU
+)
+
+---

@@ -1,0 +1,15 @@
+org/acr/platform/integration/ErrorHandlingIntegrationTest.class
+org/acr/platform/ontology/OntologyV21Generator.class
+org/acr/platform/ontology/SWRLRulesValidationTest.class
+org/acr/platform/integration/MolecularSubtypeIntegrationTest.class
+org/acr/platform/integration/PerformanceIntegrationTest.class
+org/acr/platform/service/BayesianEnhancerTest.class
+org/acr/platform/repository/PatientRepositoryTest.class
+org/acr/platform/integration/BayesToggleIntegrationTest.class
+org/acr/platform/ontology/OntologyValidationTest.class
+org/acr/platform/ontology/ValidationReportGenerator.class
+org/acr/platform/ontology/FileIntegrityValidationTest.class
+org/acr/platform/repository/ImagingStudyRepositoryTest.class
+org/acr/platform/ontology/ReasoningFixtureValidationTest.class
+org/acr/platform/ontology/OntologyTestPaths.class
+org/acr/platform/ontology/SQWRLQueriesValidationTest.class

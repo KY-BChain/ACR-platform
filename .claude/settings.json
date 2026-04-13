@@ -1,0 +1,32 @@
+{
+  "permissions": {
+    "allow": [
+      "View(*)",
+      "Edit(*.properties)",
+      "Edit(*.java)",
+      "Edit(*.md)",
+      "Bash(mvn:*)",
+      "Bash(git status:*)",
+      "Bash(git diff:*)",
+      "Bash(ls:*)",
+      "Bash(cat:*)"
+    ],
+    "deny": [
+      "Bash(rm:*)",
+      "Bash(sudo:*)",
+      "Edit(.git/*)",
+      "Bash(git push:*)"
+    ]
+  },
+  "auto_approve": {
+    "enabled": false,
+    "safe_commands": [
+      "mvn clean compile",
+      "mvn test",
+      "git status",
+      "ls", "cat", "head", "tail"
+    ]
+  },
+  "approval_mode": "ask",
+  "thinking_mode": "auto"
+}
