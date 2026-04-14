@@ -1,0 +1,154 @@
+# acr_swrl_rules.swrl
+@prefix : <https://medical-ai.org/ontologies/ACR#> .
+
+# Rules go here in SWRL syntax
+# Category 1: Molecular Subtype Classification
+### Rule 1: Luminal A Subtype Classification
+Patient(?p) ^ hasER结果标志和百分比(?p, ?er) ^ hasPR结果标志和百分比(?p, ?pr) ^
+hasHER2最终解释(?p, "阴性") ^ hasKi-67增殖指数(?p, ?ki67) ^
+swrlb:greaterThan(?er, 0) ^ swrlb:greaterThan(?pr, 0) ^ swrlb:lessThan(?ki67, 14)
+→ hasMolecularSubtype(?p, "LuminalA")
+
+### Rule 2: Luminal B (HER2-) Subtype Classification
+Patient(?p) ^ hasER结果标志和百分比(?p, ?er) ^ hasHER2最终解释(?p, "阴性") ^
+hasKi-67增殖指数(?p, ?ki67) ^ swrlb:greaterThan(?er, 0) ^
+(swrlb:greaterThanOrEqual(?ki67, 14) ∨ hasPR结果标志和百分比(?p, ?pr) ^ swrlb:lessThanOrEqual(?pr, 20))
+→ hasMolecularSubtype(?p, "LuminalB_HER2neg")
+
+### Rule 3: HER2-Enriched Subtype Classification
+Patient(?p) ^ hasER结果标志和百分比(?p, ?er) ^ hasPR结果标志和百分比(?p, ?pr) ^
+hasHER2最终解释(?p, "阳性") ^ swrlb:equal(?er, 0) ^ swrlb:equal(?pr, 0)
+→ hasMolecularSubtype(?p, "HER2Enriched")
+
+### Rule 4: Triple Negative Subtype Classification
+Patient(?p) ^ hasER结果标志和百分比(?p, ?er) ^ hasPR结果标志和百分比(?p, ?pr) ^
+hasHER2最终解释(?p, "阴性") ^ swrlb:equal(?er, 0) ^ swrlb:equal(?pr, 0)
+→ hasMolecularSubtype(?p, "TripleNegative")
+
+### Rule 5: Luminal B (HER2+) Subtype Classification
+Patient(?p) ^ hasER结果标志和百分比(?p, ?er) ^ hasHER2最终解释(?p, "阳性") ^
+swrlb:greaterThan(?er, 0)
+→ hasMolecularSubtype(?p, "LuminalB_HER2pos")
+
+# Category 2: Treatment Recommendations (CSCO/CACA/NCCN Guidelines)
+### Rule 6: Luminal A Early Stage - Endocrine Therapy Only (CSCO Category I)
+Patient(?p) ^ hasMolecularSubtype(?p, "LuminalA") ^ has临床TNMcTNM(?p, ?tnm) ^
+has肿瘤大小最大毫米(?p, ?size) ^ swrlb:lessThanOrEqual(?size, 20) ^
+swrlb:stringContains(?tnm, "N0")
+→ recommendTreatment(?p, "内分泌治疗") ^ hasGuidelineSource(?p, :CSCO) ^ 
+hasRecommendationLevel(?p, :CategoryI) ^ treatmentRationale(?p, "小肿瘤、淋巴结阴性的LuminalA型，仅需内分泌治疗")
+
+### Rule 7: HER2+ Neoadjuvant Therapy Recommendation (CSCO Category I)
+Patient(?p) ^ hasHER2最终解释(?p, "阳性") ^ has临床TNMcTNM(?p, ?tnm) ^
+(swrlb:stringContains(?tnm, "T2") ∨ swrlb:stringContains(?tnm, "T3") ∨ 
+ swrlb:stringContains(?tnm, "N1") ∨ swrlb:stringContains(?tnm, "N2"))
+→ recommendTreatment(?p, "新辅助化疗+抗HER2靶向治疗") ^ 
+recommendedRegimen(?p, "THP方案（多西他赛+曲妥珠单抗+帕妥珠单抗）") ^
+hasGuidelineSource(?p, :CSCO) ^ hasRecommendationLevel(?p, :CategoryI) ^
+treatmentRationale(?p, "HER2阳性T2-3或N+，CSCO推荐新辅助THP方案")
+
+### Rule 8: Triple Negative PD-L1+ Immunotherapy (CSCO Category I)
+Patient(?p) ^ hasMolecularSubtype(?p, "TripleNegative") ^ 
+hasPDL1Status(?p, "阳性") ^ has临床TNMcTNM(?p, ?tnm) ^
+(swrlb:stringContains(?tnm, "T2") ∨ swrlb:stringContains(?tnm, "T3") ∨
+ swrlb:stringContains(?tnm, "N+"))
+→ recommendTreatment(?p, "新辅助免疫治疗+化疗") ^
+recommendedRegimen(?p, "帕博利珠单抗+化疗") ^
+hasGuidelineSource(?p, :CSCO) ^ hasRecommendationLevel(?p, :CategoryI) ^
+treatmentRationale(?p, "PD-L1阳性的三阴性乳腺癌，免疫治疗+化疗提高pCR率")
+
+### Rule 9: Luminal B High-Risk Adjuvant Chemotherapy + Endocrine (NCCN/CSCO)
+Patient(?p) ^ hasMolecularSubtype(?p, "LuminalB_HER2neg") ^
+has临床TNMcTNM(?p, ?tnm) ^ has组织学分级(?p, ?grade) ^
+(swrlb:stringContains(?tnm, "N1") ∨ swrlb:stringContains(?tnm, "T3") ∨
+ swrlb:equal(?grade, "3"))
+→ recommendTreatment(?p, "辅助化疗+内分泌治疗") ^
+recommendedRegimen(?p, "AC-T或TC方案，然后5年内分泌治疗") ^
+hasGuidelineSource(?p, :NCCN) ^ hasRecommendationLevel(?p, :CategoryI) ^
+treatmentRationale(?p, "高危LuminalB型需化疗+内分泌治疗")
+
+### Rule 10: HER2+ Adjuvant Anti-HER2 Therapy Duration (CSCO/NCCN Consensus)
+Patient(?p) ^ hasHER2最终解释(?p, "阳性") ^ 
+has计划Or执行的手术类型和日期(?p, ?surgeryDate) ^
+recommendTreatment(?p, ?treatment) ^ swrlb:stringContains(?treatment, "HER2")
+→ hasHER2靶向药物和持续时间(?p, "曲妥珠单抗12个月") ^
+hasGuidelineSource(?p, :CSCO) ^ hasGuidelineSource(?p, :NCCN) ^
+treatmentRationale(?p, "HER2阳性标准抗HER2治疗12个月")
+
+#Category 3: MDT Decision Triggers
+### Rule 11: Mandatory MDT for Complex Cases
+Patient(?p) ^ 
+((hasMolecularSubtype(?p, "TripleNegative") ^ has临床TNMcTNM(?p, ?tnm) ^ swrlb:stringContains(?tnm, "N2")) ∨
+ (has组织学分级(?p, "3") ^ has肿瘤大小最大毫米(?p, ?size) ^ swrlb:greaterThan(?size, 50)) ∨
+ (has临床TNMcTNM(?p, ?tnm) ^ swrlb:stringContains(?tnm, "M1")))
+→ requiresMDT(?p, true) ^ mdtPriority(?p, "高优先级") ^
+mdtReason(?p, "复杂病例：晚期分期/高级别/三阴性淋巴结转移")
+
+### Rule 12: MDT Required Before Neoadjuvant Therapy
+Patient(?p) ^ recommendTreatment(?p, ?treatment) ^
+swrlb:stringContains(?treatment, "新辅助")
+→ requiresMDT(?p, true) ^ mdtReason(?p, "新辅助治疗前需MDT讨论")
+
+### Rule 13: Young Age MDT Discussion
+Patient(?p) ^ has年龄推导(?p, ?age) ^ swrlb:lessThan(?age, 40) ^
+has家族癌症史(?p, ?familyHx) ^ swrlb:stringContains(?familyHx, "乳腺癌")
+→ requiresMDT(?p, true) ^ recommendsGeneticTesting(?p, true) ^
+mdtReason(?p, "年轻患者伴家族史，需遗传咨询和MDT讨论")
+
+# Category 4: Staging and Risk Assessment
+### Rule 14: Early Stage Classification (Stage I)
+Patient(?p) ^ has临床TNMcTNM(?p, ?tnm) ^
+(swrlb:stringContains(?tnm, "T1N0M0") ∨ swrlb:stringContains(?tnm, "T1N0"))
+→ has总体分期分组(?p, "I期") ^ riskCategory(?p, "低危")
+
+### Rule 15: Locally Advanced Classification (Stage III)
+Patient(?p) ^ has临床TNMcTNM(?p, ?tnm) ^
+(swrlb:stringContains(?tnm, "T3") ∨ swrlb:stringContains(?tnm, "T4") ∨
+ swrlb:stringContains(?tnm, "N2") ∨ swrlb:stringContains(?tnm, "N3"))
+→ has总体分期分组(?p, "III期") ^ riskCategory(?p, "高危")
+
+### Rule 16: Metastatic Disease Classification (Stage IV)
+Patient(?p) ^ has临床TNMcTNM(?p, ?tnm) ^ swrlb:stringContains(?tnm, "M1")
+→ has总体分期分组(?p, "IV期") ^ requiresPalliativeTreatment(?p, true) ^
+treatmentIntent(?p, "姑息治疗")
+
+#Category 5: Follow-up and Surveillance
+### Rule 17: Standard Follow-up Schedule (Years 1-2)
+Patient(?p) ^ has计划Or执行的手术类型和日期(?p, ?surgeryDate) ^
+swrlb:subtractDateTimes(?currentDate, ?surgeryDate, ?interval) ^
+swrlb:lessThanOrEqual(?interval, 730) # 2 years = 730 days
+→ has随访计划(?p, "每3-4个月临床检查+年度乳腺X线/超声") ^
+followUpFrequency(?p, "每3-4个月")
+
+### Rule 18: Extended Follow-up Schedule (Years 3-5)
+Patient(?p) ^ has计划Or执行的手术类型和日期(?p, ?surgeryDate) ^
+swrlb:subtractDateTimes(?currentDate, ?surgeryDate, ?interval) ^
+swrlb:greaterThan(?interval, 730) ^ swrlb:lessThanOrEqual(?interval, 1825)
+→ has随访计划(?p, "每6个月临床检查+年度影像") ^
+followUpFrequency(?p, "每6个月")
+
+### Rule 19: Recurrence Detection Alert
+Patient(?p) ^ has复发或进展标志(?p, "是") ^ has复发日期和部位(?p, ?recurrenceDate)
+→ requiresUrgentMDT(?p, true) ^ alertType(?p, "复发") ^
+alertMessage(?p, "检测到复发，需立即MDT讨论治疗方案")
+
+#Category 6: Quality Metrics & Guideline Adherence
+### Rule 20: Guideline Concordance Check - ER+ No Endocrine Therapy Alert
+Patient(?p) ^ hasER结果标志和百分比(?p, ?er) ^ swrlb:greaterThan(?er, 0) ^
+has内分泌治疗药物和计划持续时间(?p, ?endocrine) ^ swrlb:equal(?endocrine, "无")
+→ guidelineDeviation(?p, true) ^ deviationType(?p, "缺少推荐的内分泌治疗") ^
+requiresJustification(?p, true)
+
+### Rule 21: HER2+ Without Anti-HER2 Therapy Alert
+Patient(?p) ^ hasHER2最终解释(?p, "阳性") ^
+hasHER2靶向药物和持续时间(?p, ?her2Drug) ^ swrlb:equal(?her2Drug, "无")
+→ guidelineDeviation(?p, true) ^ deviationType(?p, "缺少HER2靶向治疗") ^
+requiresJustification(?p, true)
+
+### Rule 22: Timely Treatment Initiation Check
+Patient(?p) ^ has活检日期Or时间(?p, ?biopsyDate) ^
+has全身治疗开始日期(?p, ?treatmentStart) ^
+swrlb:subtractDateTimes(?treatmentStart, ?biopsyDate, ?days) ^
+swrlb:greaterThan(?days, 60)
+→ timelinessDeviation(?p, true) ^ deviationMessage(?p, "诊断到治疗超过60天") ^
+requiresDocumentation(?p, true)
