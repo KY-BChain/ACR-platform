@@ -819,9 +819,24 @@
                 </label>
                 <select id="neoadjuvantTherapyType">
                     <option value="">请选择 Select</option>
-                    <option value="化疗">化疗 Chemotherapy</option>
-                    <option value="靶向">靶向 Targeted</option>
-                    <option value="内分泌">内分泌 Endocrine</option>
+                    <optgroup label="1. 新辅助治疗 Neoadjuvant Therapy">
+                        <option value="neoadjuvant-chemo">　1.1 化疗 Chemotherapy</option>
+                        <option value="neoadjuvant-targeted">　1.2 靶向治疗 Targeted Therapy</option>
+                        <option value="neoadjuvant-endocrine">　1.3 内分泌治疗 Endocrine Therapy</option>
+                        <option value="neoadjuvant-immuno">　1.4 免疫治疗 Immunotherapy</option>
+                    </optgroup>
+                    <optgroup label="2. 辅助治疗 Adjuvant Therapy">
+                        <option value="adjuvant-chemo">　2.1 化疗 Chemotherapy</option>
+                        <option value="adjuvant-targeted">　2.2 靶向治疗 Targeted Therapy</option>
+                        <option value="adjuvant-endocrine">　2.3 内分泌治疗 Endocrine Therapy</option>
+                        <option value="adjuvant-immuno">　2.4 免疫治疗 Immunotherapy</option>
+                    </optgroup>
+                    <optgroup label="3. 手术 Surgery">
+                        <option value="surgery">　手术 Surgery</option>
+                    </optgroup>
+                    <optgroup label="4. 放射治疗 Radiation Therapy">
+                        <option value="radiation">　放射治疗 Radiation Therapy</option>
+                    </optgroup>
                 </select>
             </div>
             <div class="form-group">
